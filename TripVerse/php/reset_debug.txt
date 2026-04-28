@@ -1,0 +1,129 @@
+2025-12-09 04:05:20 | POST: Array
+(
+    [phone] => 6287806776235
+    [password] => Elroy123
+    [confirm_password] => Elroy123
+)
+ | SESSION: Array
+(
+    [verified_time] => 1765249506
+    [otp_verified] => 1
+    [verified_phone] => 6287806776235
+)
+
+2025-12-09 04:05:20 | Raw Input - Phone: 6287806776235, PassLen: 8
+2025-12-09 04:05:20 | Phone formats - Original: 6287806776235, 62: 6287806776235, 08: 087806776235, 62alt: 6287806776235
+2025-12-09 04:05:20 | DB CONNECTED to tripverse
+2025-12-09 04:05:20 | Searching user with all phone formats...
+2025-12-09 04:05:20 | Found 1 user(s) in user table
+2025-12-09 04:05:20 | Users found:
+Array
+(
+    [0] => Array
+        (
+            [id_user] => USR006
+            [first_name] => Elroy
+            [last_name] => Matthew
+            [username] => Rorow
+            [gender] => 
+            [no_hp] => 6287806776235
+            [profile_picture] => 
+            [email] => elroymatthew@gmail.com
+            [password] => $2y$10$wzcUOOXbtGzrJF0BqIY3heEIrpzaMcRYFtNU60FzeEh/BGmcY/796
+            [role] => user
+            [approved] => 
+            [approved_by] => 
+            [approved_at] => 
+            [is_new_user] => 1
+        )
+
+)
+
+2025-12-09 04:05:20 | Updating user ID: USR006, Current pass: $2y$10$wzcUOOXbtGzrJF0BqIY3heEIrpzaMcRYFtNU60FzeEh/BGmcY/796
+2025-12-09 04:05:20 | New hashed password: $2y$10$MBIftTM2EwC.eQk5DwZzN.r20FcYwA3W/4DZtYiqNGFEcSJ.hFThe
+2025-12-09 04:05:20 | UPDATE SUCCESS! Affected rows: 20
+2025-12-09 04:05:20 | After update - New pass in DB: $2y$10$MBIftTM2EwC.eQk5DwZzN.r20FcYwA3W/4DZtYiqNGFEcSJ.hFThe
+[2025-12-09 04:19:09] POST: Array
+(
+    [phone] => 6287806776235
+    [password] => elroy123
+    [confirm_password] => elroy123
+)
+
+SESSION: Array
+(
+    [reset_phone_raw] => 6287806776235
+    [reset_phone_normalized] => 6287806776235
+    [otp_verified] => 1
+    [verified_phone] => 6287806776235
+    [verified_time] => 1765250337
+)
+
+[2025-12-09 04:19:09] Using phone from session: 6287806776235 (raw: 6287806776235)
+[2025-12-09 04:19:09] Searching formats: %87806776235%, 087806776235%, +6287806776235%, 6287806776235%
+[2025-12-09 04:19:09] Found customer: ID=CUST12396, Name=Sayang Matthew, Phone=6287806776235, UserID=USR007
+[2025-12-09 04:19:09] Password updated SUCCESSFULLY for user_id: USR007
+New password (plain text): elroy123
+[2025-12-09 04:20:06] POST: Array
+(
+    [phone] => 6285703504600
+    [password] => mantap123
+    [confirm_password] => mantap123
+)
+
+SESSION: Array
+(
+    [reset_phone_raw] => 6285703504600
+    [reset_phone_normalized] => 6285703504600
+    [otp_verified] => 1
+    [verified_phone] => 6285703504600
+    [verified_time] => 1765250394
+)
+
+[2025-12-09 04:20:06] Using phone from session: 6285703504600 (raw: 6285703504600)
+[2025-12-09 04:20:06] Searching formats: %85703504600%, 085703504600%, +6285703504600%, 6285703504600%
+[2025-12-09 04:20:06] Found customer: ID=CUST87613, Name=Sendy Ferdian Sujadi, Phone=085703504600, UserID=USR008
+[2025-12-09 04:20:06] Password updated SUCCESSFULLY for user_id: USR008
+New password (plain text): mantap123
+[2025-12-09 04:24:35] POST: Array
+(
+    [phone] => 6285703504600
+    [password] => sendy123
+    [confirm_password] => sendy123
+)
+
+SESSION: Array
+(
+    [reset_phone_raw] => 6285703504600
+    [reset_phone_normalized] => 6285703504600
+    [otp_verified] => 1
+    [verified_phone] => 6285703504600
+    [verified_time] => 1765250668
+)
+
+[2025-12-09 04:24:35] Using phone from session: 6285703504600 (raw: 6285703504600)
+[2025-12-09 04:24:35] Searching formats: %85703504600%, 085703504600%, +6285703504600%, 6285703504600%
+[2025-12-09 04:24:35] Found customer: ID=CUST87613, Name=Sendy Ferdian Sujadi, Phone=085703504600, UserID=USR008
+[2025-12-09 04:24:35] Password updated SUCCESSFULLY for user_id: USR008
+New password (plain text): sendy123
+[2025-12-09 04:27:45] POST: Array
+(
+    [phone] => 6287806776235
+    [password] => elroy123
+    [confirm_password] => elroy123
+)
+
+SESSION: Array
+(
+    [reset_phone_raw] => 6287806776235
+    [reset_phone_normalized] => 6287806776235
+    [otp_verified] => 1
+    [verified_phone] => 6287806776235
+    [verified_time] => 1765250859
+)
+
+[2025-12-09 04:27:45] Using phone from session: 6287806776235 (raw: 6287806776235)
+[2025-12-09 04:27:45] Searching formats: %87806776235%, 087806776235%, +6287806776235%, 6287806776235%
+[2025-12-09 04:27:45] Found customer: ID=CUST12396, Name=Sayang Matthew, Phone=6287806776235, UserID=USR007
+[2025-12-09 04:27:45] Password updated SUCCESSFULLY for user_id: USR007
+New password (plain text): elroy123

@@ -1,0 +1,1 @@
+2025-12-05 12:09:47 | Target: 081234567890 | File: none | Response: {"reason":"request invalid on disconnected device","requestid":261417812,"status":false} | Error: NONE

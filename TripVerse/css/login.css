@@ -1,0 +1,262 @@
+/* Reset dan Font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Body dan Container Utama */
+body,
+html {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, #fff5e6, #ffe0b3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  background-color: white;
+  width: 100%;
+  max-width: 480px;
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Judul Form */
+.form-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ff6600;
+  margin-bottom: 30px;
+}
+
+/* Grup Input */
+.input-group {
+  position: relative;
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.input-group i {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #ff6600;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+input:focus {
+  outline: none;
+  border: 1.5px solid #ff6600;
+  background-color: #fffaf0;
+}
+
+/* Tombol Submit */
+.btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #ff9900, #ff6600);
+  color: white;
+  cursor: pointer;
+  transition: background 0.4s ease;
+}
+
+.btn:hover {
+  background: linear-gradient(to right, #ff6600, #ff9900);
+}
+
+/* Icon Sosial Media */
+.icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icons i {
+  color: #ff9800;
+  padding: 0.7rem 1.3rem;
+  border-radius: 10px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  border: 2px solid #ffd699;
+  margin: 0 10px;
+  transition: 0.3s ease;
+}
+
+.icons i:hover {
+  background: #ff6600;
+  color: white;
+  border-color: #ff9933;
+}
+
+/* Link Recovery */
+.recover {
+  text-align: right;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.recover a {
+  text-decoration: none;
+  color: #ff9900;
+}
+
+.recover a:hover {
+  color: #ff6600;
+  text-decoration: underline;
+}
+
+/* Link Sign In/Up */
+.links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+button {
+  color: #ff9800;
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  text-decoration: underline;
+  color: #e65100;
+}
+
+/* Logo TripVerse */
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.logo h3 {
+  font-weight: 700;
+  font-size: 28px;
+  background: linear-gradient(to right, #000000, #ff6600);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.logo h3 span {
+  background: linear-gradient(to right, #ff6600, #ffaa33);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Teks pemisah (jika digunakan) */
+.or {
+  font-size: 14px;
+  margin: 20px 0;
+  color: #999;
+}
+
+/* Add these styles to login.css */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-container {
+  background-color: white;
+  width: 100%;
+  max-width: 450px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+  color: #ff6600;
+  transform: rotate(90deg);
+}
+
+.modal-title {
+  font-size: 24px;
+  color: #ff6600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal-text {
+  color: #666;
+  margin-bottom: 25px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.success-message {
+  color: #28a745;
+  margin: 15px 0;
+  text-align: center;
+  font-weight: 500;
+}
+
+.error-message {
+  color: #dc3545;
+  margin: 15px 0;
+  text-align: center;
+  font-weight: 500;
+}
