@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 
 // Redirect if user is not logged in
 if (!isset($_SESSION['id_user'])) {
@@ -694,7 +695,7 @@ try {
         'diskon_id' => $diskon_id,
         'nilai_diskon' => $nilai_diskon,
         'base_harga_kamar' => $base_harga_kamar,
-        'selected_facilities' => $selected_facilitiesz
+        'selected_facilities' => $selected_facilities
     ];
 } catch (Exception $e) {
     $error = $e->getMessage();
@@ -771,12 +772,13 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style.css?v=2.0" rel="stylesheet">
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         :root {
-            --primary-color: #ff6b00;
-            --secondary-color: #ffa500;
+            --primary-color: #FEA116;
+            --secondary-color: #FEA116;
             --dark-color: #2c3e50;
             --light-color: #f8f9fa;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -815,7 +817,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             top: 20px;
             left: 0;
             height: 6px;
-            background: linear-gradient(90deg, var(--primary-color), #ff8c00);
+            background: linear-gradient(90deg, var(--primary-color), #FF7A3D);
             border-radius: 3px;
             z-index: 2;
             transition: width 0.5s ease;
@@ -847,13 +849,15 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         }
 
         .step.active .step-number {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
             color: white;
             transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(254, 161, 22, .45);
+            animation: tv-pulse-glow 2.2s infinite;
         }
 
         .step.completed .step-number {
-            background: #28a745;
+            background: #16A34A;
             color: white;
         }
 
@@ -878,33 +882,42 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         }
 
         .step.completed .step-label {
-            color: #28a745;
+            color: #16A34A;
         }
 
         .countdown-timer {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #dc3545;
+            color: #DC2626;
             background-color: #f8d7da;
-            padding: 8px 15px;
-            border-radius: 5px;
-            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 15px;
+            animation: tv-timer-pulse 1.6s ease-in-out infinite;
+        }
+
+        @keyframes tv-timer-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, .35); }
+            50% { box-shadow: 0 0 0 8px rgba(220, 53, 69, 0); }
         }
 
         .expired-message {
-            color: #dc3545;
+            color: #DC2626;
             font-weight: bold;
             margin-bottom: 15px;
         }
 
         .qris-container {
             text-align: center;
-            padding: 20px;
-            border: 1px dashed #ddd;
-            border-radius: 8px;
+            padding: 24px;
+            border: 1px solid var(--tv-border, #eee);
+            border-radius: 18px;
             margin: 20px 0;
-            background-color: #f9f9f9;
+            background: linear-gradient(180deg, #fff 0%, #fffaf3 100%);
+            box-shadow: 0 12px 28px rgba(15, 23, 43, 0.06);
         }
 
         .qris-code {
@@ -913,7 +926,9 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             margin: 0 auto;
             background-color: white;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            box-shadow: 0 6px 16px rgba(15, 23, 43, 0.08);
         }
 
         .qris-instruction {
@@ -940,26 +955,31 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         }
 
         .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-weight: 500;
+            background: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
+            border: none;
+            padding: 13px 26px;
+            border-radius: 999px;
+            font-weight: 600;
+            box-shadow: 0 10px 24px rgba(254, 161, 22, 0.35);
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .3s ease, filter .3s ease;
         }
 
         .btn-primary:hover {
-            background-color: #e05d00;
-            border-color: #e05d00;
+            filter: brightness(1.06);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(254, 161, 22, 0.45);
         }
 
         .summary-card {
             background-color: white;
-            border-radius: 12px;
+            border-radius: 18px;
             padding: 25px;
             box-shadow: var(--shadow);
             position: sticky;
             top: 20px;
             margin-bottom: 30px;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(135deg, #FEA116, #FF7A3D) 1;
         }
 
         .hotel-image {
@@ -1028,17 +1048,17 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         }
 
         .text-success {
-            color: #28a745 !important;
+            color: #16A34A !important;
         }
 
         .savings-remark {
             font-size: 0.875rem;
-            color: #28a745;
+            color: #16A34A;
             font-weight: 500;
         }
 
         .discount-badge {
-            background: linear-gradient(135deg, #28a745, #20c997);
+            background: linear-gradient(135deg, #16A34A, #22C55E);
             color: white;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
@@ -1049,7 +1069,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
         .discount-info {
             background: #f8f9fa;
-            border-left: 4px solid #28a745;
+            border-left: 4px solid #16A34A;
             padding: 0.75rem;
             border-radius: 4px;
             margin: 0.5rem 0;
@@ -1057,12 +1077,12 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
         .discount-name {
             font-weight: 600;
-            color: #28a745;
+            color: #16A34A;
         }
 
         .discount-code {
             background: #e9f7ef;
-            color: #28a745;
+            color: #16A34A;
             padding: 0.2rem 0.5rem;
             border-radius: 3px;
             font-family: monospace;
@@ -1125,7 +1145,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
         .footer .btn-link:hover {
             text-decoration: underline;
-            color: #f5b70a;
+            color: #FEA116;
         }
 
         .footer .btn-social {
@@ -1142,7 +1162,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         }
 
         .footer .btn-social:hover {
-            background-color: #f5b70a;
+            background-color: #FEA116;
             color: #000;
         }
 
@@ -1154,7 +1174,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
         .footer-menu a:hover {
             text-decoration: underline;
-            color: #f5b70a;
+            color: #FEA116;
         }
 
         .footer hr {
@@ -1210,7 +1230,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                     <a href="about.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
-                        <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                        <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
                 </div>
 
@@ -1241,31 +1261,22 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                     <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
                         <a href="home.php" class="navbar-brand d-block d-lg-none">
                             <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
-                            <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                            <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                         </a>
                         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a href="home.php" class="nav-item nav-link">Beranda</a>
-                                <a href="about.php" class="nav-item nav-link">Tentang Kami</a>
-                                <a href="hotel.php" class="nav-item nav-link active">Hotel</a>
-                                <a href="pesawat.php" class="nav-item nav-link">Pesawat</a>
-                                <a href="service.php" class="nav-item nav-link">Fitur</a>
-                                <a href="team.php" class="nav-item nav-link">Tim Kami</a>
-                                <a href="contact.php" class="nav-item nav-link">Kontak</a>
-                                <a href="riwayat.php" class="nav-item nav-link">Riwayat</a>
-                                <a href="logout.php" class="nav-item nav-link">Logout</a>
+                                <a href="home.php" class="nav-item nav-link"><?= te("Beranda") ?></a>
+                                <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
+                                <a href="hotel.php" class="nav-item nav-link active"><?= te("Hotel") ?></a>
+                                <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
+                                <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
+                                <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
+                                <a href="history.php" class="nav-item nav-link"><?= te("Riwayat") ?></a>
                             </div>
-                            <?php if (isset($_SESSION['username'])): ?>
-                                <span class="navbar-text fw-bold me-3"
-                                    style="background: linear-gradient(to right, #FFA500, #FF6347);
-                                    -webkit-background-clip: text; background-clip: text;
-                                    -webkit-text-fill-color: transparent; text-decoration: underline;">
-                                    Hi <?= htmlspecialchars($_SESSION['username']); ?>, selamat datang di TripVerse
-                                </span>
-                            <?php endif; ?>
+                            <?php include __DIR__ . '/_lang_switch.php'; ?><?php include __DIR__ . '/_account_menu.php'; ?>
                         </div>
                     </nav>
                 </div>
@@ -1276,13 +1287,13 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         <div class="container-fluid page-header mb-5 p-0" style="background-image: url(../img/carousel-1.jpg);">
             <div class="container-fluid page-header-inner py-5">
                 <div class="container text-center pb-5">
-                    <h1 class="display-3 text-white mb-3 animated slideInDown">Pembayaran QRIS</h1>
+                    <h1 class="display-3 text-white mb-3 animated slideInDown"><?= te('Pembayaran QRIS') ?></h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center text-uppercase">
-                            <li class="breadcrumb-item"><a href="home.php">Beranda</a></li>
-                            <li class="breadcrumb-item"><a href="hotel.php">Hotel</a></li>
-                            <li class="breadcrumb-item"><a href="booking.php">Pemesanan</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Pembayaran</li>
+                            <li class="breadcrumb-item"><a href="home.php"><?= te('Beranda') ?></a></li>
+                            <li class="breadcrumb-item"><a href="hotel.php"><?= te('Hotel') ?></a></li>
+                            <li class="breadcrumb-item"><a href="booking.php"><?= te('Pemesanan') ?></a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page"><?= te('Pembayaran') ?></li>
                         </ol>
                     </nav>
                 </div>
@@ -1311,17 +1322,17 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                     <div class="col-lg-8">
                         <div class="payment-container">
                             <div class="payment-header">
-                                <h2 class="mb-3">Pembayaran QRIS</h2>
+                                <h2 class="mb-3"><?= te('Pembayaran QRIS') ?></h2>
 
                                 <?php if (!$is_expired && $waktu_tersisa > 0): ?>
                                     <div class="countdown-timer">
                                         <i class="fas fa-clock me-2"></i>
-                                        Waktu tersisa: <span id="countdown"><?= gmdate("i:s", $waktu_tersisa) ?></span>
+                                        <?= te('Waktu tersisa:') ?> <span id="countdown"><?= gmdate("i:s", $waktu_tersisa) ?></span>
                                     </div>
                                 <?php elseif ($is_expired): ?>
                                     <div class="expired-message">
                                         <i class="fas fa-exclamation-triangle me-2"></i>
-                                        Waktu pembayaran telah habis. Pemesanan otomatis dibatalkan.
+                                        <?= te('Waktu pembayaran telah habis. Pemesanan otomatis dibatalkan.') ?>
                                     </div>
                                 <?php endif; ?>
 
@@ -1331,22 +1342,22 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
                                     <div class="step completed">
                                         <div class="step-number">1</div>
-                                        <div class="step-label">Detail Pemesanan</div>
+                                        <div class="step-label"><?= te('Detail Pemesanan') ?></div>
                                     </div>
 
                                     <div class="step completed">
                                         <div class="step-number">2</div>
-                                        <div class="step-label">Penawaran Layanan</div>
+                                        <div class="step-label"><?= te('Penawaran Layanan') ?></div>
                                     </div>
 
                                     <div class="step active">
                                         <div class="step-number">3</div>
-                                        <div class="step-label">Pembayaran</div>
+                                        <div class="step-label"><?= te('Pembayaran') ?></div>
                                     </div>
 
                                     <div class="step">
                                         <div class="step-number">4</div>
-                                        <div class="step-label">Konfirmasi</div>
+                                        <div class="step-label"><?= te('Konfirmasi') ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -1356,7 +1367,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                 <?php if ($diskon_id && $nilai_diskon > 0): ?>
                                     <div class="refund-notice">
                                         <i class="fas fa-info-circle"></i>
-                                        <strong>Perhatian:</strong> Jika Anda membatalkan pemesanan, kuota diskon <strong><?= htmlspecialchars($discount_details['nama_diskon'] ?? 'Diskon') ?></strong> akan otomatis dikembalikan ke sistem.
+                                        <strong><?= te('Perhatian:') ?></strong> <?= te('Jika Anda membatalkan pemesanan, kuota diskon') ?> <strong><?= htmlspecialchars($discount_details['nama_diskon'] ?? t('Diskon')) ?></strong> <?= te('akan otomatis dikembalikan ke sistem.') ?>
                                     </div>
                                 <?php endif; ?>
 
@@ -1366,70 +1377,70 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
                                     <!-- Bagian Pembayaran QRIS -->
                                     <div class="form-section">
-                                        <h3 class="section-title">Bayar dengan QRIS</h3>
+                                        <h3 class="section-title"><?= te('Bayar dengan QRIS') ?></h3>
 
                                         <div class="alert alert-info">
                                             <i class="fas fa-info-circle me-2"></i>
-                                            Silakan scan kode QR di bawah menggunakan aplikasi mobile banking atau e-wallet Anda untuk menyelesaikan pembayaran.
+                                            <?= te('Silakan scan kode QR di bawah menggunakan aplikasi mobile banking atau e-wallet Anda untuk menyelesaikan pembayaran.') ?>
                                         </div>
 
                                         <div class="qris-container">
                                             <div class="qris-code">
                                                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=<?= urlencode('TripVerseBooking:' . $booking_id . ':' . $customer_id . ':' . $total_harga) ?>"
-                                                    alt="Kode QRIS"
+                                                    alt="<?= te('Kode QRIS') ?>"
                                                     onerror="this.onerror=null; this.src='../img/qr-placeholder.jpg';">
                                             </div>
 
                                             <div class="mt-3">
-                                                <h5>Total Pembayaran</h5>
+                                                <h5><?= te('Total Pembayaran') ?></h5>
                                                 <h3 class="text-primary">Rp <?= number_format($total_harga, 0, ',', '.') ?></h3>
-                                                <small class="text-muted">ID Pemesanan: <?= htmlspecialchars($booking_id) ?></small>
+                                                <small class="text-muted"><?= te('ID Pemesanan:') ?> <?= htmlspecialchars($booking_id) ?></small>
                                             </div>
 
                                             <div class="qris-instruction">
-                                                <h5 class="mt-4">Petunjuk Pembayaran:</h5>
+                                                <h5 class="mt-4"><?= te('Petunjuk Pembayaran:') ?></h5>
 
                                                 <div class="instruction-step">
                                                     <div class="step-icon">1</div>
-                                                    <div>Buka aplikasi mobile banking atau e-wallet Anda yang mendukung QRIS</div>
+                                                    <div><?= te('Buka aplikasi mobile banking atau e-wallet Anda yang mendukung QRIS') ?></div>
                                                 </div>
 
                                                 <div class="instruction-step">
                                                     <div class="step-icon">2</div>
-                                                    <div>Pilih menu "Scan QR" atau "Bayar dengan QRIS"</div>
+                                                    <div><?= te('Pilih menu "Scan QR" atau "Bayar dengan QRIS"') ?></div>
                                                 </div>
 
                                                 <div class="instruction-step">
                                                     <div class="step-icon">3</div>
-                                                    <div>Arahkan kamera Anda ke kode QR di atas</div>
+                                                    <div><?= te('Arahkan kamera Anda ke kode QR di atas') ?></div>
                                                 </div>
 
                                                 <div class="instruction-step">
                                                     <div class="step-icon">4</div>
-                                                    <div>Masukkan jumlah pembayaran jika diminta (Rp <?= number_format($total_harga, 0, ',', '.') ?>)</div>
+                                                    <div><?= te('Masukkan jumlah pembayaran jika diminta') ?> (Rp <?= number_format($total_harga, 0, ',', '.') ?>)</div>
                                                 </div>
 
                                                 <div class="instruction-step">
                                                     <div class="step-icon">5</div>
-                                                    <div>Konfirmasi pembayaran dan masukkan PIN/Password Anda</div>
+                                                    <div><?= te('Konfirmasi pembayaran dan masukkan PIN/Password Anda') ?></div>
                                                 </div>
 
                                                 <div class="instruction-step">
                                                     <div class="step-icon">6</div>
-                                                    <div>Tunggu notifikasi pembayaran berhasil</div>
+                                                    <div><?= te('Tunggu notifikasi pembayaran berhasil') ?></div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="alert alert-warning">
                                             <i class="fas fa-exclamation-triangle me-2"></i>
-                                            Pemesanan Anda akan otomatis dibatalkan jika pembayaran tidak selesai dalam 2 menit.
+                                            <?= te('Pemesanan Anda akan otomatis dibatalkan jika pembayaran tidak selesai dalam 2 menit.') ?>
                                         </div>
                                     </div>
 
                                     <div class="d-flex justify-content-between mt-4">
-                                        <a href="penawaran.php?booking_id=<?= htmlspecialchars($booking_id) ?>" class="btn btn-secondary">
-                                            <i class="fas fa-arrow-left me-2"></i> Kembali ke Penawaran
+                                        <a href="extra_services.php?booking_id=<?= htmlspecialchars($booking_id) ?>" class="btn tv-btn-ghost">
+                                            <i class="fas fa-arrow-left me-2"></i> <?= te('Kembali') ?>
                                         </a>
 
                                         <div>
@@ -1438,8 +1449,8 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                                 <input type="hidden" name="booking_id" value="<?= htmlspecialchars($booking_id) ?>">
                                                 <button type="submit" name="cancel_booking"
                                                     class="btn btn-danger me-2"
-                                                    onclick="return confirm('Apakah Anda yakin ingin membatalkan pemesanan ini?')">
-                                                    <i class="fas fa-times-circle me-2"></i> Batalkan Pemesanan
+                                                    onclick="return confirm('<?= t('Apakah Anda yakin ingin membatalkan pemesanan ini?') ?>')">
+                                                    <i class="fas fa-times-circle me-2"></i> <?= te('Batalkan Pemesanan') ?>
                                                 </button>
                                             </form>
 
@@ -1450,8 +1461,8 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
                                                 <button type="submit" name="confirm_payment"
                                                     class="btn btn-primary"
-                                                    onclick="return confirm('Pastikan Anda sudah menyelesaikan pembayaran. Lanjutkan konfirmasi?')">
-                                                    <i class="fas fa-check-circle me-2"></i> Saya Sudah Bayar
+                                                    onclick="return confirm('<?= t('Pastikan Anda sudah menyelesaikan pembayaran. Lanjutkan konfirmasi?') ?>')">
+                                                    <i class="fas fa-check-circle me-2"></i> <?= te('Saya Sudah Bayar') ?>
                                                 </button>
                                             </form>
 
@@ -1472,7 +1483,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                     <!-- Ringkasan Pesanan -->
                     <div class="col-lg-4">
                         <div class="summary-card">
-                            <h4 class="mb-4">Ringkasan Pemesanan</h4>
+                            <h4 class="mb-4"><?= te('Ringkasan Pemesanan') ?></h4>
 
                             <img src="<?= htmlspecialchars($hotel_image_path) ?>"
                                 alt="<?= htmlspecialchars($hotel['nama_hotel']) ?>"
@@ -1487,15 +1498,15 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
                             <div class="mb-4">
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">Tipe Kamar:</span>
+                                    <span class="text-muted"><?= te('Tipe Kamar:') ?></span>
                                     <span><?= htmlspecialchars($room['tipe_kamar']) ?></span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">Durasi:</span>
-                                    <span><?= $durasi ?> malam</span>
+                                    <span class="text-muted"><?= te('Durasi:') ?></span>
+                                    <span><?= $durasi ?> <?= t('malam') ?></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <span class="text-muted">Jumlah Kamar:</span>
+                                    <span class="text-muted"><?= te('Jumlah Kamar:') ?></span>
                                     <span><?= $kamar ?></span>
                                 </div>
                             </div>
@@ -1503,7 +1514,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                             <div class="price-detail">
                                 <!-- Harga Kamar Sebelum Diskon -->
                                 <div class="price-item">
-                                    <span>Harga Kamar (<?= $durasi ?> malam)</span>
+                                    <span><?= te('Harga Kamar') ?> (<?= $durasi ?> <?= t('malam') ?>)</span>
                                     <span>Rp <?= number_format($base_harga_kamar, 0, ',', '.') ?></span>
                                 </div>
 
@@ -1512,21 +1523,21 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                     <div class="price-item text-success">
                                         <span>
                                             <i class="fas fa-tag me-1"></i>
-                                            <?= !empty($discount_details) ? htmlspecialchars($discount_details['nama_diskon']) : 'Diskon' ?>
+                                            <?= !empty($discount_details) ? htmlspecialchars($discount_details['nama_diskon']) : te('Diskon') ?>
                                         </span>
                                         <span>- Rp <?= number_format($nilai_diskon, 0, ',', '.') ?></span>
                                     </div>
 
                                     <!-- Harga Kamar Setelah Diskon -->
                                     <div class="price-item">
-                                        <span>Harga Kamar Setelah Diskon</span>
+                                        <span><?= te('Harga Kamar Setelah Diskon') ?></span>
                                         <span>Rp <?= number_format($harga_setelah_diskon, 0, ',', '.') ?></span>
                                     </div>
                                 <?php endif; ?>
 
                                 <!-- Selected Facilities -->
                                 <div class="selected-facilities">
-                                    <h6 class="selected-title">Layanan Tambahan</h6>
+                                    <h6 class="selected-title"><?= te('Layanan Tambahan') ?></h6>
                                     <?php if (!empty($selected_facilities)): ?>
                                         <?php foreach ($selected_facilities as $facility): ?>
                                             <div class="facility-item">
@@ -1538,32 +1549,32 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                             </div>
                                         <?php endforeach; ?>
                                     <?php else: ?>
-                                        <div class="no-facilities">Belum ada layanan tambahan</div>
+                                        <div class="no-facilities"><?= te('Belum ada layanan tambahan') ?></div>
                                     <?php endif; ?>
                                 </div>
 
                                 <!-- Total Fasilitas -->
                                 <?php if (!empty($selected_facilities)): ?>
                                     <div class="price-item mt-3">
-                                        <span>Total Layanan Tambahan</span>
+                                        <span><?= te('Total Layanan Tambahan') ?></span>
                                         <span>Rp <?= number_format($total_fasilitas_ekstra, 0, ',', '.') ?></span>
                                     </div>
                                 <?php endif; ?>
 
                                 <!-- Pajak & Layanan -->
                                 <div class="price-item">
-                                    <span>Pajak & Layanan:</span>
-                                    <span>Termasuk</span>
+                                    <span><?= te('Pajak & Layanan:') ?></span>
+                                    <span><?= te('Termasuk') ?></span>
                                 </div>
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mt-4">
-                                <h5>Total Pembayaran</h5>
+                                <h5><?= te('Total Pembayaran') ?></h5>
                                 <div class="text-end">
                                     <?php if ($nilai_diskon > 0): ?>
                                         <small class="savings-remark d-block">
                                             <i class="fas fa-piggy-bank me-1"></i>
-                                            Hemat Rp <?= number_format($nilai_diskon, 0, ',', '.') ?>
+                                            <?= te('Hemat') ?> Rp <?= number_format($nilai_diskon, 0, ',', '.') ?>
                                         </small>
                                     <?php endif; ?>
                                     <h4 class="price-total mb-0">Rp <?= number_format($total_harga, 0, ',', '.') ?></h4>
@@ -1605,7 +1616,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                 <img src="../img/logo.png" alt="TripVerse Logo" width="50" class="me-3">
                             </a>
                             <a href="home.php">
-                                <h1 class="text-white text-uppercase mb-0">TripVerse</h1>
+                                <span class="tv-wordmark tv-wordmark-footer">TripVerse</span>
                             </a>
                         </div>
                     </div>
@@ -1637,7 +1648,6 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                             <div class="col-md-6">
                                 <h6 class="section-title text-start text-primary text-uppercase mb-4">Services</h6>
                                 <a class="btn btn-link" href="hotel.php">Hotel</a>
-                                <a class="btn btn-link" href="pesawat.php">Pesawat</a>
                                 <a class="btn btn-link" href="service.php">Fitur</a>
                                 <a class="btn btn-link" href="#">Event & Party</a>
                                 <a class="btn btn-link" href="#">GYM & Yoga</a>
@@ -1679,7 +1689,8 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
         <!-- Template Javascript -->
-        <script src="../js/main.js"></script>
+        <script src="../js/main.js?v=2.0"></script>
+        <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 
         <script>
             // Hide spinner when page is loaded
@@ -1716,12 +1727,12 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             // Confirmation before cancelling booking
             document.getElementById('cancel-booking')?.addEventListener('click', function(e) {
                 <?php if ($diskon_id && $nilai_diskon > 0): ?>
-                    const discountName = "<?= !empty($discount_details) ? htmlspecialchars(addslashes($discount_details['nama_diskon'])) : 'Diskon' ?>";
-                    if (!confirm(`Apakah Anda yakin ingin membatalkan pemesanan ini?\n\nKuota diskon "${discountName}" akan otomatis dikembalikan ke sistem.`)) {
+                    const discountName = "<?= !empty($discount_details) ? htmlspecialchars(addslashes($discount_details['nama_diskon'])) : t('Diskon') ?>";
+                    if (!confirm(`<?= t('Apakah Anda yakin ingin membatalkan pemesanan ini?') ?>\n\n<?= t('Kuota diskon') ?> "${discountName}" <?= t('akan otomatis dikembalikan ke sistem.') ?>`)) {
                         e.preventDefault();
                     }
                 <?php else: ?>
-                    if (!confirm('Apakah Anda yakin ingin membatalkan pemesanan ini?')) {
+                    if (!confirm('<?= t('Apakah Anda yakin ingin membatalkan pemesanan ini?') ?>')) {
                         e.preventDefault();
                     }
                 <?php endif; ?>
@@ -1729,7 +1740,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
             // Confirmation before submitting payment
             document.getElementById('confirm-payment')?.addEventListener('click', function(e) {
-                if (!confirm('Apakah Anda sudah menyelesaikan pembayaran?')) {
+                if (!confirm('<?= t('Apakah Anda sudah menyelesaikan pembayaran?') ?>')) {
                     e.preventDefault();
                 }
             });

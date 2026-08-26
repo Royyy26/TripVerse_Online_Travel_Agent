@@ -6,6 +6,13 @@ if (!isset($_SESSION['id_user'])) {
     exit;
 }
 
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'owner'])) {
+    header('Content-Type: application/json');
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Akses ditolak.']);
+    exit;
+}
+
 require 'connect.php';
 
 header('Content-Type: application/json');

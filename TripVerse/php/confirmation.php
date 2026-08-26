@@ -1,8 +1,9 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 
 if (!isset($_SESSION['selected_hotel'])) {
-    header('Location: penawaran.php');
+    header('Location: extra_services.php');
     exit();
 }
 
@@ -18,11 +19,14 @@ session_destroy();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konfirmasi Berhasil - TripVerse</title>
+    <title><?= te('Konfirmasi Berhasil') ?> - TripVerse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700</title>family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Heebo', sans-serif;
+            background: linear-gradient(135deg, #0F172B 0%, #1c2a4a 100%);
             margin: 0;
             padding: 0;
             display: flex;
@@ -80,29 +84,30 @@ session_destroy();
 <body>
     <div class="confirmation-container">
         <div class="success-icon">✓</div>
-        <h1>Pembayaran Berhasil!</h1>
-        <p>Terima kasih telah memesan di TripVerse. Detail pemesanan telah dikirim ke email Anda.</p>
-        
+        <h1><?= te('Pembayaran Berhasil!') ?></h1>
+        <p><?= te('Terima kasih telah memesan di TripVerse. Detail pemesanan telah dikirim ke email Anda.') ?></p>
+
         <div class="booking-info">
             <div class="info-item">
                 <strong>Booking ID:</strong>
                 <span><?php echo $booking_id; ?></span>
             </div>
             <div class="info-item">
-                <strong>Hotel:</strong>
+                <strong><?= te('Hotel:') ?></strong>
                 <span><?php echo $hotel['nama_hotel']; ?></span>
             </div>
             <div class="info-item">
-                <strong>Check-in:</strong>
+                <strong><?= te('Check-In:') ?></strong>
                 <span><?php echo $hotel['checkin']; ?></span>
             </div>
             <div class="info-item">
-                <strong>Total:</strong>
+                <strong><?= te('Total:') ?></strong>
                 <span>Rp <?php echo number_format($hotel['total'], 0, ',', '.'); ?></span>
             </div>
         </div>
-        
-        <a href="penawaran.php" class="btn">Pesan Hotel Lain</a>
+
+        <a href="extra_services.php" class="btn"><?= te('Pesan Hotel Lain') ?></a>
     </div>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 </body>
 </html>

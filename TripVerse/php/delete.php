@@ -1,6 +1,13 @@
 <?php
 session_start();
+header('Content-Type: application/json; charset=utf-8');
 require 'connect.php';
+
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'owner'])) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Akses ditolak.']);
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);

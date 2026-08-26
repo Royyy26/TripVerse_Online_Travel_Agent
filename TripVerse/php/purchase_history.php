@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
@@ -185,12 +186,12 @@ function getBookingHistory($user_id, $filter_type = '90_hari', $start_date = nul
 function getFilterOptions()
 {
     return [
-        '90_hari' => '90 Hari Terakhir',
-        '30_hari' => '30 Hari Terakhir',
-        'bulan_ini' => 'Bulan Ini',
-        'bulan_lalu' => 'Bulan Lalu',
-        'tahun_ini' => 'Tahun Ini',
-        'custom' => 'Tanggal Custom'
+        '90_hari' => t('90 Hari Terakhir'),
+        '30_hari' => t('30 Hari Terakhir'),
+        'bulan_ini' => t('Bulan Ini'),
+        'bulan_lalu' => t('Bulan Lalu'),
+        'tahun_ini' => t('Tahun Ini'),
+        'custom' => t('Tanggal Custom')
     ];
 }
 
@@ -227,7 +228,7 @@ $filter_options = getFilterOptions();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Pembelian - TripVerse</title>
+    <title><?= te('Daftar Pembelian') ?> - TripVerse</title>
 
     <!-- Favicon -->
     <link href="../img/favicon.ico" rel="icon">
@@ -249,16 +250,18 @@ $filter_options = getFilterOptions();
 
     <!-- Bootstrap & Custom CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
-    <link href="../css/wa.css" rel="stylesheet">
-    <link href="../css/home.css" rel="stylesheet">
+    <link href="../css/style.css?v=2.0" rel="stylesheet">
+    <link href="../css/wa.css?v=2.0" rel="stylesheet">
+    <link href="../css/home.css?v=2.0" rel="stylesheet">
+
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Heebo', Tahoma, Geneva, sans-serif;
         }
 
         body {
@@ -319,15 +322,15 @@ $filter_options = getFilterOptions();
         }
 
         .menu-link:hover {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             color: white;
             transform: translateX(5px);
         }
 
         .menu-link.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(254, 161, 22, 0.35);
         }
 
         .menu-icon {
@@ -385,24 +388,26 @@ $filter_options = getFilterOptions();
         .filter-form select:focus,
         .filter-form input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #FEA116;
+            box-shadow: 0 0 0 3px rgba(254, 161, 22, 0.15);
         }
 
         .filter-form button {
-            background: #667eea;
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             color: white;
             border: none;
             padding: 12px 24px;
-            border-radius: 8px;
+            border-radius: 999px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 22px rgba(254, 161, 22, 0.35);
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .3s ease, filter .3s ease;
         }
 
         .filter-form button:hover {
-            background: #5a6fd8;
-            transform: translateY(-2px);
+            filter: brightness(1.06);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px rgba(254, 161, 22, 0.45);
         }
 
         .btn-reset {
@@ -431,7 +436,7 @@ $filter_options = getFilterOptions();
         .booking-item:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border-color: #667eea;
+            border-color: #FEA116;
         }
 
         .hotel-image {
@@ -527,7 +532,7 @@ $filter_options = getFilterOptions();
         .price-amount {
             font-size: 24px;
             font-weight: 700;
-            color: #667eea;
+            color: #FF7A3D;
         }
 
         .price-label {
@@ -543,7 +548,7 @@ $filter_options = getFilterOptions();
         }
 
         .new-booking {
-            background: #28a745;
+            background: #16A34A;
             color: white;
             padding: 10px 20px;
             border-radius: 8px;
@@ -588,7 +593,7 @@ $filter_options = getFilterOptions();
         }
 
         .badge-new {
-            background: #28a745;
+            background: #16A34A;
             color: white;
             padding: 4px 8px;
             border-radius: 12px;
@@ -664,7 +669,7 @@ $filter_options = getFilterOptions();
         }
 
         .dropdown-item:hover {
-            background-color: #667eea;
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             color: white;
             transform: translateX(5px);
         }
@@ -749,7 +754,7 @@ $filter_options = getFilterOptions();
             <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                 <a href="about.php" class="d-flex align-items-center text-decoration-none">
                     <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
-                    <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                    <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                 </a>
             </div>
 
@@ -779,76 +784,24 @@ $filter_options = getFilterOptions();
                 <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
                     <a href="home.php" class="navbar-brand d-block d-lg-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
-                        <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                        <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
                     <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="home.php" class="nav-item nav-link">Beranda</a>
-                            <a href="about.php" class="nav-item nav-link">Tentang Kami</a>
-                            <a href="hotel.php" class="nav-item nav-link">Hotel</a>
-                            <a href="service.php" class="nav-item nav-link">Fitur</a>
-                            <a href="team.php" class="nav-item nav-link">Tim Kami</a>
-                            <a href="contact.php" class="nav-item nav-link">Kontak</a>
-                            <a href="riwayat.php" class="nav-item nav-link">Riwayat</a>
+                            <a href="home.php" class="nav-item nav-link"><?= te("Beranda") ?></a>
+                            <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
+                            <a href="hotel.php" class="nav-item nav-link"><?= te("Hotel") ?></a>
+                            <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
+                            <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
+                            <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
+                            <a href="history.php" class="nav-item nav-link"><?= te("Riwayat") ?></a>
                         </div>
 
                         <!-- PERBAIKAN: Profile Dropdown yang Benar -->
-                        <div class="ms-auto me-2 dropdown profile-dropdown-container">
-                            <a class="nav-link p-0 d-flex align-items-center" href="#" id="profileDropdownToggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="profile-photo-container">
-                                    <img src="<?= $fotoPath ?>"
-                                        alt="Profile Photo"
-                                        class="profile-photo"
-                                        id="profilePhoto"
-                                        onerror="this.onerror=null; this.src='../img/default.jpg';">
-                                </div>
-                                <div class="profile-text d-none d-lg-block ms-2 me-2">
-                                    <div class="name fw-semibold text-white">
-                                        <?= htmlspecialchars(trim($firstName . ' ' . $lastName)) ?: htmlspecialchars($username) ?>
-                                    </div>
-                                    <div class="email small text-light"><?= htmlspecialchars($email) ?></div>
-                                </div>
-                                <span class="material-icons text-white d-none d-lg-block me-3">expand_more</span>
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="profileDropdownToggle">
-                                <li>
-                                    <div class="dropdown-header text-truncate">
-                                        <span class="fw-bold"><?= htmlspecialchars(trim($firstName . ' ' . $lastName)) ?: htmlspecialchars($username) ?></span><br>
-                                        <span class="small text-muted"><?= htmlspecialchars($email) ?></span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="profile_customer.php">
-                                        <span class="material-icons me-2">person</span> Profil Saya
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="riwayat.php">
-                                        <span class="material-icons me-2">receipt_long</span> Pesanan Saya
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="daftar_pembelian.php">
-                                        <span class="material-icons me-2">shopping_bag</span> Daftar Pembelian
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                                        <span class="material-icons me-2">logout</span> Logout
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <div class="ms-auto me-2 d-flex align-items-center"><?php include __DIR__ . '/_lang_switch.php'; ?><?php include __DIR__ . '/_account_menu.php'; ?></div>
                     </div>
                 </nav>
             </div>
@@ -860,33 +813,33 @@ $filter_options = getFilterOptions();
         <div class="content-wrapper">
             <!-- Sidebar Menu -->
             <div class="sidebar">
-                <h3 class="sidebar-title">Akun Saya</h3>
+                <h3 class="sidebar-title"><?= te('Akun Saya') ?></h3>
                 <ul class="menu-list">
                     <li class="menu-item">
                     <a href="profile_customer.php" class="menu-link <?php echo $active_section == 'profile' ? 'active' : ''; ?>">
                         <span class="menu-icon">👤</span>
-                        <span>Profil Saya</span>
+                        <span><?= te('Profil Saya') ?></span>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="?section=orders" class="menu-link <?php echo $active_section == 'orders' ? 'active' : ''; ?>">
                         <span class="menu-icon">📦</span>
-                        <span>Pesanan Saya</span>
+                        <span><?= te('Pesanan Saya') ?></span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="daftar_pembelian.php" class="menu-link active ">
-                        <i class="menu-icon material-icons">shopping_bag</i> Daftar Pembelian</a>
+                    <a href="purchase_history.php" class="menu-link active ">
+                        <i class="menu-icon material-icons">shopping_bag</i> <?= te('Daftar Pembelian') ?></a>
                 </li>
                 <li class="menu-item">
                     <a href="?section=settings" class="menu-link <?php echo $active_section == 'settings' ? 'active' : ''; ?>">
                         <span class="menu-icon">⚙️</span>
-                        <span>Pengaturan</span><!--Optional-->
+                        <span><?= te('Pengaturan') ?></span><!--Optional-->
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                        <span class="material-icons me-2">logout</span> Logout
+                        <span class="material-icons me-2">logout</span> <?= te('Logout') ?>
                     </a>
                 </li>
                 </ul>
@@ -894,8 +847,8 @@ $filter_options = getFilterOptions();
 
             <!-- Content Area -->
             <div class="content-area">
-                <h1 class="page-title">Daftar Pembelian</h1>
-                <p class="page-subtitle">Kelola dan lihat riwayat pembelian hotel Anda</p>
+                <h1 class="page-title"><?= te('Daftar Pembelian') ?></h1>
+                <p class="page-subtitle"><?= te('Kelola dan lihat riwayat pembelian hotel Anda') ?></p>
 
                 <!-- Filter Section -->
                 <div class="filter-section">
@@ -910,13 +863,13 @@ $filter_options = getFilterOptions();
 
                         <div id="custom_date_range" style="display: <?= ($filter_periode == 'custom') ? 'flex' : 'none'; ?>; gap: 10px; align-items: center;">
                             <input type="date" name="start_date" id="start_date" value="<?= htmlspecialchars($start_date) ?>">
-                            <span>s/d</span>
+                            <span><?= te('s/d') ?></span>
                             <input type="date" name="end_date" id="end_date" value="<?= htmlspecialchars($end_date) ?>">
                         </div>
 
-                        <button type="submit">Terapkan Filter</button>
+                        <button type="submit"><?= te('Terapkan Filter') ?></button>
                         <?php if ($filter_periode != '90_hari'): ?>
-                            <button type="button" onclick="resetFilter()" class="btn-reset">Reset</button>
+                            <button type="button" onclick="resetFilter()" class="btn-reset"><?= te('Reset') ?></button>
                         <?php endif; ?>
                     </form>
                 </div>
@@ -926,14 +879,14 @@ $filter_options = getFilterOptions();
                     <?php if (empty($bookings)): ?>
                         <div class="no-data">
                             <h3>
-                                Tidak ada pembelian dalam
+                                <?= te('Tidak ada pembelian dalam') ?>
                                 <?=
-                                $filter_periode == '90_hari' ? '90' : ($filter_periode == '30_hari' ? '30' : ($filter_periode == 'bulan_ini' ? 'bulan ini' : ($filter_periode == 'bulan_lalu' ? 'bulan lalu' : ($filter_periode == 'tahun_ini' ? 'tahun ini' : ($filter_periode == 'custom' ? 'rentang tanggal yang dipilih' : 'periode yang dipilih')))))
-                                ?> hari terakhir
+                                te($filter_periode == '90_hari' ? '90 hari terakhir' : ($filter_periode == '30_hari' ? '30 hari terakhir' : ($filter_periode == 'bulan_ini' ? 'bulan ini' : ($filter_periode == 'bulan_lalu' ? 'bulan lalu' : ($filter_periode == 'tahun_ini' ? 'tahun ini' : ($filter_periode == 'custom' ? 'rentang tanggal yang dipilih' : 'periode yang dipilih'))))))
+                                ?>
                             </h3>
-                            <p>Jika Anda pernah melakukan pembelian sebelumnya, silakan gunakan Filter untuk melihatnya.</p>
+                            <p><?= te('Jika Anda pernah melakukan pembelian sebelumnya, silakan gunakan Filter untuk melihatnya.') ?></p>
                             <a href="hotel.php" class="new-booking">
-                                <i class="fas fa-plus"></i> Cari Hotel
+                                <i class="fas fa-plus"></i> <?= te('Cari Hotel') ?>
                             </a>
                         </div>
                     <?php else: ?>
@@ -952,7 +905,7 @@ $filter_options = getFilterOptions();
                                     <div class="hotel-name">
                                         <?= htmlspecialchars($booking['nama_hotel']) ?>
                                         <?php if (isset($booking['minutes_since_booking']) && $booking['minutes_since_booking'] < 1440): ?>
-                                            <span class="badge-new">BARU</span>
+                                            <span class="badge-new"><?= te('BARU') ?></span>
                                         <?php endif; ?>
                                     </div>
                                     <div class="hotel-location">
@@ -969,17 +922,17 @@ $filter_options = getFilterOptions();
                                             <div class="meta-value"><?= date('d M Y', strtotime($booking['check_out'])) ?></div>
                                         </div>
                                         <div class="meta-item">
-                                            <span class="meta-label">Tipe Kamar</span>
+                                            <span class="meta-label"><?= te('Tipe Kamar') ?></span>
                                             <div class="meta-value"><?= htmlspecialchars($booking['nama_tipe']) ?></div>
                                         </div>
                                         <div class="meta-item">
-                                            <span class="meta-label">Jumlah Kamar</span>
-                                            <div class="meta-value"><?= $booking['jumlah_kamar'] ?> Kamar</div>
+                                            <span class="meta-label"><?= te('Jumlah Kamar') ?></span>
+                                            <div class="meta-value"><?= $booking['jumlah_kamar'] ?> <?= te('Kamar') ?></div>
                                         </div>
                                     </div>
 
                                     <div class="meta-item">
-                                        <span class="meta-label">Status Booking</span>
+                                        <span class="meta-label"><?= te('Status Booking') ?></span>
                                         <span class="booking-status status-<?= strtolower($booking['status']) ?>">
                                             <?= $booking['status'] ?>
                                         </span>
@@ -987,7 +940,7 @@ $filter_options = getFilterOptions();
 
                                     <?php if ($booking['tanggal_transaksi']): ?>
                                         <div class="transaction-info">
-                                            <span class="meta-label">Transaksi:</span>
+                                            <span class="meta-label"><?= te('Transaksi:') ?></span>
                                             <?= date('d M Y H:i', strtotime($booking['tanggal_transaksi'])) ?> -
                                             <span class="booking-status status-<?= strtolower($booking['status_transaksi']) ?>">
                                                 <?= $booking['status_transaksi'] ?>
@@ -1001,7 +954,7 @@ $filter_options = getFilterOptions();
                                         <div class="price-amount">
                                             Rp <?= number_format($booking['total_harga'], 0, ',', '.') ?>
                                         </div>
-                                        <div class="price-label">Total Pembayaran</div>
+                                        <div class="price-label"><?= te('Total Pembayaran') ?></div>
                                     </div>
                                     <div class="booking-time">
                                         <?= date('d M Y H:i', strtotime($booking['tanggal_booking'])) ?>
@@ -1070,7 +1023,7 @@ $filter_options = getFilterOptions();
 
         function sendWhatsApp() {
             const phone = '6287806776235';
-            const message = 'Halo TripVerse, saya ingin bertanya tentang...';
+            const message = '<?= t('Halo TripVerse, saya ingin bertanya tentang...') ?>';
             const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
@@ -1089,7 +1042,8 @@ $filter_options = getFilterOptions();
     <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="../js/main.js"></script>
+    <script src="../js/main.js?v=2.0"></script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

@@ -135,7 +135,7 @@ input[type="file"] {
     border-radius: 10px;
     font-size: 16px;
     margin-bottom: 24px;
-    border-left: 4px solid #28a745;
+    border-left: 4px solid #16A34A;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -149,7 +149,7 @@ input[type="file"] {
     border-radius: 10px;
     font-size: 16px;
     margin-bottom: 24px;
-    border-left: 4px solid #dc3545;
+    border-left: 4px solid #DC2626;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -237,12 +237,12 @@ input[type="file"] {
 }
 
 .submit-btn {
-    background-color: #4CAF50;
+    background-color: #16A34A;
     color: white;
 }
 
 .cancel-btn {
-    background-color: #f44336;
+    background-color: #DC2626;
     color: white;
 }
 

@@ -11,29 +11,69 @@ body,
 html {
   height: 100%;
   width: 100%;
-  background: linear-gradient(to right, #fff5e6, #ffe0b3);
+  background: radial-gradient(circle at 15% 20%, #1c2a4a 0%, #0F172B 45%, #0a0f1e 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.tv-aurora {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  z-index: 0;
+  pointer-events: none;
+  animation: tv-float 9s ease-in-out infinite;
+}
+
+.tv-aurora-1 {
+  width: 480px;
+  height: 480px;
+  top: -120px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(254, 161, 22, .55) 0%, rgba(254, 161, 22, 0) 70%);
+}
+
+.tv-aurora-2 {
+  width: 520px;
+  height: 520px;
+  bottom: -160px;
+  right: -140px;
+  background: radial-gradient(circle, rgba(255, 122, 61, .45) 0%, rgba(255, 122, 61, 0) 70%);
+  animation-delay: -3s;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 .container {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.97);
   width: 100%;
   max-width: 480px;
-  padding: 40px 30px;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 44px 34px;
+  border-radius: 24px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
   text-align: center;
   transition: all 0.3s ease-in-out;
+  animation: tv-card-in .7s cubic-bezier(.22, 1, .36, 1);
+}
+
+@keyframes tv-card-in {
+  from { opacity: 0; transform: translateY(24px) scale(.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* Judul Form */
 .form-title {
   font-size: 28px;
   font-weight: 700;
-  color: #ff6600;
+  color: #FEA116;
   margin-bottom: 30px;
 }
 
@@ -49,7 +89,7 @@ html {
   top: 50%;
   left: 12px;
   transform: translateY(-50%);
-  color: #ff6600;
+  color: #FEA116;
 }
 
 .input-group input {
@@ -69,7 +109,7 @@ html {
 
 input:focus {
   outline: none;
-  border: 1.5px solid #ff6600;
+  border: 1.5px solid #FEA116;
   background-color: #fffaf0;
 }
 
@@ -81,14 +121,14 @@ input:focus {
   font-weight: 600;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(to right, #ff9900, #ff6600);
+  background: linear-gradient(135deg, #FEA116, #FF7A3D);
   color: white;
   cursor: pointer;
   transition: background 0.4s ease;
 }
 
 .btn:hover {
-  background: linear-gradient(to right, #ff6600, #ff9900);
+  background: linear-gradient(135deg, #FF7A3D, #FEA116);
 }
 
 /* Icon Sosial Media */
@@ -99,20 +139,20 @@ input:focus {
 }
 
 .icons i {
-  color: #ff9800;
+  color: #FEA116;
   padding: 0.7rem 1.3rem;
   border-radius: 10px;
   font-size: 1.4rem;
   cursor: pointer;
-  border: 2px solid #ffd699;
+  border: 2px solid #FFC966;
   margin: 0 10px;
   transition: 0.3s ease;
 }
 
 .icons i:hover {
-  background: #ff6600;
+  background: #FEA116;
   color: white;
-  border-color: #ff9933;
+  border-color: #FEA116;
 }
 
 /* Link Recovery */
@@ -124,11 +164,11 @@ input:focus {
 
 .recover a {
   text-decoration: none;
-  color: #ff9900;
+  color: #FEA116;
 }
 
 .recover a:hover {
-  color: #ff6600;
+  color: #FEA116;
   text-decoration: underline;
 }
 
@@ -142,7 +182,7 @@ input:focus {
 }
 
 button {
-  color: #ff9800;
+  color: #FEA116;
   border: none;
   background-color: transparent;
   font-size: 1rem;
@@ -152,7 +192,7 @@ button {
 
 button:hover {
   text-decoration: underline;
-  color: #e65100;
+  color: #E8890A;
 }
 
 /* Logo TripVerse */
@@ -172,7 +212,7 @@ button:hover {
 .logo h3 {
   font-weight: 700;
   font-size: 28px;
-  background: linear-gradient(to right, #000000, #ff6600);
+  background: linear-gradient(to right, #000000, #FEA116);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -180,7 +220,7 @@ button:hover {
 }
 
 .logo h3 span {
-  background: linear-gradient(to right, #ff6600, #ffaa33);
+  background: linear-gradient(to right, #FEA116, #FF7A3D);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -229,13 +269,13 @@ button:hover {
 }
 
 .close-modal:hover {
-  color: #ff6600;
+  color: #FEA116;
   transform: rotate(90deg);
 }
 
 .modal-title {
   font-size: 24px;
-  color: #ff6600;
+  color: #FEA116;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -248,14 +288,14 @@ button:hover {
 }
 
 .success-message {
-  color: #28a745;
+  color: #16A34A;
   margin: 15px 0;
   text-align: center;
   font-weight: 500;
 }
 
 .error-message {
-  color: #dc3545;
+  color: #DC2626;
   margin: 15px 0;
   text-align: center;
   font-weight: 500;

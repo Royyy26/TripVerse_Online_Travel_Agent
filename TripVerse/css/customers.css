@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #3a86ff;
+    --primary-color: #FEA116;
     --primary-dark: #2667cc;
     --secondary-color: #ff006e;
     --light-bg: #f8f9fa;
@@ -178,7 +178,7 @@ table {
 }
 
 thead {
-    background: linear-gradient(135deg, #3a86ff, #2667cc);
+    background: linear-gradient(135deg, #FEA116, #2667cc);
     color: white;
 }
 

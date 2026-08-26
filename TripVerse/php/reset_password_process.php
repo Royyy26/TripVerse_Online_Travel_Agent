@@ -100,20 +100,15 @@ if (empty($user_id)) {
     exit;
 }
 
-// ========================== UPDATE PASSWORD (TANPA HASH) ==================
-// ⚠️ PERINGATAN: Password TIDAK di-hash - HANYA untuk development/testing!
-// ⚠️ Di production, HARUS gunakan: password_hash($new_password, PASSWORD_DEFAULT)
+$hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
 $update_sql = "UPDATE user SET password = ? WHERE id_user = ?";
 $update_stmt = $conn->prepare($update_sql);
-
-// Password DISIMPAN PLAIN TEXT (sesuai permintaan Anda)
-$update_stmt->bind_param("ss", $new_password, $user_id);
+$update_stmt->bind_param("ss", $hashed_password, $user_id);
 
 if ($update_stmt->execute()) {
     $debug = "[" . date('Y-m-d H:i:s') . "] ";
     $debug .= "Password updated SUCCESSFULLY for user_id: $user_id\n";
-    $debug .= "New password (plain text): $new_password\n";
     file_put_contents('reset_debug.txt', $debug, FILE_APPEND);
     
     // Log aktivitas (opsional)

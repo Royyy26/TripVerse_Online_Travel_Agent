@@ -320,7 +320,7 @@ tbody tr:hover {
 
 .search-input:focus {
     border-color: #2980b9;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+    box-shadow: 0 0 0 2px rgba(254, 161, 22, 0.15);
 }
 
 /* ✅ Tombol disesuaikan ukurannya */

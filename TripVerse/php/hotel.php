@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
@@ -99,7 +100,7 @@ if (isset($_GET['city'])) {
     // Masukkan data baru ke posisi paling atas (index 0)
     array_unshift($_SESSION['search_history'], [
         "kota" => $city,
-        "info" => "Terakhir dicari"
+        "info" => t("Terakhir dicari")
     ]);
 }
 
@@ -149,13 +150,13 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
 
 <head>
     <meta charset="utf-8">
-    <title>TripVerse - Hotel</title>
+    <title>TripVerse - <?= te('Hotel') ?></title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="../img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -167,26 +168,27 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="../lib/animate/animate.min.css" rel="stylesheet">
+    <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style.css?v=2.0" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
     <!-- Tambahkan CSS Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link href="../css/search_history.css" rel="stylesheet">
+    <link href="../css/search_history.css?v=2.0" rel="stylesheet">
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         html,
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Heebo', sans-serif;
             height: 100%;
             margin: 0;
             padding: 0;
@@ -195,18 +197,53 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
 
         /* Warna Oranye Utama */
         :root {
-            --orange-dark: #E65C00;
-            --orange-primary: #FF9933;
+            --orange-dark: #E8890A;
+            --orange-primary: #FEA116;
             --orange-very-light: #FFF5E6;
+        }
+
+        .page-header {
+            position: relative;
+        }
+
+        .page-header::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(15, 23, 43, .35) 0%, rgba(15, 23, 43, .78) 100%);
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 2;
         }
 
         .search-container {
             max-width: 800px;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            padding: 28px 26px;
+            border-radius: 22px;
+            box-shadow: 0 30px 60px rgba(15, 23, 43, 0.25);
+            margin: -95px auto 50px;
+            position: relative;
+            z-index: 10;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(135deg, #FEA116, #FF7A3D) 1;
+            animation: tv-card-in-up .7s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        @keyframes tv-card-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(36px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .title {
@@ -228,18 +265,25 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
         .btn-primary,
         .room-button,
         .city-btn.active {
-            background: var(--orange-primary);
+            background: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
             color: white;
-            border-radius: 5px;
+            border-radius: 999px;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .3s ease, filter .3s ease;
             border: none;
+        }
+
+        .btn-search {
+            padding: .85rem 1.5rem;
+            box-shadow: 0 12px 26px rgba(254, 161, 22, 0.4);
         }
 
         .btn-search:hover,
         .btn-primary:hover,
         .room-button:hover {
-            background-color: var(--orange-dark);
+            filter: brightness(1.06);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px rgba(254, 161, 22, 0.45);
         }
 
         .form-control,
@@ -269,7 +313,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
             max-height: 300px;
             overflow-y: auto;
             padding: 12px 16px;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Heebo', sans-serif;
         }
 
         .dest-item {
@@ -410,22 +454,17 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
         }
 
         .hotel-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .hotel-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .hotel-card {
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform .4s cubic-bezier(.22, 1, .36, 1), box-shadow .4s ease;
             height: 100%;
+            border: none;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(15, 23, 43, 0.08);
         }
 
         .hotel-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 24px 44px rgba(15, 23, 43, 0.18);
         }
 
         .city-filter {
@@ -435,18 +474,32 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
         .city-btn {
             margin: 5px;
             min-width: 120px;
-            border: 1px solid #ddd;
+            border: 2px solid #eee;
+            border-radius: 999px !important;
+            font-weight: 600;
+            transition: all .3s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        .city-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--orange-primary);
         }
 
         .city-btn.active {
-            background-color: var(--orange-primary);
+            background: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
             color: white;
-            border-color: var(--orange-primary);
+            border-color: transparent;
+            box-shadow: 0 10px 22px rgba(254, 161, 22, 0.4);
         }
 
         .hotel-img {
             height: 200px;
             object-fit: cover;
+            transition: transform .5s ease;
+        }
+
+        .hotel-card:hover .hotel-img {
+            transform: scale(1.06);
         }
 
         .price {
@@ -519,7 +572,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
         }
 
         .btn-clear-history {
-            background: #dc3545;
+            background: #DC2626;
             color: white;
             border: none;
             padding: 4px 8px;
@@ -622,7 +675,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
         }
 
         .clear-all-history {
-            background-color: #dc3545;
+            background-color: #DC2626;
             color: white;
             border: none;
             padding: 6px 12px;
@@ -656,7 +709,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                     <a href="about.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
-                        <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                        <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
                 </div>
 
@@ -688,30 +741,22 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                     <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
                         <a href="home.php" class="navbar-brand d-block d-lg-none">
                             <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
-                            <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                            <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                         </a>
                         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a href="home.php" class="nav-item nav-link">Beranda</a>
-                                <a href="about.php" class="nav-item nav-link">Tentang Kami</a>
-                                <a href="hotel.php" class="nav-item nav-link active">Hotel</a>
-                                <a href="service.php" class="nav-item nav-link">Fitur</a>
-                                <a href="team.php" class="nav-item nav-link">Tim Kami</a>
-                                <a href="contact.php" class="nav-item nav-link">Kontak</a>
-                                <a href="riwayat.php" class="nav-item nav-link">Riwayat</a>
-                                <a href="logout.php" class="nav-item nav-link">Logout</a>
+                                <a href="home.php" class="nav-item nav-link"><?= te("Beranda") ?></a>
+                                <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
+                                <a href="hotel.php" class="nav-item nav-link active"><?= te("Hotel") ?></a>
+                                <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
+                                <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
+                                <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
+                                <a href="history.php" class="nav-item nav-link"><?= te("Riwayat") ?></a>
                             </div>
-                            <?php if (isset($_SESSION['username'])): ?>
-                                <span class="navbar-text fw-bold me-3"
-                                    style="background: linear-gradient(to right, #FFA500, #FF6347);
-                                    -webkit-background-clip: text; background-clip: text;
-                                    -webkit-text-fill-color: transparent; text-decoration: underline;">
-                                    Hi <?= htmlspecialchars($_SESSION['username']); ?>, selamat datang di TripVerse
-                                </span>
-                            <?php endif; ?>
+                            <?php include __DIR__ . '/_lang_switch.php'; ?><?php include __DIR__ . '/_account_menu.php'; ?>
                         </div>
                     </nav>
                 </div>
@@ -723,11 +768,11 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
         <div class="container-fluid page-header mb-5 p-0" style="background-image: url(../img/carousel-1.jpg);">
             <div class="container-fluid page-header-inner py-5">
                 <div class="container text-center pb-5">
-                    <h1 class="display-3 text-white mb-3 animated slideInDown">Hotel</h1>
+                    <h1 class="display-3 text-white mb-3 animated slideInDown"><?= te('Hotel') ?></h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center text-uppercase">
-                            <li class="breadcrumb-item"><a href="#">Beranda</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Hotel</li>
+                            <li class="breadcrumb-item"><a href="#"><?= te('Beranda') ?></a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page"><?= te('Hotel') ?></li>
                         </ol>
                     </nav>
                 </div>
@@ -740,14 +785,14 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
             <div class="search-container">
                 <!-- Input Tujuan -->
                 <div class="mb-3">
-                    <label class="form-label">Kota dan tujuan</label>
-                    <input type="text" class="form-control" id="cityInput" placeholder="Kota dan tujuan hotel" value="<?= $selectedCity ?>">
+                    <label class="form-label"><?= te('Kota dan tujuan') ?></label>
+                    <input type="text" class="form-control" id="cityInput" placeholder="<?= te('Kota dan tujuan hotel') ?>" value="<?= $selectedCity ?>">
                 </div>
 
                 <!-- Dropdown Tujuan -->
                 <div class="destination-dropdown shadow-lg" id="destinationDropdown" style="display: none;">
                     <div class="p-3">
-                        <div class="mb-2 text-primary"><strong>Destinasi Populer (Jabodetabek)</strong></div>
+                        <div class="mb-2 text-primary"><strong><?= te('Destinasi Populer (Jabodetabek)') ?></strong></div>
 
                         <?php foreach ($cities as $city): ?>
                             <div class="dest-item py-2 px-3"
@@ -801,7 +846,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                 <div class="row">
                     <!-- Check-In -->
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Check-In:</label>
+                        <label class="form-label"><?= te('Check-In:') ?></label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             <input type="date" id="checkin" class="form-control">
@@ -810,21 +855,21 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
 
                     <!-- Durasi -->
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Durasi:</label>
+                        <label class="form-label"><?= te('Durasi:') ?></label>
                         <select id="durasi" class="form-select">
-                            <option value="1" selected>1 malam</option>
-                            <option value="2">2 malam</option>
-                            <option value="3">3 malam</option>
-                            <option value="4">4 malam</option>
-                            <option value="5">5 malam</option>
-                            <option value="6">6 malam</option>
-                            <option value="7">7 malam</option>
+                            <option value="1" selected>1 <?= te('malam') ?></option>
+                            <option value="2">2 <?= te('malam') ?></option>
+                            <option value="3">3 <?= te('malam') ?></option>
+                            <option value="4">4 <?= te('malam') ?></option>
+                            <option value="5">5 <?= te('malam') ?></option>
+                            <option value="6">6 <?= te('malam') ?></option>
+                            <option value="7">7 <?= te('malam') ?></option>
                         </select>
                     </div>
 
                     <!-- Check-Out (otomatis) -->
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Check-Out:</label>
+                        <label class="form-label"><?= te('Check-Out:') ?></label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             <input type="text" id="checkout" class="form-control" readonly>
@@ -860,16 +905,16 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
 
                 <!-- Tamu dan Kamar -->
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Tamu dan Kamar:</label>
+                    <label class="form-label"><?= te('Tamu dan Kamar:') ?></label>
                     <div class="dropdown">
                         <button class="form-control text-start dropdown-toggle" type="button" id="guestToggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span id="guestSummary">2 Dewasa, 0 Anak, 1 Kamar</span>
+                            <span id="guestSummary">2 <?= t('Dewasa') ?>, 0 <?= t('Anak') ?>, 1 <?= t('Kamar') ?></span>
                         </button>
                         <ul class="dropdown-menu p-3" aria-labelledby="guestToggle" style="min-width: 250px;">
                             <li class="mb-2">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div><i class="fas fa-user"></i> Dewasa</div>
+                                    <div><i class="fas fa-user"></i> <?= te('Dewasa') ?></div>
                                     <div>
                                         <button class="btn btn-sm btn-outline-secondary"
                                             onclick="adjustGuest('adult', -1)">–</button>
@@ -881,7 +926,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                             </li>
                             <li class="mb-2">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div><i class="fas fa-child"></i> Anak</div>
+                                    <div><i class="fas fa-child"></i> <?= te('Anak') ?></div>
                                     <div>
                                         <button class="btn btn-sm btn-outline-secondary"
                                             onclick="adjustGuest('child', -1)">–</button>
@@ -893,7 +938,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                             </li>
                             <li class="mb-2">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div><i class="fas fa-door-open"></i> Kamar</div>
+                                    <div><i class="fas fa-door-open"></i> <?= te('Kamar') ?></div>
                                     <div>
                                         <button class="btn btn-sm btn-outline-secondary"
                                             onclick="adjustGuest('room', -1)">–</button>
@@ -905,7 +950,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                             </li>
                             <li class="text-end">
                                 <button class="btn btn-primary btn-sm mt-2"
-                                    onclick="closeGuestDropdown()">Selesai</button>
+                                    onclick="closeGuestDropdown()"><?= tv_lang() === 'en' ? 'Done' : 'Selesai' ?></button>
                             </li>
                         </ul>
                     </div>
@@ -930,7 +975,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                     }
 
                     function updateGuestSummary() {
-                        const summary = `${guestData.adult} Dewasa, ${guestData.child} Anak, ${guestData.room} Kamar`;
+                        const summary = `${guestData.adult} <?= t('Dewasa') ?>, ${guestData.child} <?= t('Anak') ?>, ${guestData.room} <?= t('Kamar') ?>`;
                         document.getElementById("guestSummary").innerText = summary;
                     }
 
@@ -944,7 +989,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
 
                 <!-- Tombol Pencarian -->
                 <button class="btn btn-search w-100" onclick="cariHotel()">
-                    <i class="fa fa-search"></i> Cari Hotel
+                    <i class="fa fa-search"></i> <?= te('Cari Hotel') ?>
                 </button>
                 <script>
                     function cariHotel() {
@@ -972,7 +1017,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                             kamar: guestData.room
                         });
 
-                        window.location.href = `hotel_hasil.php?${params.toString()}`;
+                        window.location.href = `hotel_results.php?${params.toString()}`;
                     }
                 </script>
             </div>
@@ -982,8 +1027,8 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
         <div class="container-fluid py-5">
             <div class="container">
                 <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 class="section-title text-center text-primary text-uppercase">Hotel</h6>
-                    <h1 class="mb-5">Rekomendasi <span class="text-primary text-uppercase">Hotel <?= $selectedCity ?></span></h1>
+                    <h6 class="section-title text-center text-primary text-uppercase"><?= te('Hotel') ?></h6>
+                    <h2 class="mb-5"><?= te('Rekomendasi') ?> <span class="text-primary text-uppercase"><?= te('Hotel') ?> <?= $selectedCity ?></span></h2>
                 </div>
 
                 <!-- City Filter Buttons -->
@@ -997,10 +1042,10 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                 </div>
 
                 <!-- Hotels Grid -->
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-md-3 g-4 tv-stagger">
                     <?php if (count($topHotels) > 0): ?>
                         <?php foreach ($topHotels as $hotel): ?>
-                            <div class="col">
+                            <div class="col tv-reveal">
                                 <div class="card hotel-card h-100">
                                     <img src="../img/<?= $hotel['foto_hotel'] ?>" class="card-img-top hotel-img" alt="<?= $hotel['nama_hotel'] ?>">
                                     <div class="card-body">
@@ -1018,17 +1063,17 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                                                 <i class="fas fa-wifi facility-icon"></i> Wi-Fi
                                             </span>
                                             <span class="badge bg-light text-dark me-1 mb-1">
-                                                <i class="fas fa-utensils facility-icon"></i> Restoran
+                                                <i class="fas fa-utensils facility-icon"></i> <?= te('Restoran') ?>
                                             </span>
                                         </div>
 
                                         <div class="d-flex justify-content-between align-items-center mt-auto">
                                             <div>
                                                 <span class="price">Rp <?= number_format($hotel['harga_dasar'], 0, ',', '.') ?></span>
-                                                <small class="text-muted d-block">per malam</small>
+                                                <small class="text-muted d-block"><?= te('per malam') ?></small>
                                             </div>
                                             <a href="hotel_detail.php?id=<?= $hotel['hotel_id'] ?>" class="btn btn-primary">
-                                                Lihat Detail
+                                                <?= te('Lihat Detail') ?>
                                             </a>
                                         </div>
                                     </div>
@@ -1037,7 +1082,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                         <?php endforeach; ?>
                     <?php else: ?>
                         <div class="col-12">
-                            <div class="alert alert-info">Tidak ada hotel yang tersedia di kota ini.</div>
+                            <div class="alert alert-info"><?= te('Tidak ada hotel yang tersedia di kota ini.') ?></div>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -1048,15 +1093,15 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
         <div class="container-fluid py-5">
             <div class="container">
                 <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 class="section-title text-center text-primary text-uppercase">Hotel Lainnya</h6>
-                    <h1 class="mb-5">Rekomendasi <span class="text-primary text-uppercase">Hotel di Kota Lain</span></h1>
+                    <h6 class="section-title text-center text-primary text-uppercase"><?= te('Hotel Lainnya') ?></h6>
+                    <h2 class="mb-5"><?= te('Rekomendasi') ?> <span class="text-primary text-uppercase"><?= te('Hotel di Kota Lain') ?></span></h2>
                 </div>
 
-                <div class="row">
+                <div class="row tv-stagger">
                     <?php foreach ($cities as $city): ?>
                         <?php if ($city != $selectedCity): ?>
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100">
+                            <div class="col-md-4 mb-4 tv-reveal">
+                                <div class="card h-100 tv-card tv-card-hover">
                                     <div class="card-body">
                                         <h5 class="card-title text-center">
                                             <i class="fas fa-map-marker-alt text-primary me-2"></i>
@@ -1070,13 +1115,13 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                                                         <div class="text-muted small">Rp <?= number_format($hotel['harga_dasar'], 0, ',', '.') ?>/malam</div>
                                                     </div>
                                                     <a href="hotel_detail.php?id=<?= $hotel['hotel_id'] ?>" class="btn btn-sm btn-outline-primary">
-                                                        Lihat
+                                                        <?= te('Lihat') ?>
                                                     </a>
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
                                         <a href="hotel.php?city=<?= urlencode($city) ?>" class="btn btn-primary mt-2 w-100">
-                                            Lihat Semua di <?= $city ?>
+                                            <?= te('Lihat Semua di') ?> <?= $city ?>
                                         </a>
                                     </div>
                                 </div>
@@ -1099,7 +1144,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                                 <img src="../img/logo.png" alt="TripVerse Logo" width="50" class="me-3">
                             </a>
                             <a href="home.php">
-                                <h1 class="text-white text-uppercase mb-0">TripVerse</h1>
+                                <span class="tv-wordmark tv-wordmark-footer">TripVerse</span>
                             </a>
                         </div>
                     </div>
@@ -1133,7 +1178,6 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                             <div class="col-md-6">
                                 <h6 class="section-title text-start text-primary text-uppercase mb-4">Services</h6>
                                 <a class="btn btn-link" href="#">Hotel Booking</a>
-                                <a class="btn btn-link" href="#">Flight Tickets</a>
                                 <a class="btn btn-link" href="#">Event & Activities</a>
                                 <a class="btn btn-link" href="#">Spa & Wellness</a>
                                 <a class="btn btn-link" href="#">Travel Insurance</a>
@@ -1165,17 +1209,18 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/counterup/counterup.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="../lib/wow/wow.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/counterup/counterup.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="../js/main.js?v=2.0"></script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 
     <script>
         window.addEventListener('load', function() {
@@ -1187,7 +1232,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
 
         // Fungsi untuk menghapus riwayat hotel
         function clearHotelHistory() {
-            if (confirm('Apakah Anda yakin ingin menghapus semua riwayat hotel?')) {
+            if (confirm('<?= t('Apakah Anda yakin ingin menghapus semua riwayat hotel?') ?>')) {
                 window.location.href = 'hotel.php?clear_hotel_history=1';
             }
         }

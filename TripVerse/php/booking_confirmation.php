@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 
 // OPTIONAL: jangan tampilkan error di halaman user (production).
 ini_set('display_errors', 0);
@@ -41,7 +42,7 @@ $error = null;
 $booking_id = $_GET['booking_id'] ?? $booking_id_from_session ?? null;
 
 if (!$booking_id) {
-    header("Location: riwayat.php");
+    header("Location: history.php");
     exit;
 }
 
@@ -80,7 +81,7 @@ try {
     $result = $sql->get_result();
 
     if ($result->num_rows === 0) {
-        throw new Exception("Booking tidak ditemukan atau tidak memiliki akses.");
+        throw new Exception(t("Booking tidak ditemukan atau tidak memiliki akses."));
     }
 
     $booking_data = $result->fetch_assoc();
@@ -177,7 +178,7 @@ try {
     $error = $e->getMessage();
     $_SESSION['error'] = $error;
     error_log("Booking confirmation error: " . $error);
-    header("Location: riwayat.php");
+    header("Location: history.php");
     exit;
 }
 
@@ -204,7 +205,7 @@ $booking_details = isset($booking_details) && is_array($booking_details) ? $book
 $selected_facilities = isset($selected_facilities) && is_array($selected_facilities) ? $selected_facilities : [];
 
 $hotel = array_merge([
-    'nama_hotel' => 'Nama Hotel',
+    'nama_hotel' => t('Nama Hotel'),
     'kota'       => '-',
     'foto_hotel' => '', // path relative atau URL
     'alamat'     => '-'
@@ -286,36 +287,71 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konfirmasi Pembayaran - TripVerse</title>
+    <title><?= te('Konfirmasi Pembayaran') ?> - TripVerse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700</title>family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>">
     <style>
         :root {
-            --primary: #FF6B00;
-            --primary-light: #FF8C33;
-            --primary-dark: #E05D00;
+            --primary: #FEA116;
+            --primary-light: #FF7A3D;
+            --primary-dark: #E8890A;
             --dark: #2c3e50;
             --light: #f8f9fa;
             --gray: #6c757d;
-            --success: #28a745;
+            --success: #16A34A;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Heebo', system-ui, -apple-system, sans-serif;
             background-color: #f5f7fa;
         }
 
         .confirmation-card {
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(15, 23, 43, 0.14);
             background: white;
             padding: 30px;
+            animation: tv-card-in-up .6s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        @keyframes tv-card-in-up {
+            from { opacity: 0; transform: translateY(28px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-icon-wrap {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-icon-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(40, 167, 69, .22) 0%, rgba(40, 167, 69, 0) 70%);
+            animation: tv-ring-pulse 1.8s ease-out infinite;
+        }
+
+        @keyframes tv-ring-pulse {
+            0% { transform: scale(.7); opacity: 1; }
+            100% { transform: scale(1.6); opacity: 0; }
         }
 
         .success-icon {
             font-size: 5rem;
             color: var(--success);
-            margin-bottom: 20px;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+            animation: tv-check-pop .6s cubic-bezier(.22, 1, .36, 1);
         }
 
         .hotel-image {
@@ -332,23 +368,25 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
         }
 
         .btn-download {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s;
+            padding: 11px 24px;
+            border-radius: 999px;
+            font-weight: 600;
+            box-shadow: 0 10px 24px rgba(254, 161, 22, 0.35);
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .3s ease, filter .3s ease;
         }
 
         .btn-download:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            filter: brightness(1.06);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(254, 161, 22, 0.45);
+            color: white;
         }
 
         .info-card {
-            background-color: rgba(255, 107, 0, 0.05);
+            background-color: rgba(254, 161, 22, 0.05);
             border-left: 4px solid var(--primary);
             padding: 15px;
             border-radius: 0 8px 8px 0;
@@ -402,7 +440,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
         }
 
         .discount-badge {
-            background: linear-gradient(135deg, #28a745, #20c997);
+            background: linear-gradient(135deg, #16A34A, #22C55E);
             color: white;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
@@ -413,7 +451,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
 
         .discount-info {
             background: #f8f9fa;
-            border-left: 4px solid #28a745;
+            border-left: 4px solid #16A34A;
             padding: 0.75rem;
             border-radius: 4px;
             margin: 0.5rem 0;
@@ -421,12 +459,12 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
 
         .discount-name {
             font-weight: 600;
-            color: #28a745;
+            color: #16A34A;
         }
 
         .discount-code {
             background: #e9f7ef;
-            color: #28a745;
+            color: #16A34A;
             padding: 0.2rem 0.5rem;
             border-radius: 3px;
             font-family: monospace;
@@ -436,7 +474,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
 
         .savings-remark {
             font-size: 0.875rem;
-            color: #28a745;
+            color: #16A34A;
             font-weight: 500;
         }
 
@@ -461,25 +499,27 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
             <div class="col-lg-10">
                 <div class="confirmation-card">
                     <div class="text-center">
-                        <i class="fas fa-check-circle success-icon"></i>
-                        <h2>Pembayaran Berhasil!</h2>
-                        <p class="lead">Terima kasih telah memesan melalui TripVerse</p>
+                        <div class="success-icon-wrap">
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <h2><?= te('Pembayaran Berhasil!') ?></h2>
+                        <p class="lead"><?= te('Terima kasih telah memesan melalui TripVerse') ?></p>
                     </div>
 
                     <div class="alert alert-success mt-4">
                         <h5 class="d-flex align-items-center">
-                            <i class="fas fa-receipt icon-orange me-2"></i> Detail Transaksi
+                            <i class="fas fa-receipt icon-orange me-2"></i> <?= te('Detail Transaksi') ?>
                         </h5>
                         <div class="row mt-3">
                             <div class="col-md-6">
-                                <p><strong>Kode Booking:</strong> <?= htmlspecialchars($booking_id ?? '-') ?></p>
-                                <p><strong>ID Transaksi:</strong> <?= htmlspecialchars($transaksi_id ?? '-') ?></p>
-                                <p><strong>ID Transaksi Hotel:</strong> <?= htmlspecialchars($transaksi_hotel_id ?? '-') ?></p>
+                                <p><strong><?= te('Kode Booking:') ?></strong> <?= htmlspecialchars($booking_id ?? '-') ?></p>
+                                <p><strong><?= te('ID Transaksi:') ?></strong> <?= htmlspecialchars($transaksi_id ?? '-') ?></p>
+                                <p><strong><?= te('ID Transaksi Hotel:') ?></strong> <?= htmlspecialchars($transaksi_hotel_id ?? '-') ?></p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>Metode Pembayaran:</strong> <?= htmlspecialchars($payment_method ?? 'QRIS') ?></p>
-                                <p><strong>Tanggal Pembayaran:</strong> <?= htmlspecialchars($tanggal_pembayaran ?? '-') ?></p>
-                                <p><strong>Status:</strong> <span class="badge bg-success"><?= htmlspecialchars($payment_status ?? 'Completed') ?></span></p>
+                                <p><strong><?= te('Metode Pembayaran:') ?></strong> <?= htmlspecialchars($payment_method ?? 'QRIS') ?></p>
+                                <p><strong><?= te('Tanggal Pembayaran:') ?></strong> <?= htmlspecialchars($tanggal_pembayaran ?? '-') ?></p>
+                                <p><strong><?= te('Status:') ?></strong> <span class="badge bg-success"><?= htmlspecialchars($payment_status ?? 'Completed') ?></span></p>
                             </div>
                         </div>
                     </div>
@@ -500,7 +540,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
                             <?php endif; ?>
                         </div>
                         <div class="col-md-8">
-                            <h3><?= htmlspecialchars($hotel['nama_hotel'] ?? 'Nama Hotel') ?></h3>
+                            <h3><?= htmlspecialchars($hotel['nama_hotel'] ?? t('Nama Hotel')) ?></h3>
                             <p class="text-muted">
                                 <i class="fas fa-map-marker-alt icon-orange me-1"></i>
                                 <?= htmlspecialchars($hotel['alamat'] ?? '-') ?>, <?= htmlspecialchars($hotel['kota'] ?? '-') ?>
@@ -509,13 +549,13 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
                             <div class="row mt-3">
                                 <div class="col-md-6">
                                     <div class="bg-light p-2 rounded">
-                                        <small class="text-muted d-block">Check-in</small>
+                                        <small class="text-muted d-block"><?= te('Check-In:') ?></small>
                                         <strong><?= htmlspecialchars($checkin_date ?? '-') ?></strong>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="bg-light p-2 rounded">
-                                        <small class="text-muted d-block">Check-out</small>
+                                        <small class="text-muted d-block"><?= te('Check-Out:') ?></small>
                                         <strong><?= htmlspecialchars($checkout_date ?? '-') ?></strong>
                                     </div>
                                 </div>
@@ -525,25 +565,25 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
 
                     <div class="row mt-4">
                         <div class="col-md-6">
-                            <h5 class="mb-3"><i class="fas fa-user-circle icon-orange me-2"></i> Detail Pemesan</h5>
-                            <p><strong>Nama:</strong> <?= htmlspecialchars($booking_details['nama'] ?? '-') ?></p>
+                            <h5 class="mb-3"><i class="fas fa-user-circle icon-orange me-2"></i> <?= te('Detail Pemesan') ?></h5>
+                            <p><strong><?= te('Nama') ?>:</strong> <?= htmlspecialchars($booking_details['nama'] ?? '-') ?></p>
                             <p><strong>Email:</strong> <?= htmlspecialchars($booking_details['email'] ?? '-') ?></p>
-                            <p><strong>No. HP:</strong> <?= htmlspecialchars($booking_details['no_hp'] ?? '-') ?></p>
+                            <p><strong><?= te('No. HP:') ?></strong> <?= htmlspecialchars($booking_details['no_hp'] ?? '-') ?></p>
 
                             <div class="room-details-divider">
-                                <h5 class="mb-3"><i class="fas fa-bed icon-orange me-2"></i> Detail Kamar</h5>
-                                <p><strong>Tipe Kamar:</strong> <?= htmlspecialchars($room['tipe_kamar'] ?? '-') ?></p>
-                                <p><strong>Jumlah Kamar:</strong> <?= htmlspecialchars($jumlah_kamar ?? 1) ?></p>
-                                <p><strong>Durasi Menginap:</strong> <?= htmlspecialchars($durasi ?? 1) ?> malam</p>
+                                <h5 class="mb-3"><i class="fas fa-bed icon-orange me-2"></i> <?= te('Detail Kamar') ?></h5>
+                                <p><strong><?= te('Tipe Kamar:') ?></strong> <?= htmlspecialchars($room['tipe_kamar'] ?? '-') ?></p>
+                                <p><strong><?= te('Jumlah Kamar:') ?></strong> <?= htmlspecialchars($jumlah_kamar ?? 1) ?></p>
+                                <p><strong><?= te('Durasi Menginap:') ?></strong> <?= htmlspecialchars($durasi ?? 1) ?> <?= t('malam') ?></p>
                             </div>
                         </div>
 
                         <div class="col-md-6">
-                            <h5 class="mb-3"><i class="fas fa-money-bill-wave icon-orange me-2"></i> Rincian Pembayaran</h5>
+                            <h5 class="mb-3"><i class="fas fa-money-bill-wave icon-orange me-2"></i> <?= te('Rincian Pembayaran') ?></h5>
                             <div class="price-detail">
                                 <!-- Harga Kamar Sebelum Diskon -->
                                 <div class="price-item">
-                                    <span>Harga Kamar (<?= htmlspecialchars($durasi ?? 1) ?> malam)</span>
+                                    <span><?= te('Harga Kamar') ?> (<?= htmlspecialchars($durasi ?? 1) ?> <?= t('malam') ?>)</span>
                                     <span>Rp <?= number_format($base_harga_kamar ?? 0, 0, ',', '.') ?></span>
                                 </div>
 
@@ -552,14 +592,14 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
                                     <div class="price-item text-success">
                                         <span>
                                             <i class="fas fa-tag me-1"></i>
-                                            Diskon
+                                            <?= te('Diskon') ?>
                                         </span>
                                         <span>- Rp <?= number_format($nilai_diskon, 0, ',', '.') ?></span>
                                     </div>
 
                                     <!-- Harga Kamar Setelah Diskon -->
                                     <div class="price-item">
-                                        <span>Harga Kamar Setelah Diskon</span>
+                                        <span><?= te('Harga Kamar Setelah Diskon') ?></span>
                                         <span>Rp <?= number_format($harga_setelah_diskon, 0, ',', '.') ?></span>
                                     </div>
                                 <?php endif; ?>
@@ -567,7 +607,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
                                 <!-- Selected Facilities -->
                                 <?php if (!empty($selected_facilities)): ?>
                                     <div class="selected-facilities mt-3">
-                                        <h6 class="selected-title">Layanan Tambahan</h6>
+                                        <h6 class="selected-title"><?= te('Layanan Tambahan') ?></h6>
                                         <?php foreach ($selected_facilities as $facility): ?>
                                             <div class="facility-item">
                                                 <div>
@@ -581,25 +621,25 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
 
                                     <!-- Total Fasilitas -->
                                     <div class="price-item mt-3">
-                                        <span>Total Layanan Tambahan</span>
+                                        <span><?= te('Total Layanan Tambahan') ?></span>
                                         <span>Rp <?= number_format($total_fasilitas_ekstra ?? 0, 0, ',', '.') ?></span>
                                     </div>
                                 <?php endif; ?>
 
                                 <!-- Pajak & Layanan -->
                                 <div class="price-item">
-                                    <span>Pajak & Layanan:</span>
-                                    <span>Termasuk</span>
+                                    <span><?= te('Pajak & Layanan:') ?></span>
+                                    <span><?= te('Termasuk') ?></span>
                                 </div>
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mt-4">
-                                <h5>Total Pembayaran</h5>
+                                <h5><?= te('Total Pembayaran') ?></h5>
                                 <div class="text-end">
                                     <?php if (!empty($nilai_diskon) && $nilai_diskon > 0): ?>
                                         <small class="savings-remark d-block">
                                             <i class="fas fa-piggy-bank me-1"></i>
-                                            Hemat Rp <?= number_format($nilai_diskon, 0, ',', '.') ?>
+                                            <?= te('Hemat') ?> Rp <?= number_format($nilai_diskon, 0, ',', '.') ?>
                                         </small>
                                     <?php endif; ?>
                                     <h4 class="price-total mb-0">Rp <?= number_format($total_harga ?? 0, 0, ',', '.') ?></h4>
@@ -611,7 +651,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
                                 <div class="mt-3 text-center">
                                     <span class="discount-badge">
                                         <i class="fas fa-gift me-1"></i>
-                                        Diskon Berhasil Diterapkan
+                                        <?= te('Diskon Berhasil Diterapkan') ?>
                                     </span>
                                 </div>
                             <?php endif; ?>
@@ -622,7 +662,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
                     <?php if (!empty($selected_facilities)): ?>
                         <div class="row mt-4">
                             <div class="col-12">
-                                <h5 class="mb-3"><i class="fas fa-concierge-bell icon-orange me-2"></i> Fasilitas Ekstra yang Dipilih</h5>
+                                <h5 class="mb-3"><i class="fas fa-concierge-bell icon-orange me-2"></i> <?= te('Fasilitas Ekstra yang Dipilih') ?></h5>
                                 <div class="row">
                                     <?php foreach ($selected_facilities as $facility): ?>
                                         <div class="col-md-6 mb-3">
@@ -632,8 +672,8 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
                                                     <span class="facility-price">Rp <?= number_format($facility['harga_satuan'] ?? 0, 0, ',', '.') ?></span>
                                                 </div>
                                                 <div class="facility-quantity">
-                                                    Jumlah: <?= htmlspecialchars($facility['quantity'] ?? 1) ?> x
-                                                    Subtotal: Rp <?= number_format($facility['subtotal'] ?? 0, 0, ',', '.') ?>
+                                                    <?= te('Jumlah:') ?> <?= htmlspecialchars($facility['quantity'] ?? 1) ?> x
+                                                    <?= te('Subtotal:') ?> Rp <?= number_format($facility['subtotal'] ?? 0, 0, ',', '.') ?>
                                                 </div>
                                                 <?php if (!empty($facility['fasilitas_deskripsi'])): ?>
                                                     <p class="mb-0 small text-muted mt-2"><?= htmlspecialchars($facility['fasilitas_deskripsi']) ?></p>
@@ -647,31 +687,31 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
                     <?php endif; ?>
 
                     <div class="info-card mt-4">
-                        <h5><i class="fas fa-info-circle icon-orange me-2"></i> Informasi Penting</h5>
+                        <h5><i class="fas fa-info-circle icon-orange me-2"></i> <?= te('Informasi Penting') ?></h5>
                         <ul class="mt-2">
-                            <li>Tunjukkan kode booking dan identitas saat check-in di hotel</li>
-                            <li>Pembatalan atau perubahan dapat dilakukan minimal 24 jam sebelum check-in</li>
-                            <li>E-ticket telah dikirim ke email <?= htmlspecialchars($booking_details['email'] ?? '-') ?></li>
-                            <li>Hubungi customer service jika ada pertanyaan</li>
+                            <li><?= te('Tunjukkan kode booking dan identitas saat check-in di hotel') ?></li>
+                            <li><?= te('Pembatalan atau perubahan dapat dilakukan minimal 24 jam sebelum check-in') ?></li>
+                            <li><?= te('E-ticket telah dikirim ke email') ?> <?= htmlspecialchars($booking_details['email'] ?? '-') ?></li>
+                            <li><?= te('Hubungi customer service jika ada pertanyaan') ?></li>
                             <?php if (!empty($selected_facilities)): ?>
-                                <li>Fasilitas ekstra akan disiapkan oleh hotel sesuai dengan pilihan Anda</li>
+                                <li><?= te('Fasilitas ekstra akan disiapkan oleh hotel sesuai dengan pilihan Anda') ?></li>
                             <?php endif; ?>
                             <?php if (!empty($nilai_diskon) && $nilai_diskon > 0): ?>
-                                <li>Diskon telah berhasil diterapkan pada pemesanan Anda</li>
+                                <li><?= te('Diskon telah berhasil diterapkan pada pemesanan Anda') ?></li>
                             <?php endif; ?>
                         </ul>
                     </div>
 
                     <div class="d-flex justify-content-between mt-4">
                         <a href="hotel.php" class="btn btn-outline-secondary">
-                            <i class="fas fa-home icon-orange me-2"></i> Kembali ke Beranda
+                            <i class="fas fa-home icon-orange me-2"></i> <?= te('Kembali ke Beranda') ?>
                         </a>
                         <div>
-                            <a href="riwayat.php" class="btn btn-outline-primary me-2">
-                                <i class="fas fa-history icon-orange me-2"></i> Lihat Riwayat
+                            <a href="history.php" class="btn btn-outline-primary me-2">
+                                <i class="fas fa-history icon-orange me-2"></i> <?= te('Lihat Riwayat') ?>
                             </a>
                             <button class="btn btn-download" id="download-receipt">
-                                <i class="fas fa-download me-2"></i> Unduh Bukti Pembayaran
+                                <i class="fas fa-download me-2"></i> <?= te('Unduh Bukti Pembayaran') ?>
                             </button>
                         </div>
                     </div>
@@ -697,7 +737,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
 
             // Show loading state
             const originalText = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Membuat PDF...';
+            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> <?= t('Membuat PDF...') ?>';
             this.disabled = true;
 
             try {
@@ -723,7 +763,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
                 pdf.save(fileName);
             } catch (err) {
                 console.error('Error generating PDF:', err);
-                alert('Terjadi kesalahan saat membuat PDF. Silakan coba lagi.');
+                alert('<?= t('Terjadi kesalahan saat membuat PDF. Silakan coba lagi.') ?>');
             } finally {
                 this.innerHTML = originalText;
                 this.disabled = false;
@@ -733,6 +773,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
         // Optional: clear session/notify before unload - currently not used
         window.addEventListener('beforeunload', function() {});
     </script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

@@ -1,19 +1,20 @@
+<?php require_once __DIR__ . '/_lang.php'; ?>
 <!-- Riwayat Pencarian Kota -->
 <div class="city-history-title">
-    Riwayat Pencarian
+    <?= te('Riwayat Pencarian') ?>
     <?php if (!empty($history)): ?>
-        <button class="btn-clear-history" onclick="if(confirm('Hapus semua riwayat?')) window.location.href = 'hotel.php?clear_history=1'">
-            Hapus Semua
+        <button class="btn-clear-history" onclick="if(confirm('<?= t('Hapus semua riwayat?') ?>')) window.location.href = 'hotel.php?clear_history=1'">
+            <?= te('Hapus Semua') ?>
         </button>
     <?php endif; ?>
 </div>
 
 <?php if (empty($history)): ?>
-    <div class="text-muted">Belum ada riwayat pencarian.</div>
+    <div class="text-muted"><?= te('Belum ada riwayat pencarian.') ?></div>
 <?php else: ?>
     <?php foreach ($history as $item):
         $kota = $item['kota'] ?? '';
-        $info = $item['info'] ?? 'Terakhir dicari';
+        $info = $item['info'] ?? t('Terakhir dicari');
         if ($kota === '') continue;
     ?>
         <div class="city-history-item" onclick="selectDestination('<?= $kota ?>')">
@@ -25,16 +26,16 @@
 
 <!-- Riwayat Hotel -->
 <div class="hotel-history-title mt-4">
-    Hotel Terakhir Dilihat
+    <?= te('Hotel Terakhir Dilihat') ?>
 </div>
 
-<?php 
+<?php
 // Akses session hotel_history
 $hotel_history = $_SESSION['hotel_history'] ?? [];
 ?>
 
 <?php if (empty($hotel_history)): ?>
-    <div class="text-muted small">Belum ada riwayat hotel.</div>
+    <div class="text-muted small"><?= te('Belum ada riwayat hotel.') ?></div>
 <?php else: ?>
     <?php foreach ($hotel_history as $hotel): ?>
         <div class="city-history-item" 

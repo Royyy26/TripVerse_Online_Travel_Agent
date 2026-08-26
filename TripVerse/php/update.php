@@ -12,6 +12,11 @@ function jsonError($message)
     exit;
 }
 
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'owner'])) {
+    http_response_code(403);
+    jsonError('Akses ditolak.');
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     jsonError('Invalid request method');
 }

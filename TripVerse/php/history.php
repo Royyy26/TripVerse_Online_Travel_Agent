@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 
 // Redirect jika user belum login
 if (!isset($_SESSION['id_user'])) {
@@ -111,9 +112,9 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riwayat Pesanan - TripVerse</title>
+    <title><?= te('Riwayat Pesanan') ?> - TripVerse</title>
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="../img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -135,26 +136,35 @@ try {
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style.css?v=2.0" rel="stylesheet">
+
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         .booking-card {
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(15, 23, 43, 0.08);
+            transition: transform .4s cubic-bezier(.22, 1, .36, 1), box-shadow .4s ease;
             margin-bottom: 20px;
+            overflow: hidden;
+            border: none;
         }
 
         .booking-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 24px 44px rgba(15, 23, 43, 0.16);
         }
 
         .hotel-img {
             width: 100%;
             height: 180px;
             object-fit: cover;
-            border-radius: 8px 8px 0 0;
+            border-radius: 0;
+            transition: transform .5s ease;
+        }
+
+        .booking-card:hover .hotel-img {
+            transform: scale(1.06);
         }
 
         .status-badge {
@@ -164,7 +174,7 @@ try {
         }
 
         .status-completed {
-            background-color: #28a745;
+            background-color: #16A34A;
             color: white;
         }
 
@@ -174,7 +184,7 @@ try {
         }
 
         .status-cancelled {
-            background-color: #dc3545;
+            background-color: #DC2626;
             color: white;
         }
 
@@ -185,7 +195,7 @@ try {
 
         .price-tag {
             font-weight: bold;
-            color: #ff6b00;
+            color: #FEA116;
         }
 
         .empty-state {
@@ -200,21 +210,38 @@ try {
         }
 
         .filter-btn {
-            border-radius: 20px;
+            border-radius: 999px;
             margin-right: 8px;
             margin-bottom: 8px;
+            border-width: 2px;
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
         }
 
         .filter-btn.active {
-            background-color: #ff6b00;
+            background: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
             color: white;
-            border-color: #ff6b00;
+            border-color: transparent;
+            box-shadow: 0 10px 22px rgba(254, 161, 22, 0.35);
         }
 
         .time-remaining {
             font-size: 0.8rem;
-            color: #dc3545;
+            color: #DC2626;
             font-weight: bold;
+        }
+
+        .booking-card .btn-sm {
+            border-radius: 999px;
+            border-width: 2px;
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        .booking-card .btn-sm:hover {
+            transform: translateY(-2px);
         }
 
         .footer {
@@ -242,7 +269,7 @@ try {
 
         .footer .btn-link:hover {
             text-decoration: underline;
-            color: #f5b70a;
+            color: #FEA116;
         }
 
         .footer .btn-social {
@@ -259,7 +286,7 @@ try {
         }
 
         .footer .btn-social:hover {
-            background-color: #f5b70a;
+            background-color: #FEA116;
             color: #000;
         }
 
@@ -271,7 +298,7 @@ try {
 
         .footer-menu a:hover {
             text-decoration: underline;
-            color: #f5b70a;
+            color: #FEA116;
         }
 
         .footer hr {
@@ -313,7 +340,7 @@ try {
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                     <a href="about.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
-                        <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                        <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
                 </div>
 
@@ -345,30 +372,22 @@ try {
                     <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
                         <a href="home.php" class="navbar-brand d-block d-lg-none">
                             <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
-                            <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                            <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                         </a>
                         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a href="home.php" class="nav-item nav-link">Beranda</a>
-                                <a href="about.php" class="nav-item nav-link">Tentang Kami</a>
-                                <a href="hotel.php" class="nav-item nav-link">Hotel</a>
-                                <a href="service.php" class="nav-item nav-link">Fitur</a>
-                                <a href="team.php" class="nav-item nav-link">Tim Kami</a>
-                                <a href="contact.php" class="nav-item nav-link">Kontak</a>
-                                <a href="riwayat.php" class="nav-item nav-link active">Riwayat</a>
-                                <a href="logout.php" class="nav-item nav-link">Logout</a>
+                                <a href="home.php" class="nav-item nav-link"><?= te("Beranda") ?></a>
+                                <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
+                                <a href="hotel.php" class="nav-item nav-link"><?= te("Hotel") ?></a>
+                                <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
+                                <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
+                                <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
+                                <a href="history.php" class="nav-item nav-link active"><?= te("Riwayat") ?></a>
                             </div>
-                            <?php if (isset($_SESSION['username'])): ?>
-                                <span class="navbar-text fw-bold me-3"
-                                    style="background: linear-gradient(to right, #FFA500, #FF6347);
-                                    -webkit-background-clip: text; background-clip: text;
-                                    -webkit-text-fill-color: transparent; text-decoration: underline;">
-                                    Hi <?= htmlspecialchars($_SESSION['username']); ?>, selamat datang di TripVerse
-                                </span>
-                            <?php endif; ?>
+                            <?php include __DIR__ . '/_lang_switch.php'; ?><?php include __DIR__ . '/_account_menu.php'; ?>
                         </div>
                     </nav>
                 </div>
@@ -380,11 +399,11 @@ try {
         <div class="container-fluid page-header mb-5 p-0" style="background-image: url(../img/carousel-1.jpg);">
             <div class="container-fluid page-header-inner py-5">
                 <div class="container text-center pb-5">
-                    <h1 class="display-3 text-white mb-3 animated slideInDown">Riwayat</h1>
+                    <h1 class="display-3 text-white mb-3 animated slideInDown"><?= te('Riwayat') ?></h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center text-uppercase">
-                            <li class="breadcrumb-item"><a href="#">Beranda</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Riwayat</li>
+                            <li class="breadcrumb-item"><a href="#"><?= te('Beranda') ?></a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page"><?= te('Riwayat') ?></li>
                         </ol>
                     </nav>
                 </div>
@@ -395,24 +414,24 @@ try {
         <div class="container py-5">
             <div class="row mb-4">
                 <div class="col">
-                    <h2><i class="fas fa-history me-2"></i> Riwayat Pesanan Hotel</h2>
-                    <p class="text-muted">Daftar semua pemesanan hotel yang pernah Anda lakukan</p>
+                    <h2><i class="fas fa-history me-2"></i> <?= te('Riwayat Pesanan Hotel') ?></h2>
+                    <p class="text-muted"><?= te('Daftar semua pemesanan hotel yang pernah Anda lakukan') ?></p>
 
                     <!-- Filter Status -->
                     <div class="d-flex flex-wrap mb-4">
-                        <a href="riwayat.php?status=all"
+                        <a href="history.php?status=all"
                             class="btn btn-outline-secondary filter-btn <?= $filter_status == 'all' ? 'active' : '' ?>">
-                            Semua
+                            <?= te('Semua') ?>
                         </a>
-                        <a href="riwayat.php?status=Completed"
+                        <a href="history.php?status=Completed"
                             class="btn btn-outline-secondary filter-btn <?= $filter_status == 'Completed' ? 'active' : '' ?>">
                             <i class="fas fa-check-circle me-1"></i> Completed
                         </a>
-                        <a href="riwayat.php?status=Pending"
+                        <a href="history.php?status=Pending"
                             class="btn btn-outline-secondary filter-btn <?= $filter_status == 'Pending' ? 'active' : '' ?>">
                             <i class="fas fa-clock me-1"></i> Pending
                         </a>
-                        <a href="riwayat.php?status=Cancelled"
+                        <a href="history.php?status=Cancelled"
                             class="btn btn-outline-secondary filter-btn <?= $filter_status == 'Cancelled' ? 'active' : '' ?>">
                             <i class="fas fa-times-circle me-1"></i> Cancelled
                         </a>
@@ -427,14 +446,14 @@ try {
             <?php if (empty($bookings)): ?>
                 <div class="empty-state">
                     <i class="fas fa-hotel empty-icon"></i>
-                    <h3>Belum Ada Riwayat Pesanan</h3>
+                    <h3><?= te('Belum Ada Riwayat Pesanan') ?></h3>
                     <?php if ($filter_status != 'all'): ?>
-                        <p class="text-muted">Tidak ada pesanan dengan status <?= htmlspecialchars($filter_status) ?></p>
+                        <p class="text-muted"><?= te('Tidak ada pesanan dengan status') ?> <?= htmlspecialchars($filter_status) ?></p>
                     <?php else: ?>
-                        <p class="text-muted">Anda belum pernah melakukan pemesanan hotel melalui TripVerse</p>
+                        <p class="text-muted"><?= te('Anda belum pernah melakukan pemesanan hotel melalui TripVerse') ?></p>
                     <?php endif; ?>
                     <a href="hotel.php" class="btn btn-primary mt-3">
-                        <i class="fas fa-search me-2"></i> Cari Hotel
+                        <i class="fas fa-search me-2"></i> <?= te('Cari Hotel') ?>
                     </a>
                 </div>
             <?php else: ?>
@@ -466,7 +485,7 @@ try {
                         if ($booking['status'] == 'Pending') {
                             $minutes_left = 2 - $booking['minutes_since_booking'];
                             if ($minutes_left > 0) {
-                                $time_remaining = '<div class="time-remaining mt-2"><i class="fas fa-clock"></i> Waktu tersisa: ' . $minutes_left . ' menit</div>';
+                                $time_remaining = '<div class="time-remaining mt-2"><i class="fas fa-clock"></i> ' . t('Waktu tersisa:') . ' ' . $minutes_left . ' ' . t('menit') . '</div>';
                             } else {
                                 // This should have been caught by cancelExpiredBookings()
                                 $booking['status'] = 'Cancelled';
@@ -498,10 +517,10 @@ try {
                                     </p>
                                     <p class="mb-1">
                                         <i class="fas fa-calendar-alt"></i> <?= $checkin_display ?> - <?= $checkout_display ?>
-                                        <small>(<?= $durasi ?> malam)</small>
+                                        <small>(<?= $durasi ?> <?= t('malam') ?>)</small>
                                     </p>
                                     <p class="mb-1">
-                                        <i class="fas fa-door-open"></i> <?= $booking['jumlah_kamar'] ?> Kamar
+                                        <i class="fas fa-door-open"></i> <?= $booking['jumlah_kamar'] ?> <?= te('Kamar') ?>
                                     </p>
 
                                     <?php if ($booking['status'] == 'Pending' && !empty($time_remaining)): ?>
@@ -512,18 +531,18 @@ try {
 
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <small class="text-muted">Tanggal Pesan:</small>
+                                            <small class="text-muted"><?= te('Tanggal Pesan:') ?></small>
                                             <p class="mb-0"><?= $tanggal_pesan ?></p>
                                         </div>
                                         <div class="text-end">
-                                            <small class="text-muted">Total</small>
+                                            <small class="text-muted"><?= te('Total') ?></small>
                                             <p class="mb-0 price-tag">Rp <?= number_format($booking['total_harga'], 0, ',', '.') ?></p>
                                         </div>
                                     </div>
 
                                     <div class="d-flex justify-content-between mt-3">
                                         <a href="booking_detail.php?id=<?= $booking['booking_id'] ?>" class="btn btn-sm btn-outline-primary">
-                                            <i class="fas fa-info-circle"></i> Detail
+                                            <i class="fas fa-info-circle"></i> <?= te('Detail') ?>
                                         </a>
                                         <?php if ($booking['status'] == 'Completed'): ?>
                                             <a href="booking_confirmation.php?booking_id=<?= $booking['booking_id'] ?>" class="btn btn-sm btn-outline-success">
@@ -532,11 +551,11 @@ try {
                                         <?php endif; ?>
                                         <?php if ($booking['status'] == 'Pending'): ?>
                                             <a href="payment.php?booking_id=<?= $booking['booking_id'] ?>" class="btn btn-sm btn-outline-warning">
-                                                <i class="fas fa-money-bill-wave"></i> Bayar
+                                                <i class="fas fa-money-bill-wave"></i> <?= te('Bayar') ?>
                                             </a>
                                             <a href="cancel_booking.php?id=<?= $booking['booking_id'] ?>" class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('Apakah Anda yakin ingin membatalkan pesanan ini?')">
-                                                <i class="fas fa-times"></i> Batalkan
+                                                onclick="return confirm('<?= t('Apakah Anda yakin ingin membatalkan pesanan ini?') ?>')">
+                                                <i class="fas fa-times"></i> <?= te('Batalkan') ?>
                                             </a>
                                         <?php endif; ?>
                                     </div>
@@ -558,7 +577,7 @@ try {
                                 <img src="../img/logo.png" alt="TripVerse Logo" width="50" class="me-3">
                             </a>
                             <a href="home.php">
-                                <h1 class="text-white text-uppercase mb-0">TripVerse</h1>
+                                <span class="tv-wordmark tv-wordmark-footer">TripVerse</span>
                             </a>
                         </div>
                     </div>
@@ -632,7 +651,7 @@ try {
         <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
         <!-- Template Javascript -->
-        <script src="../js/main.js"></script>
+        <script src="../js/main.js?v=2.0"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
@@ -649,6 +668,7 @@ try {
                 }, 60000); // Refresh every 60 seconds to check for expired bookings
             <?php endif; ?>
         </script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

@@ -6,6 +6,8 @@
  * lalu kirim PDF e-ticket ke WhatsApp via Fonnte.
  */
 
+require_once __DIR__ . '/_lang.php';
+
 function sendPaymentNotification(array $data, bool $debug = false): bool
 {
     //-------------------------------
@@ -73,7 +75,7 @@ function sendPaymentNotification(array $data, bool $debug = false): bool
     //-------------------------------
     // OLAH DATA
     //-------------------------------
-    $customerName   = $booking['customer_name'] ?? ($data['nama'] ?? 'Pelanggan');
+    $customerName   = $booking['customer_name'] ?? ($data['nama'] ?? t('Pelanggan'));
     $customerEmail  = $booking['customer_email'] ?? '-';
     $customerPhone  = $booking['no_hp'] ?? $phone;
 
@@ -110,14 +112,14 @@ function sendPaymentNotification(array $data, bool $debug = false): bool
     // 1) KIRIM PESAN TEKS KE WA
     //-------------------------------
     $waText =
-        "Halo *{$customerName}*,\n\n" .
-        "Pembayaran untuk Booking *{$booking_id}* telah *BERHASIL dikonfirmasi*.\n\n" .
+        t("Halo") . " *{$customerName}*,\n\n" .
+        t("Pembayaran untuk Booking") . " *{$booking_id}* " . t("telah") . " *" . t("BERHASIL dikonfirmasi") . "*.\n\n" .
         "🏨 *Hotel*: {$hotelName}\n" .
-        "📍 *Kota*: {$hotelCity}\n" .
+        "📍 *" . t("Kota") . "*: {$hotelCity}\n" .
         "📅 *Check-in*: {$checkin_date}\n" .
         "📅 *Check-out*: {$checkout_date}\n" .
-        "💰 *Total*: Rp " . number_format($total_harga, 0, ',', '.') . "\n\n" .
-        "Kami sedang membuat e-ticket Anda...";
+        "💰 *" . t("Total") . "*: Rp " . number_format($total_harga, 0, ',', '.') . "\n\n" .
+        t("Kami sedang membuat e-ticket Anda...");
 
     // Kirim teks via Fonnte
     $curl = curl_init();
@@ -162,13 +164,39 @@ function sendPaymentNotification(array $data, bool $debug = false): bool
         $imgTag = '<img src="' . htmlspecialchars($hotelImgUrl) . '" class="hotel-image" alt="' . $safeHotelName . '">';
     }
 
+    // Translated labels for the e-ticket HTML
+    $titleEticket    = te('E-Ticket Pembayaran') . ' - TripVerse';
+    $tPaymentSuccess = te('Pembayaran Berhasil!');
+    $tThanks         = te('Terima kasih telah memesan melalui TripVerse');
+    $tTransDetail    = te('Detail Transaksi');
+    $tBookingCode    = te('Kode Booking:');
+    $tPaymentDate    = te('Tanggal Pembayaran:');
+    $tStatus         = te('Status:');
+    $tHotelDetail    = te('Detail Hotel');
+    $tCheckinLabel   = te('Check-in:');
+    $tCheckoutLabel  = te('Check-out:');
+    $tDurationLabel  = te('Durasi:');
+    $tNightLabel     = te('malam');
+    $tRoomCountLabel = te('Jumlah Kamar:');
+    $tBookerDetail   = te('Detail Pemesan');
+    $tNameLabel      = te('Nama:');
+    $tEmailLabel     = te('Email:');
+    $tPhoneLabel     = te('No. HP:');
+    $tRoomTypeLabel  = te('Tipe Kamar:');
+    $tPaymentDetail  = te('Rincian Pembayaran');
+    $tTotalPayment   = te('Total Pembayaran');
+    $tImportantInfo  = te('Informasi Penting:');
+    $tInfo1          = te('Tunjukkan e-ticket dan kode booking saat check-in di hotel.');
+    $tInfo2          = te('Pembatalan minimal 24 jam sebelum waktu check-in.');
+    $tInfo3          = te('E-ticket ini juga telah dikirim ke WhatsApp Anda.');
+
     // HTML E-Ticket – Bootstrap-like, tapi inline CSS agar aman
     $html = <<<HTML
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>E-Ticket Pembayaran - TripVerse</title>
+<title>{$titleEticket}</title>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -286,70 +314,70 @@ function sendPaymentNotification(array $data, bool $debug = false): bool
 <body>
 <div class="container">
     <div class="card">
-        <h2>Pembayaran Berhasil!</h2>
-        <div class="subtitle">Terima kasih telah memesan melalui TripVerse</div>
+        <h2>{$tPaymentSuccess}</h2>
+        <div class="subtitle">{$tThanks}</div>
 
         <div class="alert">
-            <div class="section-title" style="margin-top:0;">Detail Transaksi</div>
+            <div class="section-title" style="margin-top:0;">{$tTransDetail}</div>
             <div class="row">
                 <div class="col-6">
-                    <div><span class="label">Kode Booking:</span> {$safeBookingId}</div>
+                    <div><span class="label">{$tBookingCode}</span> {$safeBookingId}</div>
                 </div>
                 <div class="col-6">
-                    <div><span class="label">Tanggal Pembayaran:</span> {$safeTanggalPemb}</div>
+                    <div><span class="label">{$tPaymentDate}</span> {$safeTanggalPemb}</div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-6">
-                    <div><span class="label">Status:</span> <span class="badge">{$safeStatusTrans}</span></div>
+                    <div><span class="label">{$tStatus}</span> <span class="badge">{$safeStatusTrans}</span></div>
                 </div>
             </div>
         </div>
 
-        <div class="section-title">Detail Hotel</div>
+        <div class="section-title">{$tHotelDetail}</div>
         {$imgTag}
         <div class="hotel-name">{$safeHotelName}</div>
         <div class="hotel-location">{$safeHotelAddr}, {$safeHotelCity}</div>
 
         <div style="margin-top:10px;">
             <div class="inline-block">
-                <strong>Check-in:</strong> {$safeCheckin}
+                <strong>{$tCheckinLabel}</strong> {$safeCheckin}
             </div>
             <div class="inline-block">
-                <strong>Check-out:</strong> {$safeCheckout}
+                <strong>{$tCheckoutLabel}</strong> {$safeCheckout}
             </div>
             <div class="inline-block">
-                <strong>Durasi:</strong> {$safeDurasi} malam
+                <strong>{$tDurationLabel}</strong> {$safeDurasi} {$tNightLabel}
             </div>
             <div class="inline-block">
-                <strong>Jumlah Kamar:</strong> {$safeJmlKamar}
+                <strong>{$tRoomCountLabel}</strong> {$safeJmlKamar}
             </div>
         </div>
 
-        <div class="section-title">Detail Pemesan</div>
+        <div class="section-title">{$tBookerDetail}</div>
         <div class="row">
             <div class="col-6">
-                <div><span class="label">Nama:</span> {$safeCustName}</div>
-                <div><span class="label">Email:</span> {$safeCustEmail}</div>
-                <div><span class="label">No. HP:</span> {$safeCustPhone}</div>
+                <div><span class="label">{$tNameLabel}</span> {$safeCustName}</div>
+                <div><span class="label">{$tEmailLabel}</span> {$safeCustEmail}</div>
+                <div><span class="label">{$tPhoneLabel}</span> {$safeCustPhone}</div>
             </div>
             <div class="col-6">
-                <div><span class="label">Tipe Kamar:</span> {$safeTipeKamar}</div>
+                <div><span class="label">{$tRoomTypeLabel}</span> {$safeTipeKamar}</div>
             </div>
         </div>
 
-        <div class="section-title">Rincian Pembayaran</div>
+        <div class="section-title">{$tPaymentDetail}</div>
         <div class="row">
-            <div class="col-6 price-total-label">Total Pembayaran</div>
+            <div class="col-6 price-total-label">{$tTotalPayment}</div>
             <div class="col-6 price-total">{$safeTotalHarga}</div>
         </div>
 
         <div class="info">
-            <strong>Informasi Penting:</strong>
+            <strong>{$tImportantInfo}</strong>
             <ul>
-                <li>Tunjukkan e-ticket dan kode booking saat check-in di hotel.</li>
-                <li>Pembatalan minimal 24 jam sebelum waktu check-in.</li>
-                <li>E-ticket ini juga telah dikirim ke WhatsApp Anda.</li>
+                <li>{$tInfo1}</li>
+                <li>{$tInfo2}</li>
+                <li>{$tInfo3}</li>
             </ul>
         </div>
     </div>
@@ -393,7 +421,7 @@ HTML;
     //-------------------------------
     // 4) KIRIM PDF KE WHATSAPP VIA FONNTE
     //-------------------------------
-    $caption = "Berikut E-Ticket Anda untuk Booking ID *{$booking_id}*.\nTerima kasih telah menggunakan TripVerse ✨";
+    $caption = t("Berikut E-Ticket Anda untuk Booking ID") . " *{$booking_id}*.\n" . t("Terima kasih telah menggunakan TripVerse") . " ✨";
 
     $curl = curl_init();
     curl_setopt_array($curl, [

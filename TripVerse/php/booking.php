@@ -3,6 +3,7 @@
 // SESSION HANDLING
 // ==========================================
 session_start();
+require_once __DIR__ . '/_lang.php';
 
 // Enable error reporting for debugging
 error_reporting(E_ALL);
@@ -43,7 +44,7 @@ $kamar = isset($_GET['kamar']) ? intval($_GET['kamar']) : 1;
 
 // Validasi parameter wajib
 if (!$hotel_id || !$tipe_id || $kamar < 1) {
-    $_SESSION['error'] = "Parameter pemesanan tidak valid";
+    $_SESSION['error'] = t("Parameter pemesanan tidak valid");
     header("Location: hotel.php");
     exit;
 }
@@ -53,11 +54,11 @@ try {
     $date1 = new DateTime($checkin);
     $date2 = new DateTime($checkout);
     if ($date2 <= $date1) {
-        throw new Exception("Tanggal check-out harus setelah check-in");
+        throw new Exception(t("Tanggal check-out harus setelah check-in"));
     }
     $durasi = $date2->diff($date1)->days;
 } catch (Exception $e) {
-    $_SESSION['error'] = "Format tanggal tidak valid: " . $e->getMessage();
+    $_SESSION['error'] = t("Format tanggal tidak valid: ") . $e->getMessage();
     header("Location: hotel_detail.php?id=" . urlencode($hotel_id));
     exit;
 }
@@ -78,7 +79,7 @@ if ($stmt_hotel = $conn->prepare($sql_hotel)) {
 }
 
 if (!$hotel) {
-    $_SESSION['error'] = "Hotel tidak ditemukan";
+    $_SESSION['error'] = t("Hotel tidak ditemukan");
     header("Location: hotel.php");
     exit;
 }
@@ -116,7 +117,7 @@ if ($stmt_room = $conn->prepare($sql_room)) {
 }
 
 if (!$room || $room['available'] < $kamar) {
-    $_SESSION['error'] = "Kamar tidak tersedia atau stok habis. Tersedia: " . ($room['available'] ?? 0) . " kamar";
+    $_SESSION['error'] = t("Kamar tidak tersedia atau stok habis. Tersedia:") . " " . ($room['available'] ?? 0) . " " . t("kamar");
     header("Location: hotel_detail.php?id=" . urlencode($hotel_id));
     exit;
 }
@@ -316,7 +317,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     // NEWUSER promo cannot be applied manually
                     if ($discount['kode_promo'] == 'NEWUSER25' || $discount['diskon_id'] == 'NEWUSER') {
-                        $promo_error = "Diskon NEWUSER hanya berlaku otomatis untuk pengguna baru";
+                        $promo_error = t("Diskon NEWUSER hanya berlaku otomatis untuk pengguna baru");
                     } else {
                         // Calculate discount value
                         $discount_value = 0;
@@ -343,14 +344,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ];
 
                         $final_price = $total_harga - $discount_value;
-                        $promo_success = "Kode promo berhasil diterapkan! Anda hemat Rp " . number_format($discount_value, 0, ',', '.');
+                        $promo_success = t("Kode promo berhasil diterapkan! Anda hemat") . " Rp " . number_format($discount_value, 0, ',', '.');
 
                         // Override new user discount
                         $new_user_discount = null;
                         $is_new_user_eligible = false;
                     }
                 } else {
-                    $promo_error = "Kode promo tidak valid atau tidak memenuhi syarat";
+                    $promo_error = t("Kode promo tidak valid atau tidak memenuhi syarat");
                     $selected_discount_id = null;
                     $discount_applied = null;
                     $final_price = $total_harga;
@@ -358,7 +359,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt_promo->close();
             }
         } else {
-            $promo_error = "Masukkan kode promo";
+            $promo_error = t("Masukkan kode promo");
         }
     }
     
@@ -386,7 +387,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $special_requests = filter_input(INPUT_POST, 'special_requests', FILTER_SANITIZE_STRING);
 
         if (empty($customer_name) || empty($no_hp) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error = "Data pemesan tidak valid. Silakan periksa kembali.";
+            $error = t("Data pemesan tidak valid. Silakan periksa kembali.");
         } else {
             try {
                 // Generate temporary booking ID
@@ -434,10 +435,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 
                 // Redirect to service offer page
-                header("Location: penawaran.php");
+                header("Location: extra_services.php");
                 exit();
             } catch (Exception $e) {
-                $error = "Gagal memproses data pemesanan: " . $e->getMessage();
+                $error = t("Gagal memproses data pemesanan: ") . $e->getMessage();
             }
         }
     }
@@ -493,7 +494,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
 <head>
     <meta charset="utf-8">
-    <title>TripVerse - Pemesanan Hotel</title>
+    <title>TripVerse - <?= te('Pemesanan Hotel') ?></title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -519,21 +520,22 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style.css?v=2.0" rel="stylesheet">
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         /* [Keep all your CSS styles unchanged] */
         :root {
-            --primary: #FF6B00;
-            --primary-light: #FF8C33;
-            --primary-dark: #E05D00;
-            --secondary: #FFA500;
+            --primary: #FEA116;
+            --primary-light: #FF7A3D;
+            --primary-dark: #E8890A;
+            --secondary: #FEA116;
             --dark: #2c3e50;
             --light: #f8f9fa;
             --gray: #6c757d;
             --gray-light: #e9ecef;
-            --success: #28a745;
-            --danger: #dc3545;
+            --success: #16A34A;
+            --danger: #DC2626;
             --info: #17a2b8;
             --warning: #ffc107;
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -543,7 +545,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Heebo', system-ui, -apple-system, sans-serif;
             line-height: 1.6;
             color: var(--dark);
             background-color: #f5f7fa;
@@ -551,11 +553,17 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
         .booking-container {
             background: white;
-            border-radius: 12px;
+            border-radius: 18px;
             box-shadow: var(--shadow-lg);
             padding: 2rem;
             margin-bottom: 2rem;
             transition: var(--transition);
+            animation: tv-card-in-up .6s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        @keyframes tv-card-in-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .booking-container:hover {
@@ -605,8 +613,8 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         }
 
         .step-number {
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: #e9ecef;
             color: var(--gray);
@@ -616,11 +624,15 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             font-weight: bold;
             margin-bottom: 10px;
             border: 3px solid white;
+            transition: all .4s cubic-bezier(.22, 1, .36, 1);
         }
 
         .step.active .step-number {
-            background: var(--primary);
+            background: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
             color: white;
+            box-shadow: 0 8px 20px rgba(254, 161, 22, .45);
+            animation: tv-pulse-glow 2.2s infinite;
+            transform: scale(1.08);
         }
 
         .step.completed .step-number {
@@ -628,15 +640,24 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             color: white;
         }
 
+        .step.completed .step-number::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            font-size: 1rem;
+            margin-left: 0.2rem;
+        }
+
         .step-title {
             font-size: 14px;
             color: var(--gray);
             text-align: center;
+            transition: color .3s ease;
         }
 
         .step.active .step-title {
             color: var(--primary);
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .step.completed .step-title {
@@ -669,7 +690,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         .form-control:focus,
         .form-select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 0.25rem rgba(255, 107, 0, 0.15);
+            box-shadow: 0 0 0 0.25rem rgba(254, 161, 22, 0.15);
             outline: none;
         }
 
@@ -680,28 +701,34 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         }
 
         .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-            padding: 0.75rem 1.75rem;
-            border-radius: 8px;
-            box-shadow: var(--shadow-sm);
+            background: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
+            border: none;
+            padding: 0.8rem 1.9rem;
+            border-radius: 999px;
+            font-weight: 600;
+            box-shadow: 0 10px 24px rgba(254, 161, 22, 0.35);
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .3s ease, filter .3s ease;
         }
 
         .btn-primary:hover {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            filter: brightness(1.06);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(254, 161, 22, 0.45);
         }
 
         .btn-primary:active {
-            transform: translateY(0);
+            transform: translateY(-1px) scale(.98);
         }
 
         .btn-outline-secondary {
             padding: 0.75rem 1.75rem;
-            border-radius: 8px;
-            border-width: 1px;
+            border-radius: 999px;
+            border-width: 2px;
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        .btn-outline-secondary:hover {
+            transform: translateY(-2px);
         }
 
         .btn-sm {
@@ -711,12 +738,14 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
         .summary-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 18px;
             box-shadow: var(--shadow-md);
             padding: 1.75rem;
             position: sticky;
             top: 1.5rem;
             transition: var(--transition);
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(135deg, #FEA116, #FF7A3D) 1;
         }
 
         .summary-card:hover {
@@ -847,7 +876,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
         .info-field input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 0.25rem rgba(255, 107, 0, 0.15);
+            box-shadow: 0 0 0 0.25rem rgba(254, 161, 22, 0.15);
             outline: none;
         }
 
@@ -950,7 +979,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
         .promo-input-group input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 0.25rem rgba(255, 107, 0, 0.15);
+            box-shadow: 0 0 0 0.25rem rgba(254, 161, 22, 0.15);
             outline: none;
         }
 
@@ -1038,7 +1067,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
         }
 
         .user-welcome {
-            background: linear-gradient(135deg, #FFA500, #FF6347);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1129,8 +1158,9 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             }
 
             .gender-selection {
-                flex-direction: column;
-                gap: 1rem;
+                flex-wrap: wrap;
+                row-gap: 0.75rem;
+                column-gap: 1.5rem;
             }
 
             .room-features {
@@ -1202,7 +1232,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                 <a href="about.php" class="d-flex align-items-center text-decoration-none">
                     <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
-                    <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                    <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                 </a>
             </div>
             <div class="col-lg-9">
@@ -1230,29 +1260,21 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                 <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
                     <a href="home.php" class="navbar-brand d-block d-lg-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
-                        <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                        <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
                     <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="home.php" class="nav-item nav-link">Beranda</a>
-                            <a href="about.php" class="nav-item nav-link">Tentang Kami</a>
-                            <a href="hotel.php" class="nav-item nav-link active">Hotel</a>
-                            <a href="pesawat.php" class="nav-item nav-link">Pesawat</a>
-                            <a href="service.php" class="nav-item nav-link">Fitur</a>
-                            <a href="team.php" class="nav-item nav-link">Tim Kami</a>
-                            <a href="contact.php" class="nav-item nav-link">Kontak</a>
-                            <a href="logout.php" class="nav-item nav-link">Logout</a>
+                            <a href="home.php" class="nav-item nav-link"><?= te("Beranda") ?></a>
+                            <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
+                            <a href="hotel.php" class="nav-item nav-link active"><?= te("Hotel") ?></a>
+                            <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
+                            <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
+                            <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
                         </div>
-                        <?php if (isset($_SESSION['username'])): ?>
-                            <div class="navbar-text ms-3">
-                                <span class="user-welcome">
-                                    Hi <?= htmlspecialchars($_SESSION['username']); ?>, selamat datang di TripVerse
-                                </span>
-                            </div>
-                        <?php endif; ?>
+                        <?php include __DIR__ . '/_lang_switch.php'; ?><?php include __DIR__ . '/_account_menu.php'; ?>
                     </div>
                 </nav>
             </div>
@@ -1263,12 +1285,12 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
     <div class="container-fluid page-header mb-5 p-0" style="background-image: url(../img/carousel-1.jpg);">
         <div class="container-fluid page-header-inner py-5">
             <div class="container text-center pb-5">
-                <h1 class="display-3 text-white mb-3 animated slideInDown">Pemesanan Hotel</h1>
+                <h1 class="display-3 text-white mb-3 animated slideInDown"><?= te('Pemesanan Hotel') ?></h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center text-uppercase">
-                        <li class="breadcrumb-item"><a href="home.php">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="hotel.php">Hotel</a></li>
-                        <li class="breadcrumb-item text-white active" aria-current="page">Pemesanan</li>
+                        <li class="breadcrumb-item"><a href="home.php"><?= te('Beranda') ?></a></li>
+                        <li class="breadcrumb-item"><a href="hotel.php"><?= te('Hotel') ?></a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page"><?= te('Pemesanan') ?></li>
                     </ol>
                 </nav>
             </div>
@@ -1286,37 +1308,37 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                         <div class="new-user-banner pulse">
                             <i class="fas fa-gift"></i>
                             <div class="new-user-banner-content flex-grow-1">
-                                <h4>Selamat! Diskon Pengguna Baru 25% Telah Aktif</h4>
-                                <p>Anda mendapatkan diskon khusus untuk pengguna baru TripVerse. Voucher ini akan hangus dalam:</p>
+                                <h4><?= te('Selamat! Diskon Pengguna Baru 25% Telah Aktif') ?></h4>
+                                <p><?= te('Anda mendapatkan diskon khusus untuk pengguna baru TripVerse. Voucher ini akan hangus dalam:') ?></p>
                             </div>
                             <div class="discount-timer">
                                 <i class="fas fa-clock me-1"></i>
-                                <?= $days_left_new_user > 0 ? "$days_left_new_user hari" : "Kurang dari 1 hari" ?>
+                                <?= $days_left_new_user > 0 ? "$days_left_new_user " . t('hari') : te('Kurang dari 1 hari') ?>
                             </div>
                         </div>
                     <?php endif; ?>
 
                     <div class="booking-container">
                         <div class="booking-header">
-                            <h2 class="mb-3">Pemesanan Hotel</h2>
+                            <h2 class="mb-3"><?= te('Pemesanan Hotel') ?></h2>
 
                             <!-- Progress Steps -->
                             <div class="progress-steps">
                                 <div class="step active">
                                     <div class="step-number">1</div>
-                                    <div class="step-title">Detail Pesanan</div>
+                                    <div class="step-title"><?= te('Detail Pesanan') ?></div>
                                 </div>
                                 <div class="step">
                                     <div class="step-number">2</div>
-                                    <div class="step-title">Penawaran Layanan</div>
+                                    <div class="step-title"><?= te('Penawaran Layanan') ?></div>
                                 </div>
                                 <div class="step">
                                     <div class="step-number">3</div>
-                                    <div class="step-title">Pembayaran</div>
+                                    <div class="step-title"><?= te('Pembayaran') ?></div>
                                 </div>
                                 <div class="step">
                                     <div class="step-number">4</div>
-                                    <div class="step-title">Konfirmasi</div>
+                                    <div class="step-title"><?= te('Konfirmasi') ?></div>
                                 </div>
                             </div>
                         </div>
@@ -1332,8 +1354,8 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
                             <!-- Promo Code Section -->
                             <div class="promo-section">
-                                <h4 class="section-title">Kode Promo</h4>
-                                <p class="booker-subtitle">Masukkan kode promo untuk mendapatkan diskon spesial</p>
+                                <h4 class="section-title"><?= te('Kode Promo') ?></h4>
+                                <p class="booker-subtitle"><?= te('Masukkan kode promo untuk mendapatkan diskon spesial') ?></p>
 
                                 <?php if ($promo_error): ?>
                                     <div class="alert alert-danger">
@@ -1353,72 +1375,72 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                             <i class="fas fa-check-circle"></i>
                                             <span>
                                                 <strong><?= htmlspecialchars($discount_applied['nama_diskon'] ?? $discount_applied['diskon_terpilih']['nama_diskon']) ?></strong> -
-                                                <?= htmlspecialchars($discount_applied['kode_promo'] ?? 'Diskon Otomatis') ?>
+                                                <?= htmlspecialchars($discount_applied['kode_promo'] ?? t('Diskon Otomatis')) ?>
                                                 <?php if ($discount_applied['minimal_pembelian'] ?? $discount_applied['diskon_terpilih']['minimal_pembelian'] ?? 0): ?>
                                                     <small class="text-muted ms-2">
-                                                        (Min. belanja: Rp <?= number_format($discount_applied['minimal_pembelian'] ?? $discount_applied['diskon_terpilih']['minimal_pembelian'] ?? 0, 0, ',', '.') ?>)
+                                                        (<?= te('Min. belanja:') ?> Rp <?= number_format($discount_applied['minimal_pembelian'] ?? $discount_applied['diskon_terpilih']['minimal_pembelian'] ?? 0, 0, ',', '.') ?>)
                                                     </small>
                                                 <?php endif; ?>
                                             </span>
                                         </div>
                                         <button type="submit" name="remove_discount" class="btn btn-sm btn-outline-danger">
-                                            Hapus
+                                            <?= te('Hapus') ?>
                                         </button>
                                     </div>
                                 <?php else: ?>
                                     <div class="promo-input-group">
                                         <input type="text" name="promo_code" value="<?= htmlspecialchars($promo_code) ?>"
-                                            placeholder="Masukkan kode promo" maxlength="50">
+                                            placeholder="<?= te('Masukkan kode promo') ?>" maxlength="50">
                                         <button type="submit" name="apply_promo" class="btn btn-primary">
-                                            Terapkan
+                                            <?= te('Terapkan') ?>
                                         </button>
                                     </div>
                                 <?php endif; ?>
 
                                 <div class="info-note mt-2">
                                     <i class="fas fa-info-circle text-secondary me-1"></i>
-                                    Kode promo hanya bisa digunakan sekali dan tidak dapat digabungkan dengan promo lainnya.
-                                    Minimal pembelian: Rp <?= number_format($total_harga, 0, ',', '.') ?>
+                                    <?= te('Kode promo hanya bisa digunakan sekali dan tidak dapat digabungkan dengan promo lainnya.') ?>
+                                    <?= te('Minimal pembelian:') ?> Rp <?= number_format($total_harga, 0, ',', '.') ?>
                                 </div>
                             </div>
 
                             <!-- Booker Details Section -->
                             <div class="booker-details">
-                                <h3 class="booker-title">Detail Pemesan</h3>
-                                <p class="booker-subtitle">Lengkapi detailnya dengan datamu. Ini akan dikirim ke hotel untuk keperluan pemesanan.</p>
+                                <h3 class="booker-title"><?= te('Detail Pemesan') ?></h3>
+                                <p class="booker-subtitle"><?= te('Lengkapi detailnya dengan datamu. Ini akan dikirim ke hotel untuk keperluan pemesanan.') ?></p>
 
                                 <!-- Gender Selection -->
                                 <div class="gender-selection">
                                     <label class="gender-option">
                                         <input type="radio" name="gender" value="Tuan" class="gender-checkbox" checked>
-                                        <span>Tuan</span>
+                                        <span><?= te('Tuan') ?></span>
                                     </label>
                                     <label class="gender-option">
                                         <input type="radio" name="gender" value="Nyonya" class="gender-checkbox">
-                                        <span>Nyonya</span>
+                                        <span><?= te('Nyonya') ?></span>
                                     </label>
                                     <label class="gender-option">
                                         <input type="radio" name="gender" value="Nona" class="gender-checkbox">
-                                        <span>Nona</span>
+                                        <span><?= te('Nona') ?></span>
                                     </label>
                                 </div>
 
                                 <!-- Personal Information -->
                                 <div class="info-field">
-                                    <label>Nama Lengkap Sesuai Identitas</label>
+                                    <label><?= te('Nama Lengkap Sesuai Identitas') ?></label>
                                     <input type="text" name="customer_name" value="<?= htmlspecialchars($user['nama']) ?>" required>
                                 </div>
 
                                 <div class="info-field">
-                                    <label>Nomor Telepon</label>
+                                    <label><?= te('Nomor Telepon') ?></label>
                                     <input type="tel" name="no_hp" value="<?= htmlspecialchars($user['no_hp']) ?>" required>
-                                    <div class="info-note">Nomor telepon aktif untuk konfirmasi pemesanan.</div>
+                                    <div class="info-note"><?= te('Nomor telepon aktif untuk konfirmasi pemesanan.') ?></div>
                                 </div>
 
                                 <div class="info-field">
-                                    <label>Alamat Email</label>
+                                    <label><?= te('Alamat Email') ?></label>
                                     <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
-                                    <div class="info-note">Konfirmasi pemesanan akan dikirim ke email ini.</div>
+                                    <div class="info-note"><?= te('Konfirmasi pemesanan akan dikirim ke email ini.') ?></div>
                                 </div>
                             </div>
 
@@ -1431,7 +1453,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                         <h4 class="room-title"><?= htmlspecialchars($hotel['nama_hotel']) ?></h4>
                                         <p class="room-subtitle">
                                             <?= date('D, d M Y', strtotime($checkin)) ?> - <?= date('D, d M Y', strtotime($checkout)) ?><br>
-                                            <?= $durasi ?> Malam • <?= $kamar ?> Kamar
+                                            <?= $durasi ?> <?= t('Malam') ?> • <?= $kamar ?> <?= te('Kamar') ?>
                                         </p>
                                     </div>
                                 </div>
@@ -1440,7 +1462,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                 <div class="room-features">
                                     <div class="feature-item">
                                         <span class="feature-check">✓</span>
-                                        <span><?= $room['kapasitas'] ?> Tamu</span>
+                                        <span><?= $room['kapasitas'] ?> <?= te('Tamu') ?></span>
                                     </div>
                                     <div class="feature-item">
                                         <span class="feature-check">✓</span>
@@ -1448,23 +1470,23 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                     </div>
                                     <div class="feature-item">
                                         <span class="feature-check">✓</span>
-                                        <span>Sarapan</span>
+                                        <span><?= te('Sarapan') ?></span>
                                     </div>
                                     <div class="feature-item">
                                         <span class="feature-check">✓</span>
-                                        <span>WiFi Gratis</span>
+                                        <span><?= te('WiFi Gratis') ?></span>
                                     </div>
                                     <div class="feature-item">
                                         <span class="feature-check">✓</span>
-                                        <span>Kamar Non-smoking</span>
+                                        <span><?= te('Kamar Non-smoking') ?></span>
                                     </div>
                                 </div>
 
                                 <!-- Room Assignment -->
                                 <div class="info-field">
-                                    <label>Kamar 1 : <?= htmlspecialchars($user['nama']) ?></label>
+                                    <label><?= te('Kamar') ?> 1 : <?= htmlspecialchars($user['nama']) ?></label>
                                     <button type="button" class="special-request-btn" onclick="openSpecialRequest()">
-                                        Ada Permintaan Khusus?
+                                        <?= te('Ada Permintaan Khusus?') ?>
                                     </button>
                                 </div>
                             </div>
@@ -1472,52 +1494,52 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                             <!-- Special Request Modal -->
                             <div class="special-request-modal" id="specialRequestModal">
                                 <div class="request-modal-content">
-                                    <h4 class="request-title">Permintaan Khusus</h4>
-                                    <p class="booker-subtitle">Pemenuhan permintaan tergantung pada ketersediaan dan mungkin dikenakan biaya tambahan saat check-in.</p>
+                                    <h4 class="request-title"><?= te('Permintaan Khusus') ?></h4>
+                                    <p class="booker-subtitle"><?= te('Pemenuhan permintaan tergantung pada ketersediaan dan mungkin dikenakan biaya tambahan saat check-in.') ?></p>
 
                                     <div class="request-options">
                                         <div class="request-option">
                                             <label>
                                                 <input type="checkbox" name="special_floor" value="lantai_atas">
-                                                <span>Lantai Atas</span>
+                                                <span><?= te('Lantai Atas') ?></span>
                                             </label>
                                         </div>
                                         <div class="request-option">
                                             <label>
                                                 <input type="checkbox" name="special_door" value="pintu_terhubung">
-                                                <span>Kamar dengan Pintu Terhubung</span>
+                                                <span><?= te('Kamar dengan Pintu Terhubung') ?></span>
                                             </label>
                                         </div>
                                         <div class="request-option">
                                             <label>
                                                 <input type="checkbox" name="special_checkin" value="waktu_checkin">
-                                                <span>Waktu Check-in Khusus</span>
+                                                <span><?= te('Waktu Check-in Khusus') ?></span>
                                             </label>
                                         </div>
                                         <div class="request-option">
                                             <label>
                                                 <input type="checkbox" name="special_checkout" value="waktu_checkout">
-                                                <span>Waktu Check-out Khusus</span>
+                                                <span><?= te('Waktu Check-out Khusus') ?></span>
                                             </label>
                                         </div>
                                     </div>
 
                                     <div class="info-field">
-                                        <label>Isi Permintaan Lain</label>
-                                        <textarea name="special_notes" class="request-textarea" placeholder="Tulis permintaan khusus lainnya di sini..."></textarea>
+                                        <label><?= te('Isi Permintaan Lain') ?></label>
+                                        <textarea name="special_notes" class="request-textarea" placeholder="<?= te('Tulis permintaan khusus lainnya di sini...') ?>"></textarea>
                                     </div>
 
                                     <div class="request-actions">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="closeSpecialRequest()">Batal</button>
-                                        <button type="button" class="btn btn-primary" onclick="saveSpecialRequest()">Simpan</button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="closeSpecialRequest()"><?= te('Batal') ?></button>
+                                        <button type="button" class="btn btn-primary" onclick="saveSpecialRequest()"><?= te('Simpan') ?></button>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Catatan Khusus -->
                             <div class="info-field">
-                                <label for="catatan">Catatan Khusus (Opsional)</label>
-                                <textarea class="form-control" id="catatan" name="catatan" rows="3" placeholder="Masukkan catatan khusus jika ada"></textarea>
+                                <label for="catatan"><?= te('Catatan Khusus (Opsional)') ?></label>
+                                <textarea class="form-control" id="catatan" name="catatan" rows="3" placeholder="<?= te('Masukkan catatan khusus jika ada') ?>"></textarea>
                             </div>
 
                             <!-- Hidden Fields -->
@@ -1534,10 +1556,10 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                             <!-- Navigation Buttons -->
                             <div class="d-flex justify-content-between mt-5">
                                 <a href="hotel_detail.php?id=<?= $hotel_id ?>" class="btn btn-outline-secondary px-4 py-2">
-                                    <i class="fas fa-arrow-left me-2"></i> Kembali
+                                    <i class="fas fa-arrow-left me-2"></i> <?= te('Kembali') ?>
                                 </a>
                                 <button type="submit" name="submit_booking" class="btn btn-primary px-4 py-2">
-                                    Lanjutkan <i class="fas fa-arrow-right ms-2"></i>
+                                    <?= te('Lanjutkan') ?> <i class="fas fa-arrow-right ms-2"></i>
                                 </button>
                             </div>
                         </form>
@@ -1547,7 +1569,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                 <!-- Order Summary -->
                 <div class="col-lg-4">
                     <div class="summary-card">
-                        <h4 class="mb-4">Ringkasan Pesanan</h4>
+                        <h4 class="mb-4"><?= te('Ringkasan Pesanan') ?></h4>
 
                         <img src="<?= htmlspecialchars($hotel_image_path) ?>"
                             alt="<?= htmlspecialchars($hotel['nama_hotel']) ?>"
@@ -1562,22 +1584,22 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
                         <div class="mb-4">
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted">Tipe Kamar:</span>
+                                <span class="text-muted"><?= te('Tipe Kamar:') ?></span>
                                 <span><?= htmlspecialchars($room['tipe_kamar']) ?></span>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted">Durasi:</span>
-                                <span><?= $durasi ?> malam</span>
+                                <span class="text-muted"><?= te('Durasi:') ?></span>
+                                <span><?= $durasi ?> <?= t('malam') ?></span>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <span class="text-muted">Jumlah Kamar:</span>
+                                <span class="text-muted"><?= te('Jumlah Kamar:') ?></span>
                                 <span><?= $kamar ?></span>
                             </div>
                         </div>
 
                         <div class="price-detail">
                             <div class="price-item">
-                                <span>Harga Kamar (<?= $durasi ?> malam)</span>
+                                <span><?= te('Harga Kamar') ?> (<?= $durasi ?> <?= t('malam') ?>)</span>
                                 <span>Rp <?= number_format($room['harga'] * $durasi * $kamar, 0, ',', '.') ?></span>
                             </div>
 
@@ -1592,13 +1614,13 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                             <?php endif; ?>
 
                             <div class="price-item">
-                                <span>Pajak & Layanan</span>
-                                <span>Termasuk</span>
+                                <span><?= te('Pajak & Layanan') ?></span>
+                                <span><?= te('Termasuk') ?></span>
                             </div>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mt-4">
-                            <h5>Total Pembayaran</h5>
+                            <h5><?= te('Total Pembayaran') ?></h5>
                             <div class="text-end">
                                 <?php if ($discount_applied): ?>
                                     <div class="text-muted text-decoration-line-through small">
@@ -1609,7 +1631,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                 <?php if ($discount_applied): ?>
                                     <small class="text-success">
                                         <i class="fas fa-piggy-bank me-1"></i>
-                                        Hemat Rp <?= number_format($discount_applied['discount_value'] ?? $discount_applied['nilai_diskon'], 0, ',', '.') ?>
+                                        <?= te('Hemat') ?> Rp <?= number_format($discount_applied['discount_value'] ?? $discount_applied['nilai_diskon'], 0, ',', '.') ?>
                                     </small>
                                 <?php endif; ?>
                             </div>
@@ -1620,8 +1642,8 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                 <div class="d-flex align-items-center">
                                     <i class="fas fa-gift me-2"></i>
                                     <div>
-                                        <strong>Diskon Pengguna Baru Aktif!</strong><br>
-                                        <small>Voucher ini akan hangus dalam <?= $days_left_new_user > 0 ? "$days_left_new_user hari" : "kurang dari 1 hari" ?></small>
+                                        <strong><?= te('Diskon Pengguna Baru Aktif!') ?></strong><br>
+                                        <small><?= te('Voucher ini akan hangus dalam') ?> <?= $days_left_new_user > 0 ? "$days_left_new_user " . t('hari') : t('kurang dari 1 hari') ?></small>
                                     </div>
                                 </div>
                             </div>
@@ -1642,7 +1664,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                             <img src="../img/logo.png" alt="TripVerse Logo" width="50" class="me-3">
                         </a>
                         <a href="home.php">
-                            <h1 class="text-white text-uppercase mb-0">TripVerse</h1>
+                            <span class="tv-wordmark tv-wordmark-footer">TripVerse</span>
                         </a>
                     </div>
                 </div>
@@ -1714,7 +1736,8 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
     <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="../js/main.js"></script>
+    <script src="../js/main.js?v=2.0"></script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 
     <script>
         // Hide spinner when page is loaded
@@ -1753,7 +1776,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             document.getElementById('specialRequests').value = specialRequests.join(', ');
 
             // Show confirmation
-            alert('Permintaan khusus telah disimpan!');
+            alert('<?= t('Permintaan khusus telah disimpan!') ?>');
             closeSpecialRequest();
         }
 
@@ -1775,13 +1798,13 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
 
                 if (!customerName || !phone || !email) {
                     e.preventDefault();
-                    alert('Harap lengkapi semua data pemesan yang wajib diisi.');
+                    alert('<?= t('Harap lengkapi semua data pemesan yang wajib diisi.') ?>');
                     return false;
                 }
 
                 if (!validateEmail(email)) {
                     e.preventDefault();
-                    alert('Format email tidak valid.');
+                    alert('<?= t('Format email tidak valid.') ?>');
                     return false;
                 }
             }

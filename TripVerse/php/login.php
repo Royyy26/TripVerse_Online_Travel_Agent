@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 
 // Include database connection
 require 'connect.php';
@@ -18,15 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        // Verify password (plain text comparison for now, consider using password_verify() for hashed passwords)
-        if ($password === $user['password']) {
+        if (password_verify($password, $user['password'])) {
             // Jika user adalah supplier (owner), cek status approval
             if ($user['role'] == 'owner') {
                 $approvedStatus = $user['approved'];
 
                 // Jika status rejected, blokir login
                 if ($approvedStatus == 'rejected' || $approvedStatus == 2) {
-                    $_SESSION['error'] = "Your supplier account has been rejected. Please contact administrator.";
+                    $_SESSION['error'] = t("Akun supplier Anda telah ditolak. Silakan hubungi administrator.");
                     header("Location: login.php");
                     exit;
                 }
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                 // Jika status pending atau NULL, beri pesan informasi
                 if ($approvedStatus === null || $approvedStatus == '' || $approvedStatus == 'pending' || $approvedStatus == 0) {
                     $_SESSION['pending_approval'] = true;
-                    $_SESSION['pending_message'] = "Your supplier account is pending approval. You may have limited access until approved.";
+                    $_SESSION['pending_message'] = t("Akun supplier Anda sedang menunggu persetujuan. Anda mungkin memiliki akses terbatas hingga disetujui.");
                     header("Location: login.php");
                     exit;
                 }
@@ -58,12 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             }
             exit;
         } else {
-            $_SESSION['error'] = "Invalid email or password!";
+            $_SESSION['error'] = t("Email atau password salah!");
             header("Location: login.php");
             exit;
         }
     } else {
-        $_SESSION['error'] = "User not found!";
+        $_SESSION['error'] = t("Pengguna tidak ditemukan!");
         header("Location: login.php");
         exit;
     }
@@ -79,16 +79,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register & Login | TripVerse</title>
+    <title><?= te('Daftar & Masuk') ?> | TripVerse</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" />
     <style>
         /* Reset dan Font */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Heebo', sans-serif;
         }
 
         /* Body dan Container Utama */
@@ -96,19 +97,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         html {
             height: 100%;
             width: 100%;
-            background: linear-gradient(135deg, #fff5e6 0%, #ffe0b3 100%);
+            background: radial-gradient(circle at 15% 20%, #1c2a4a 0%, #0F172B 45%, #0a0f1e 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
             min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tv-aurora {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            pointer-events: none;
+            animation: tv-float 9s ease-in-out infinite;
+        }
+
+        .tv-aurora-1 {
+            width: 480px;
+            height: 480px;
+            top: -120px;
+            left: -100px;
+            background: radial-gradient(circle, rgba(254, 161, 22, .55) 0%, rgba(254, 161, 22, 0) 70%);
+        }
+
+        .tv-aurora-2 {
+            width: 520px;
+            height: 520px;
+            bottom: -160px;
+            right: -140px;
+            background: radial-gradient(circle, rgba(255, 122, 61, .45) 0%, rgba(255, 122, 61, 0) 70%);
+            animation-delay: -3s;
+        }
+
+        .tv-aurora-3 {
+            width: 380px;
+            height: 380px;
+            top: 40%;
+            right: 8%;
+            background: radial-gradient(circle, rgba(59, 130, 246, .30) 0%, rgba(59, 130, 246, 0) 70%);
+            animation-delay: -5.5s;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
         }
 
         /* Error message styling */
         .error-message {
             background-color: #ffebee;
             border: 1px solid #ffcdd2;
-            color: #c62828;
+            color: #DC2626;
             padding: 12px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
@@ -126,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         .success-message {
             background-color: #e8f5e9;
             border: 1px solid #c8e6c9;
-            color: #2e7d32;
+            color: #16A34A;
             padding: 12px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
@@ -172,16 +215,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         }
 
         .container {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.97);
             width: 100%;
             max-width: 480px;
-            padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            padding: 44px 34px;
+            border-radius: 24px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
             text-align: center;
             transition: all 0.3s ease-in-out;
             position: relative;
             overflow: hidden;
+            animation: tv-card-in .7s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        @keyframes tv-card-in {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         #signupSupplier {
@@ -199,12 +255,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         }
 
         #signupSupplier::-webkit-scrollbar-thumb {
-            background: #ff6600;
+            background: #FEA116;
             border-radius: 10px;
         }
 
         #signupSupplier::-webkit-scrollbar-thumb:hover {
-            background: #ff9900;
+            background: #FEA116;
         }
 
         /* Animasi background */
@@ -215,14 +271,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             left: 0;
             width: 100%;
             height: 5px;
-            background: linear-gradient(to right, #ff9900, #ff6600);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
         }
 
         /* Judul Form */
         .form-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ff6600;
+            color: #FEA116;
             margin-bottom: 30px;
             position: relative;
         }
@@ -235,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             transform: translateX(-50%);
             width: 50px;
             height: 3px;
-            background: linear-gradient(to right, #ff9900, #ff6600);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             border-radius: 3px;
         }
 
@@ -255,7 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         }
 
         .input-group .required {
-            color: #ff6600;
+            color: #FEA116;
         }
 
         .input-group i {
@@ -263,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             top: 50%;
             left: 12px;
             transform: translateY(-50%);
-            color: #ff6600;
+            color: #FEA116;
             transition: all 0.3s ease;
             font-size: 16px;
         }
@@ -276,7 +332,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             border-radius: 8px;
             font-size: 16px;
             transition: all 0.3s ease;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Heebo', sans-serif;
         }
 
         .input-group textarea {
@@ -288,13 +344,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         .input-group input:focus,
         .input-group textarea:focus {
             outline: none;
-            border-color: #ff6600;
-            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
+            border-color: #FEA116;
+            box-shadow: 0 0 0 3px rgba(254, 161, 22, 0.1);
         }
 
         .input-group input:focus+i,
         .input-group textarea:focus+i {
-            color: #ff3300;
+            color: #E8890A;
             transform: translateY(-50%) scale(1.1);
         }
 
@@ -311,37 +367,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         }
 
         .toggle-password:hover {
-            color: #ff6600;
+            color: #FEA116;
         }
 
         .toggle-password.active {
-            color: #ff6600;
+            color: #FEA116;
         }
 
         /* Tombol Submit */
         .btn {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: .01em;
             border: none;
-            border-radius: 8px;
-            background: linear-gradient(to right, #ff9900, #ff6600);
+            border-radius: 999px;
+            background: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
             color: white;
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .3s ease, filter .3s ease;
             margin-top: 10px;
-            box-shadow: 0 4px 6px rgba(255, 102, 0, 0.2);
+            box-shadow: 0 10px 24px rgba(254, 161, 22, 0.35);
         }
 
         .btn:hover {
-            background: linear-gradient(to right, #ff6600, #ff9900);
-            box-shadow: 0 6px 8px rgba(255, 102, 0, 0.3);
-            transform: translateY(-2px);
+            filter: brightness(1.06);
+            box-shadow: 0 14px 30px rgba(254, 161, 22, 0.5);
+            transform: translateY(-3px);
         }
 
         .btn:active {
-            transform: translateY(0);
+            transform: translateY(-1px) scale(.98);
         }
 
         /* Link Sign In/Up */
@@ -356,7 +413,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         }
 
         .links button {
-            color: #ff6600;
+            color: #FEA116;
             border: none;
             background-color: transparent;
             font-weight: 600;
@@ -367,8 +424,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         }
 
         .links button:hover {
-            color: #e65100;
-            background-color: rgba(255, 102, 0, 0.1);
+            color: #E8890A;
+            background-color: rgba(254, 161, 22, 0.1);
             text-decoration: none;
         }
 
@@ -394,14 +451,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         .logo h3 {
             font-weight: 700;
             font-size: 28px;
-            background: linear-gradient(to right, #000000, #ff6600);
+            background: linear-gradient(90deg, #0F172B, #FEA116);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .logo h3 span {
-            background: linear-gradient(to right, #ff6600, #ffaa33);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -449,11 +506,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         }
 
         .requirement-met {
-            color: #28a745;
+            color: #16A34A;
         }
 
         .requirement-not-met {
-            color: #dc3545;
+            color: #DC2626;
         }
 
         /* Pilihan User Type */
@@ -475,18 +532,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         }
 
         .user-type-option:hover {
-            border-color: #ff9900;
+            border-color: #FEA116;
         }
 
         .user-type-option.selected {
-            border-color: #ff6600;
-            background-color: rgba(255, 102, 0, 0.05);
+            border-color: #FEA116;
+            background-color: rgba(254, 161, 22, 0.05);
         }
 
         .user-type-option i {
             font-size: 24px;
             margin-bottom: 8px;
-            color: #ff6600;
+            color: #FEA116;
         }
 
         .user-type-option p {
@@ -532,7 +589,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         }
 
         .form-divider i {
-            color: #ff6600;
+            color: #FEA116;
             font-size: 16px;
         }
 
@@ -597,8 +654,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         }
 
         .otp-field:focus {
-            border-color: #ff6600;
-            box-shadow: 0 0 8px rgba(255, 102, 0, 0.3);
+            border-color: #FEA116;
+            box-shadow: 0 0 8px rgba(254, 161, 22, 0.3);
             outline: none;
             transform: scale(1.05);
         }
@@ -614,6 +671,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
 </head>
 
 <body>
+    <div class="tv-aurora tv-aurora-1"></div>
+    <div class="tv-aurora tv-aurora-2"></div>
+    <div class="tv-aurora tv-aurora-3"></div>
+
     <!-- Login Container -->
     <div class="container" id="signIn">
         <div class="logo">
@@ -634,37 +695,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                 <i class="fas fa-info-circle"></i>
                 <?php
                 echo isset($_SESSION['pending_message']) ? htmlspecialchars($_SESSION['pending_message']) :
-                    "Your supplier account is pending approval. You may have limited access until approved.";
+                    t("Akun supplier Anda sedang menunggu persetujuan. Anda mungkin memiliki akses terbatas hingga disetujui.");
                 unset($_SESSION['pending_approval']);
                 unset($_SESSION['pending_message']);
                 ?>
             </div>
         <?php endif; ?>
 
-        <h1 class="form-title">Sign In</h1>
+        <h1 class="form-title"><?= te('Masuk') ?></h1>
         <form id="loginForm" method="post" action="login.php">
             <div class="input-group">
                 <i class="fas fa-envelope"></i>
-                <input type="email" name="email" id="emailLogin" placeholder="Email" required />
+                <input type="email" name="email" id="emailLogin" placeholder="<?= te('Email') ?>" required />
             </div>
 
             <div class="input-group">
                 <i class="fas fa-lock"></i>
-                <input type="password" name="password" id="passwordLogin" placeholder="Password" required />
+                <input type="password" name="password" id="passwordLogin" placeholder="<?= te('Password') ?>" required />
             </div>
 
-            <input type="submit" class="btn" value="Sign In" name="signIn" />
+            <input type="submit" class="btn" value="<?= te('Masuk') ?>" name="signIn" />
         </form>
 
         <div class="links">
-            <p>Don't have an account yet?</p>
-            <button id="signUpButton">Sign Up</button>
+            <p><?= te('Belum punya akun?') ?></p>
+            <button id="signUpButton"><?= te('Daftar') ?></button>
         </div>
 
         <!-- Forgot Password Link -->
         <div style="text-align: center; margin-top: 15px;">
-            <a href="forgot_password.php" style="color: #ff6600; text-decoration: none; font-size: 14px;">
-                <i class="fas fa-key"></i> Forgot Password?
+            <a href="forgot_password.php" style="color: #FEA116; text-decoration: none; font-size: 14px;">
+                <i class="fas fa-key"></i> <?= te('Lupa Password?') ?>
             </a>
         </div>
     </div>
@@ -676,28 +737,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             <h3>Trip<span>Verse</span></h3>
         </div>
 
-        <h1 class="form-title">Register as Customer</h1>
+        <h1 class="form-title"><?= te('Daftar Sebagai Customer') ?></h1>
         <form id="registerCustomerForm" method="post" action="register.php">
             <input type="hidden" name="signUp" value="1">
 
             <div class="input-group">
                 <i class="fas fa-user"></i>
-                <input type="text" name="fName" id="fNameCustomer" placeholder="First Name" required />
+                <input type="text" name="fName" id="fNameCustomer" placeholder="<?= te('Nama Depan') ?>" required />
             </div>
 
             <div class="input-group">
                 <i class="fas fa-user"></i>
-                <input type="text" name="lName" id="lNameCustomer" placeholder="Last Name" />
+                <input type="text" name="lName" id="lNameCustomer" placeholder="<?= te('Nama Belakang') ?>" />
             </div>
 
             <div class="input-group">
                 <i class="fas fa-user"></i>
-                <input type="text" name="uName" id="uNameCustomer" placeholder="Username" required />
+                <input type="text" name="uName" id="uNameCustomer" placeholder="<?= te('Username') ?>" required />
             </div>
 
             <div class="input-group">
                 <i class="fas fa-envelope"></i>
-                <input type="email" name="email" id="emailCustomer" placeholder="Email" required />
+                <input type="email" name="email" id="emailCustomer" placeholder="<?= te('Email') ?>" required />
             </div>
 
             <div class="input-group">
@@ -707,13 +768,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                     id="phoneCustomer"
                     placeholder="+628123456789"
                     pattern="\+62[0-9]{8,11}"
-                    title="Nomor harus diawali +62"
+                    title="<?= te('Nomor harus diawali +62') ?>"
                     required />
             </div>
 
             <div class="input-group">
                 <i class="fas fa-lock"></i>
-                <input type="password" name="password" id="passwordCustomer" placeholder="Password" required />
+                <input type="password" name="password" id="passwordCustomer" placeholder="<?= te('Password') ?>" required />
                 <div class="password-strength">
                     <div class="password-strength-bar" id="passwordStrengthBarCustomer"></div>
                 </div>
@@ -721,17 +782,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
 
             <div class="input-group">
                 <i class="fas fa-lock"></i>
-                <input type="password" name="confirmPassword" id="confirmPasswordCustomer" placeholder="Confirm Password" required />
+                <input type="password" name="confirmPassword" id="confirmPasswordCustomer" placeholder="<?= te('Konfirmasi Password') ?>" required />
             </div>
 
             <input type="hidden" name="userType" value="customer" />
 
-            <button type="button" class="btn" id="openOtpPopupCustomer">Sign Up as Customer</button>
+            <button type="button" class="btn" id="openOtpPopupCustomer"><?= te('Daftar Sebagai Customer') ?></button>
         </form>
 
         <div class="links">
-            <p>Already have an account?</p>
-            <button id="signInButtonCustomer">Sign In</button>
+            <p><?= te('Sudah punya akun?') ?></p>
+            <button id="signInButtonCustomer"><?= te('Masuk') ?></button>
         </div>
     </div>
 
@@ -742,13 +803,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             <h3>Trip<span>Verse</span></h3>
         </div>
 
-        <h1 class="form-title">Verify OTP</h1>
+        <h1 class="form-title"><?= te('Verifikasi OTP') ?></h1>
         <p style="color:#666; margin-bottom:20px;">
-            We sent a 6-digit code to your WhatsApp.
+            <?= te('Kami mengirim kode 6 digit ke WhatsApp Anda.') ?>
         </p>
 
         <button id="requestOtpBtnCustomer" class="btn" style="margin-bottom:15px;">
-            Request OTP
+            <?= te('Minta OTP') ?>
         </button>
 
         <div class="otp-input-wrapper">
@@ -761,7 +822,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         </div>
 
         <button class="btn" id="verifyOtpBtnCustomer" style="margin-top:20px;">
-            Verify OTP
+            <?= te('Verifikasi OTP') ?>
         </button>
     </div>
 
@@ -772,12 +833,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             <h3>Trip<span>Verse</span></h3>
         </div>
 
-        <h1 class="form-title">Daftar Supplier</h1>
-        <p class="form-subtitle">Bergabunglah sebagai mitra bisnis profesional kami</p>
+        <h1 class="form-title"><?= te('Daftar Supplier') ?></h1>
+        <p class="form-subtitle"><?= te('Bergabunglah sebagai mitra bisnis profesional kami') ?></p>
 
         <div class="links">
-            <p>Sudah punya akun?</p>
-            <button id="signInButtonSupplier">Masuk di sini</button>
+            <p><?= te('Sudah punya akun?') ?></p>
+            <button id="signInButtonSupplier"><?= te('Masuk di sini') ?></button>
         </div>
     </div>
 
@@ -788,28 +849,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             <h3>Trip<span>Verse</span></h3>
         </div>
 
-        <h1 class="form-title">Select Account Type</h1>
+        <h1 class="form-title"><?= te('Pilih Tipe Akun') ?></h1>
 
         <div class="user-type">
             <div class="user-type-option" id="customerOption">
                 <i class="fas fa-user"></i>
-                <p>Customer</p>
-                <p>Book trips and experiences</p>
+                <p><?= te('Customer') ?></p>
+                <p><?= te('Pesan perjalanan dan pengalaman') ?></p>
             </div>
 
             <a href="register_supplier.php" style="text-decoration: none; color: inherit;">
                 <div class="user-type-option" id="supplierOption">
                     <i class="fas fa-store"></i>
-                    <p>Supplier</p>
-                    <p>Offer travel services</p>
+                    <p><?= te('Supplier') ?></p>
+                    <p><?= te('Tawarkan layanan perjalanan') ?></p>
                 </div>
             </a>
 
         </div>
 
         <div class="links">
-            <p>Already have an account?</p>
-            <button id="signInButtonFromSelection">Sign In</button>
+            <p><?= te('Sudah punya akun?') ?></p>
+            <button id="signInButtonFromSelection"><?= te('Masuk') ?></button>
         </div>
     </div>
 
@@ -904,7 +965,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                 case 0:
                 case 1:
                     strengthBar.style.width = '25%';
-                    strengthBar.style.backgroundColor = '#dc3545';
+                    strengthBar.style.backgroundColor = '#DC2626';
                     break;
                 case 2:
                     strengthBar.style.width = '50%';
@@ -916,7 +977,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                     break;
                 case 4:
                     strengthBar.style.width = '100%';
-                    strengthBar.style.backgroundColor = '#28a745';
+                    strengthBar.style.backgroundColor = '#16A34A';
                     break;
             }
 
@@ -936,7 +997,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                 case 0:
                 case 1:
                     strengthBar.style.width = '25%';
-                    strengthBar.style.backgroundColor = '#dc3545';
+                    strengthBar.style.backgroundColor = '#DC2626';
                     break;
                 case 2:
                     strengthBar.style.width = '50%';
@@ -948,7 +1009,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                     break;
                 case 4:
                     strengthBar.style.width = '100%';
-                    strengthBar.style.backgroundColor = '#28a745';
+                    strengthBar.style.backgroundColor = '#16A34A';
                     break;
             }
         }
@@ -958,9 +1019,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             checkPasswordStrength(e.target.value, 'passwordStrengthBarCustomer', 'Customer');
         });
 
-        document.getElementById('passwordSupplier').addEventListener('input', function(e) {
-            checkPasswordStrengthSupplier(e.target.value);
-        });
+        if (document.getElementById('passwordSupplier')) {
+            document.getElementById('passwordSupplier').addEventListener('input', function(e) {
+                checkPasswordStrengthSupplier(e.target.value);
+            });
+        }
 
         // Form validation for customer registration
         document.getElementById('registerCustomerForm').addEventListener('submit', function(e) {
@@ -969,14 +1032,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
 
             if (password !== confirmPassword) {
                 e.preventDefault();
-                alert('Passwords do not match!');
+                alert('<?= t('Password tidak cocok!') ?>');
                 return false;
             }
 
             const isStrongPassword = checkPasswordStrength(password, 'passwordStrengthBarCustomer', 'Customer');
             if (!isStrongPassword) {
                 e.preventDefault();
-                alert('Password does not meet all requirements!');
+                alert('<?= t('Password tidak memenuhi semua persyaratan!') ?>');
                 return false;
             }
 
@@ -984,31 +1047,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         });
 
         // Form validation for supplier registration
-        document.getElementById('registerSupplierForm').addEventListener('submit', function(e) {
-            const password = document.getElementById('passwordSupplier').value;
-            const confirmPassword = document.getElementById('confirmPasswordSupplier').value;
-            const phone = document.getElementById('phoneSupplier').value;
+        if (document.getElementById('registerSupplierForm')) {
+            document.getElementById('registerSupplierForm').addEventListener('submit', function(e) {
+                const password = document.getElementById('passwordSupplier').value;
+                const confirmPassword = document.getElementById('confirmPasswordSupplier').value;
+                const phone = document.getElementById('phoneSupplier').value;
 
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                alert('Password dan Konfirmasi Password tidak cocok!');
-                return false;
-            }
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    alert('<?= t('Password dan Konfirmasi Password tidak cocok!') ?>');
+                    return false;
+                }
 
-            if (password.length < 6) {
-                e.preventDefault();
-                alert('Password harus minimal 6 karakter!');
-                return false;
-            }
+                if (password.length < 6) {
+                    e.preventDefault();
+                    alert('<?= t('Password harus minimal 6 karakter!') ?>');
+                    return false;
+                }
 
-            if (phone.length < 10) {
-                e.preventDefault();
-                alert('Nomor telepon harus minimal 10 digit!');
-                return false;
-            }
+                if (phone.length < 10) {
+                    e.preventDefault();
+                    alert('<?= t('Nomor telepon harus minimal 10 digit!') ?>');
+                    return false;
+                }
 
-            return true;
-        });
+                return true;
+            });
+        }
 
         // Phone number format for customer
         document.getElementById("phoneCustomer").addEventListener("input", function() {
@@ -1022,7 +1087,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         // ========== OTP FUNCTIONALITY ==========
         document.getElementById("openOtpPopupCustomer").addEventListener("click", () => {
             if (document.getElementById("phoneCustomer").value.trim() === "") {
-                alert("Phone number required.");
+                alert("<?= t('Nomor telepon wajib diisi.') ?>");
                 return;
             }
             document.getElementById("signupCustomer").style.display = "none";
@@ -1039,7 +1104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                     body: "no_hp=" + encodeURIComponent(phone)
                 })
                 .then(res => res.text())
-                .then(() => alert("OTP sent to WhatsApp!"));
+                .then(() => alert("<?= t('OTP terkirim ke WhatsApp!') ?>"));
         });
 
         // OTP Auto Focus
@@ -1066,19 +1131,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                 .then(res => res.text())
                 .then(result => {
                     if (result === "success") {
-                        alert("OTP valid! Creating account...");
+                        alert("<?= t('OTP valid! Membuat akun...') ?>");
                         document.getElementById("registerCustomerForm").submit();
                         setTimeout(() => {
                             window.location.href = "login.php";
                         }, 600);
                     } else if (result === "expired") {
-                        alert("OTP expired. Request again.");
+                        alert("<?= t('OTP kedaluwarsa. Silakan minta lagi.') ?>");
                     } else {
-                        alert("Wrong OTP!");
+                        alert("<?= t('OTP salah!') ?>");
                     }
                 });
         });
     </script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

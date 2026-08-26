@@ -6,9 +6,24 @@ if (!isset($_SESSION['id_user'])) {
     exit;
 }
 
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'owner'])) {
+    header("Location: home.php");
+    exit;
+}
+
 require 'connect.php';
 
 $id_user = $_SESSION['id_user'];
+$is_admin = $_SESSION['role'] === 'admin';
+
+function hotelBelongsToOwner($conn, $hotel_id, $id_user) {
+    $stmt = $conn->prepare("SELECT 1 FROM hotel WHERE hotel_id = ? AND owner_id = ?");
+    $stmt->bind_param("ss", $hotel_id, $id_user);
+    $stmt->execute();
+    $owns = $stmt->get_result()->num_rows > 0;
+    $stmt->close();
+    return $owns;
+}
 
 // Ambil data user berdasarkan ID user (tanpa JOIN dengan admin)
 $query = "SELECT 
@@ -55,6 +70,12 @@ $stmt->close();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_hotel'])) {
     $hotel_id = $_POST['hotel_id'];
 
+    if (!$is_admin && !hotelBelongsToOwner($conn, $hotel_id, $id_user)) {
+        $_SESSION['notification'] = "Anda tidak memiliki akses untuk menghapus hotel ini.";
+        header("Location: reporting_hotels.php");
+        exit;
+    }
+
     // First delete related records in hotel_fasilitas
     $delete_facilities = $conn->prepare("DELETE FROM hotel_fasilitas WHERE hotel_id = ?");
     $delete_facilities->bind_param("s", $hotel_id);
@@ -91,6 +112,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_hotel'])) {
 // Handle hotel update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_hotel'], $_POST['hotel_id'])) {
     $hotel_id = $_POST['hotel_id'];
+
+    if (!$is_admin && !hotelBelongsToOwner($conn, $hotel_id, $id_user)) {
+        $_SESSION['notification'] = "Anda tidak memiliki akses untuk mengubah hotel ini.";
+        header("Location: reporting_hotels.php");
+        exit;
+    }
 
     // Pastikan ada field yang diubah
     $hasChanges = false;
@@ -264,7 +291,16 @@ if (!empty($kota_filter)) {
     $types .= 's';
 }
 
-$sql = "SELECT hotel_id, nama_hotel, alamat, kota, foto_hotel, harga_dasar, info_hotel, 
+if (!$is_admin) {
+    if (!empty($whereClause)) {
+        $whereClause .= " AND ";
+    }
+    $whereClause .= " owner_id = ? ";
+    $params[] = $id_user;
+    $types .= 's';
+}
+
+$sql = "SELECT hotel_id, nama_hotel, alamat, kota, foto_hotel, harga_dasar, info_hotel,
             maps_embed_url
         FROM hotel";
 

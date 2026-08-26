@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/connect.php');
 require_once(__DIR__ . '/fonnte_api.php');
+require_once __DIR__ . '/_lang.php';
 date_default_timezone_set("Asia/Jakarta");
 
 // ============================
@@ -70,10 +71,10 @@ Kami berharap pengalaman menginap Anda menyenangkan dan penuh kenangan indah.
                 $conn->query("UPDATE transaksi SET is_wa_sent=1, wa_sent_at=NOW() WHERE id_transaksi={$row['id_transaksi']}");
                 echo json_encode(['success'=>true, 'id'=>$row['id_transaksi']]);
             } else {
-                echo json_encode(['success'=>false, 'message'=>'Gagal mengirim pesan']);
+                echo json_encode(['success'=>false, 'message'=>t('Gagal mengirim pesan')]);
             }
         } else {
-            echo json_encode(['success'=>false, 'message'=>'Transaksi tidak ditemukan atau sudah dikirim']);
+            echo json_encode(['success'=>false, 'message'=>t('Transaksi tidak ditemukan atau sudah dikirim')]);
         }
         exit;
     }
@@ -184,7 +185,7 @@ $result = $conn->query($sql);
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Payment Confirmation TripVerse</title>
+<title><?= te('Payment Confirmation') ?> TripVerse</title>
 <style>
 body { font-family: Arial; background:#f5f7fa; padding:30px; color:#333; }
 h2 { color:#0077b6; }
@@ -202,32 +203,32 @@ button:hover { background:#005f87; }
 </head>
 <body>
 
-<h2>📄 Konfirmasi Pembayaran TripVerse — Hari Ini (<?= date("d M Y") ?>)</h2>
+<h2>📄 <?= te('Konfirmasi Pembayaran TripVerse') ?> — <?= te('Hari Ini') ?> (<?= date("d M Y") ?>)</h2>
 
 <div class="status" style="display:none;"></div>
 
 <form id="sendAllForm" class="send-all">
-    <button type="button">📤 Kirim Semua Belum Dikirim</button>
+    <button type="button">📤 <?= te('Kirim Semua Belum Dikirim') ?></button>
 </form>
 
 <table>
 <tr>
     <th>No</th>
-    <th>Nama</th>
+    <th><?= te('Nama') ?></th>
     <th>Hotel</th>
     <th>Check-in</th>
     <th>Check-out</th>
-    <th>Total</th>
+    <th><?= te('Total') ?></th>
     <th>No. WhatsApp</th>
-    <th>Status WA</th>
-    <th>Aksi</th>
+    <th><?= te('Status WA') ?></th>
+    <th><?= te('Aksi') ?></th>
 </tr>
 <?php
 $no=1;
 if($result && $result->num_rows>0) {
     while($row=$result->fetch_assoc()) {
         $sentClass = $row['is_wa_sent'] ? "sent" : "not-sent";
-        $sentText = $row['is_wa_sent'] ? "✅ Sudah Dikirim" : "❌ Belum Dikirim";
+        $sentText = $row['is_wa_sent'] ? "✅ " . t("Sudah Dikirim") : "❌ " . t("Belum Dikirim");
 
         echo "<tr>
             <td>$no</td>
@@ -240,7 +241,7 @@ if($result && $result->num_rows>0) {
             <td class='$sentClass'>$sentText</td>
             <td>";
         if(!$row['is_wa_sent']) {
-            echo "<button onclick=\"sendWhatsApp('{$row['id_transaksi']}', this)\">Kirim Pesan</button>";
+            echo "<button onclick=\"sendWhatsApp('{$row['id_transaksi']}', this)\">" . t('Kirim Pesan') . "</button>";
         } else {
             echo "-";
         }
@@ -248,7 +249,7 @@ if($result && $result->num_rows>0) {
         $no++;
     }
 } else {
-    echo "<tr><td colspan='9'>Tidak ada transaksi hari ini.</td></tr>";
+    echo "<tr><td colspan='9'>" . t('Tidak ada transaksi hari ini.') . "</td></tr>";
 }
 ?>
 </table>
@@ -257,7 +258,7 @@ if($result && $result->num_rows>0) {
 // KIRIM PER TRANSAKSI
 function sendWhatsApp(id_transaksi, btn){
     btn.disabled = true;
-    btn.innerText = "Mengirim...";
+    btn.innerText = "<?= t('Mengirim...') ?>";
 
     let formData = new FormData();
     formData.append('send_single', 1);
@@ -269,18 +270,18 @@ function sendWhatsApp(id_transaksi, btn){
         if(data.success){
             let statusCell = btn.closest('tr').querySelector('td:nth-child(8)');
             statusCell.className='sent';
-            statusCell.innerText='✅ Sudah Dikirim';
+            statusCell.innerText='✅ <?= t('Sudah Dikirim') ?>';
             btn.remove();
         } else {
-            alert('Gagal: '+data.message);
+            alert('<?= t('Gagal:') ?> '+data.message);
             btn.disabled=false;
-            btn.innerText='Kirim Pesan';
+            btn.innerText='<?= t('Kirim Pesan') ?>';
         }
     })
     .catch(err=>{
         alert('Error: '+err);
         btn.disabled=false;
-        btn.innerText='Kirim Pesan';
+        btn.innerText='<?= t('Kirim Pesan') ?>';
     });
 }
 
@@ -288,7 +289,7 @@ function sendWhatsApp(id_transaksi, btn){
 document.querySelector('#sendAllForm button').addEventListener('click', function() {
     let btn = this;
     btn.disabled = true;
-    btn.innerText = "Mengirim semua...";
+    btn.innerText = "<?= t('Mengirim semua...') ?>";
 
     let formData = new FormData();
     formData.append('send_all', 1);
@@ -302,24 +303,24 @@ document.querySelector('#sendAllForm button').addEventListener('click', function
                 if(row){
                     let statusCell = row.querySelector('td:nth-child(8)');
                     statusCell.className='sent';
-                    statusCell.innerText='✅ Sudah Dikirim';
+                    statusCell.innerText='✅ <?= t('Sudah Dikirim') ?>';
                     let btnRow = row.querySelector('button');
                     if(btnRow) btnRow.remove();
                 }
             });
             let statusDiv = document.querySelector('.status');
             statusDiv.style.display = 'block';
-            statusDiv.innerText = `✅ Berhasil mengirim ${data.count} pesan.`;
+            statusDiv.innerText = `✅ <?= t('Berhasil mengirim') ?> ${data.count} <?= t('pesan.') ?>`;
         } else {
-            alert("Gagal mengirim semua pesan");
+            alert("<?= t('Gagal mengirim semua pesan') ?>");
         }
         btn.disabled=false;
-        btn.innerText = "📤 Kirim Semua Belum Dikirim";
+        btn.innerText = "📤 <?= t('Kirim Semua Belum Dikirim') ?>";
     })
     .catch(err=>{
         alert("Error: "+err);
         btn.disabled=false;
-        btn.innerText = "📤 Kirim Semua Belum Dikirim";
+        btn.innerText = "📤 <?= t('Kirim Semua Belum Dikirim') ?>";
     });
 });
 </script>

@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
@@ -68,7 +69,7 @@ $conn->close();
 
 <head>
     <meta charset="utf-8">
-    <title>TripVerse - Hasil Pencarian Hotel</title>
+    <title>TripVerse - <?= te('Hasil Pencarian Hotel') ?></title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -94,7 +95,7 @@ $conn->close();
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style.css?v=2.0" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
@@ -662,7 +663,7 @@ $conn->close();
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                     <a href="about.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
-                        <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                        <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
                 </div>
 
@@ -692,27 +693,27 @@ $conn->close();
                     <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
                         <a href="home.php" class="navbar-brand d-block d-lg-none">
                             <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
-                            <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                            <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                         </a>
                         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a href="home.php" class="nav-item nav-link">Beranda</a>
-                                <a href="about.php" class="nav-item nav-link">Tentang Kami</a>
-                                <a href="hotel.php" class="nav-item nav-link active">Hotel</a>
-                                <a href="service.php" class="nav-item nav-link">Fitur</a>
-                                <a href="team.php" class="nav-item nav-link">Tim Kami</a>
-                                <a href="contact.php" class="nav-item nav-link">Kontak</a>
-                                <a href="logout.php" class="nav-item nav-link">Logout</a>
+                                <a href="home.php" class="nav-item nav-link"><?= te('Beranda') ?></a>
+                                <a href="about.php" class="nav-item nav-link"><?= te('Tentang Kami') ?></a>
+                                <a href="hotel.php" class="nav-item nav-link active"><?= te('Hotel') ?></a>
+                                <a href="service.php" class="nav-item nav-link"><?= te('Fitur') ?></a>
+                                <a href="team.php" class="nav-item nav-link"><?= te('Tim Kami') ?></a>
+                                <a href="contact.php" class="nav-item nav-link"><?= te('Kontak') ?></a>
                             </div>
+                            <?php include __DIR__ . '/_lang_switch.php'; ?>
                             <?php if (isset($_SESSION['username'])): ?>
                                 <span class="navbar-text fw-bold me-3"
                                     style="background: linear-gradient(to right, #FFA500, #FF6347);
                                     -webkit-background-clip: text; background-clip: text;
                                     -webkit-text-fill-color: transparent; text-decoration: underline;">
-                                    Hi <?= htmlspecialchars($_SESSION['username']); ?>, selamat datang di TripVerse
+                                    Hi <?= htmlspecialchars($_SESSION['username']); ?>, <?= te('selamat datang di TripVerse') ?>
                                 </span>
                             <?php endif; ?>
                         </div>
@@ -725,12 +726,12 @@ $conn->close();
         <div class="container-fluid page-header mb-5 p-0" style="background-image: url(../img/carousel-1.jpg);">
             <div class="container-fluid page-header-inner py-5">
                 <div class="container text-center pb-5">
-                    <h1 class="display-3 text-white mb-3 animated slideInDown">Hasil Pencarian Hotel</h1>
+                    <h1 class="display-3 text-white mb-3 animated slideInDown"><?= te('Hasil Pencarian Hotel') ?></h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center text-uppercase">
-                            <li class="breadcrumb-item"><a href="home.php">Beranda</a></li>
-                            <li class="breadcrumb-item"><a href="hotel.php">Hotel</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Hasil Pencarian</li>
+                            <li class="breadcrumb-item"><a href="home.php"><?= te('Beranda') ?></a></li>
+                            <li class="breadcrumb-item"><a href="hotel.php"><?= te('Hotel') ?></a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page"><?= te('Hasil Pencarian') ?></li>
                         </ol>
                     </nav>
                 </div>
@@ -746,7 +747,7 @@ $conn->close();
                     <div class="position-relative">
                         <input type="text"
                             class="form-control"
-                            placeholder="Kota dan tujuan hotel"
+                            placeholder="<?= te('Kota dan tujuan hotel') ?>"
                             id="searchLocation"
                             value="<?= htmlspecialchars($tujuan) ?>"
                             oninput="capitalizeInput(this)"
@@ -757,7 +758,7 @@ $conn->close();
                         <!-- Dropdown Destinasi -->
                         <div class="destination-dropdown shadow-lg" id="destinationDropdown" style="display: none;">
                             <div class="p-3">
-                                <div class="mb-2 text-primary"><strong>Destinasi Populer (Jabodetabek)</strong></div>
+                                <div class="mb-2 text-primary"><strong><?= te('Destinasi Populer (Jabodetabek)') ?></strong></div>
                                 <?php foreach ($cities as $city): ?>
                                     <div class="dest-item py-2 px-3"
                                         onclick="selectDestination('<?= $city ?>')"
@@ -780,12 +781,12 @@ $conn->close();
 
                     <div class="dropdown">
                         <button class="form-control text-start dropdown-toggle" type="button" id="guestToggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span id="guestSummary"><?= $dewasa ?> Dewasa, <?= $anak ?> Anak, <?= $kamar ?> Kamar</span>
+                            <span id="guestSummary"><?= $dewasa ?> <?= t('Dewasa') ?>, <?= $anak ?> <?= t('Anak') ?>, <?= $kamar ?> <?= te('Kamar') ?></span>
                         </button>
                         <ul class="dropdown-menu p-3" aria-labelledby="guestToggle" style="min-width: 250px;">
                             <li class="mb-2">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div><i class="fas fa-user"></i> Dewasa</div>
+                                    <div><i class="fas fa-user"></i> <?= te('Dewasa') ?></div>
                                     <div>
                                         <button class="btn btn-sm btn-outline-secondary" type="button" onclick="adjustGuest('adult', -1)">–</button>
                                         <span id="adultCount" class="mx-2"><?= $dewasa ?></span>
@@ -795,7 +796,7 @@ $conn->close();
                             </li>
                             <li class="mb-2">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div><i class="fas fa-child"></i> Anak</div>
+                                    <div><i class="fas fa-child"></i> <?= te('Anak') ?></div>
                                     <div>
                                         <button class="btn btn-sm btn-outline-secondary" type="button" onclick="adjustGuest('child', -1)">–</button>
                                         <span id="childCount" class="mx-2"><?= $anak ?></span>
@@ -805,7 +806,7 @@ $conn->close();
                             </li>
                             <li class="mb-2">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div><i class="fas fa-door-open"></i> Kamar</div>
+                                    <div><i class="fas fa-door-open"></i> <?= te('Kamar') ?></div>
                                     <div>
                                         <button class="btn btn-sm btn-outline-secondary" type="button" onclick="adjustGuest('room', -1)">–</button>
                                         <span id="roomCount" class="mx-2"><?= $kamar ?></span>
@@ -814,13 +815,13 @@ $conn->close();
                                 </div>
                             </li>
                             <li class="text-end">
-                                <button class="btn btn-primary btn-sm mt-2" type="button" onclick="closeGuestDropdown()">Selesai</button>
+                                <button class="btn btn-primary btn-sm mt-2" type="button" onclick="closeGuestDropdown()"><?= tv_lang() === 'en' ? 'Done' : 'Selesai' ?></button>
                             </li>
                         </ul>
                     </div>
 
                     <button type="button" class="btn btn-primary" style="height: 60px; font-size: 18px;" onclick="cariHotel()">
-                        <i class="fa fa-search me-2"></i>Cari Hotel
+                        <i class="fa fa-search me-2"></i><?= te('Cari Hotel') ?>
                     </button>
                 </form>
             </div>
@@ -831,13 +832,13 @@ $conn->close();
             <div class="container">
                 <!-- Search Summary -->
                 <div class="search-summary">
-                    <h5 class="fw-bold mb-4">Hasil Pencarian Hotel di <?= htmlspecialchars($tujuan) ?></h5>
+                    <h5 class="fw-bold mb-4"><?= te('Hasil Pencarian Hotel di') ?> <?= htmlspecialchars($tujuan) ?></h5>
                     <div class="row g-3">
                         <div class="col-lg-3 col-md-6">
                             <div class="d-flex align-items-center summary-item">
                                 <i class="far fa-calendar-alt me-3 text-primary"></i>
                                 <div>
-                                    <div class="text-muted small">Check-in</div>
+                                    <div class="text-muted small"><?= te('Check-In:') ?></div>
                                     <div class="fw-medium"><?= $checkinDisplay ?></div>
                                 </div>
                             </div>
@@ -846,7 +847,7 @@ $conn->close();
                             <div class="d-flex align-items-center summary-item">
                                 <i class="far fa-calendar-alt me-3 text-primary"></i>
                                 <div>
-                                    <div class="text-muted small">Check-out</div>
+                                    <div class="text-muted small"><?= te('Check-Out:') ?></div>
                                     <div class="fw-medium"><?= $checkoutDisplay ?></div>
                                 </div>
                             </div>
@@ -855,8 +856,8 @@ $conn->close();
                             <div class="d-flex align-items-center summary-item">
                                 <i class="far fa-clock me-3 text-primary"></i>
                                 <div>
-                                    <div class="text-muted small">Durasi</div>
-                                    <div class="fw-medium"><?= $durasi ?> malam</div>
+                                    <div class="text-muted small"><?= te('Durasi:') ?></div>
+                                    <div class="fw-medium"><?= $durasi ?> <?= t('malam') ?></div>
                                 </div>
                             </div>
                         </div>
@@ -864,8 +865,8 @@ $conn->close();
                             <div class="d-flex align-items-center summary-item">
                                 <i class="fas fa-users me-3 text-primary"></i>
                                 <div>
-                                    <div class="text-muted small">Tamu</div>
-                                    <div class="fw-medium"><?= $dewasa ?> Dewasa, <?= $anak ?> Anak, <?= $kamar ?> Kamar</div>
+                                    <div class="text-muted small"><?= te('Tamu:') ?></div>
+                                    <div class="fw-medium"><?= $dewasa ?> <?= t('Dewasa') ?>, <?= $anak ?> <?= t('Anak') ?>, <?= $kamar ?> <?= te('Kamar') ?></div>
                                 </div>
                             </div>
                         </div>
@@ -876,46 +877,46 @@ $conn->close();
                     <!-- Sidebar Filter -->
                     <div class="col-md-3">
                         <div class="sidebar-box">
-                            <h5 class="fw-bold mb-3">Filter Hotel</h5>
+                            <h5 class="fw-bold mb-3"><?= te('Filter Hotel') ?></h5>
 
                             <!-- Harga Maksimal -->
                             <div class="mb-4">
-                                <label class="form-label fw-bold">Harga Maksimal</label>
+                                <label class="form-label fw-bold"><?= te('Harga Maksimal') ?></label>
                                 <input type="range" class="form-range" id="hargaRange" min="400000" max="3000000" step="50000" value="3000000">
                                 <div class="d-flex justify-content-between mt-2">
                                     <small>Rp 400rb</small>
                                     <small>Rp 3.0jt</small>
                                 </div>
                                 <div class="mt-2">
-                                    <span class="badge bg-primary" style="color: white;">Maks: Rp <span id="hargaValue">3.000.000</span></span>
+                                    <span class="badge bg-primary" style="color: white;"><?= te('Maks:') ?> Rp <span id="hargaValue">3.000.000</span></span>
                                 </div>
                             </div>
 
                             <!-- Fasilitas -->
                             <div class="mb-4">
-                                <label class="form-label fw-bold">Fasilitas</label>
+                                <label class="form-label fw-bold"><?= te('Fasilitas') ?></label>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="wifi" id="wifi" checked>
                                     <label class="form-check-label" for="wifi">
-                                        <i class="fas fa-wifi text-primary me-2"></i>Wi-Fi Gratis
+                                        <i class="fas fa-wifi text-primary me-2"></i><?= te('Wi-Fi Gratis') ?>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="pool" id="pool">
                                     <label class="form-check-label" for="pool">
-                                        <i class="fas fa-swimming-pool text-primary me-2"></i>Kolam Renang
+                                        <i class="fas fa-swimming-pool text-primary me-2"></i><?= te('Kolam Renang') ?>
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="restaurant" id="restaurant" checked>
                                     <label class="form-check-label" for="restaurant">
-                                        <i class="fas fa-utensils text-primary me-2"></i>Restoran
+                                        <i class="fas fa-utensils text-primary me-2"></i><?= te('Restoran') ?>
                                     </label>
                                 </div>
                             </div>
 
-                            <button class="btn btn-primary w-100 mb-2" id="applyFilter">Terapkan Filter</button>
-                            <button class="btn btn-outline-secondary w-100" id="resetFilter">Reset Filter</button>
+                            <button class="btn btn-primary w-100 mb-2" id="applyFilter"><?= te('Terapkan Filter') ?></button>
+                            <button class="btn btn-outline-secondary w-100" id="resetFilter"><?= te('Reset Filter') ?></button>
                         </div>
                     </div>
 
@@ -953,11 +954,11 @@ $conn->close();
                                                     <i class="fas fa-wifi facility-icon"></i> Wi-Fi
                                                 </span>
                                                 <span class="facility-badge">
-                                                    <i class="fas fa-utensils facility-icon"></i> Restoran
+                                                    <i class="fas fa-utensils facility-icon"></i> <?= te('Restoran') ?>
                                                 </span>
                                                 <?php if (rand(0, 1)): ?>
                                                     <span class="facility-badge">
-                                                        <i class="fas fa-swimming-pool facility-icon"></i> Kolam Renang
+                                                        <i class="fas fa-swimming-pool facility-icon"></i> <?= te('Kolam Renang') ?>
                                                     </span>
                                                 <?php endif; ?>
                                             </div>
@@ -965,11 +966,11 @@ $conn->close();
                                             <div class="card-footer">
                                                 <div class="price-container">
                                                     <span class="price">Rp <?= number_format($hotel['harga_dasar'], 0, ',', '.') ?></span>
-                                                    <span class="price-per-night">per malam</span>
+                                                    <span class="price-per-night"><?= te('per malam') ?></span>
                                                 </div>
                                                 <a href="hotel_detail.php?id=<?= $hotel['hotel_id'] ?>&checkin=<?= $checkin ?>&checkout=<?= $checkout ?>&dewasa=<?= $dewasa ?>&anak=<?= $anak ?>&kamar=<?= $kamar ?>"
                                                     class="btn-select-room">
-                                                    Pilih Kamar
+                                                    <?= te('Pilih Kamar') ?>
                                                 </a>
                                             </div>
                                         </div>
@@ -979,9 +980,9 @@ $conn->close();
                         <?php else: ?>
                             <div class="no-results">
                                 <i class="fas fa-hotel fa-4x mb-3"></i>
-                                <h4>Maaf, tidak ada hotel yang tersedia di <?= htmlspecialchars($tujuan) ?></h4>
-                                <p>Coba cari dengan kriteria yang berbeda atau pilih kota lain.</p>
-                                <a href="hotel.php" class="btn btn-primary">Kembali ke Pencarian Hotel</a>
+                                <h4><?= te('Maaf, tidak ada hotel yang tersedia di') ?> <?= htmlspecialchars($tujuan) ?></h4>
+                                <p><?= te('Coba cari dengan kriteria yang berbeda atau pilih kota lain.') ?></p>
+                                <a href="hotel.php" class="btn btn-primary"><?= te('Kembali ke Pencarian Hotel') ?></a>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -1001,7 +1002,7 @@ $conn->close();
                                     <img src="../img/logo.png" alt="TripVerse Logo" width="50" class="me-3">
                                 </a>
                                 <a href="home.php">
-                                    <h1 class="text-white text-uppercase mb-0">TripVerse</h1>
+                                    <span class="tv-wordmark tv-wordmark-footer">TripVerse</span>
                                 </a>
                             </div>
                         </div>
@@ -1077,7 +1078,7 @@ $conn->close();
     <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="../js/main.js"></script>
+    <script src="../js/main.js?v=2.0"></script>
 
     <script>
         // Fungsi untuk pencarian hotel
@@ -1088,11 +1089,11 @@ $conn->close();
 
             // Validasi input
             if (!tujuan) {
-                alert('Silakan masukkan destinasi');
+                alert('<?= t('Silakan masukkan destinasi') ?>');
                 return;
             }
             if (!checkin || !checkout) {
-                alert('Silakan pilih tanggal check-in dan check-out');
+                alert('<?= t('Silakan pilih tanggal check-in dan check-out') ?>');
                 return;
             }
 
@@ -1110,7 +1111,7 @@ $conn->close();
             const spinner = document.getElementById('spinner');
             if (spinner) spinner.classList.add('show');
 
-            window.location.href = `hotel_hasil.php?${params.toString()}`;
+            window.location.href = `hotel_results.php?${params.toString()}`;
         }
 
         // Fungsi untuk menangani dropdown
@@ -1178,13 +1179,13 @@ $conn->close();
 
             // Validasi jumlah maksimum
             if (newValue > 10) {
-                alert('Maksimal 10 untuk setiap kategori');
+                alert('<?= t('Maksimal 10 untuk setiap kategori') ?>');
                 return;
             }
 
             // Validasi kamar tidak boleh lebih dari dewasa
             if (type === "adult" && newValue < guestData.room) {
-                alert('Jumlah kamar tidak boleh lebih dari jumlah dewasa');
+                alert('<?= t('Jumlah kamar tidak boleh lebih dari jumlah dewasa') ?>');
                 return;
             }
 
@@ -1200,11 +1201,11 @@ $conn->close();
 
         function updateGuestSummary() {
             const summary = [];
-            if (guestData.adult > 0) summary.push(`${guestData.adult} Dewasa`);
-            if (guestData.child > 0) summary.push(`${guestData.child} Anak`);
-            if (guestData.room > 0) summary.push(`${guestData.room} Kamar`);
+            if (guestData.adult > 0) summary.push(`${guestData.adult} <?= t('Dewasa') ?>`);
+            if (guestData.child > 0) summary.push(`${guestData.child} <?= t('Anak') ?>`);
+            if (guestData.room > 0) summary.push(`${guestData.room} <?= t('Kamar') ?>`);
 
-            document.getElementById("guestSummary").textContent = summary.join(", ") || "Pilih Tamu";
+            document.getElementById("guestSummary").textContent = summary.join(", ") || "<?= t('Pilih Tamu') ?>";
         }
 
         // Fungsi untuk tanggal
@@ -1227,7 +1228,7 @@ $conn->close();
                 const checkinDate = new Date(checkinInput.value);
                 if (date <= checkinDate) {
                     checkoutInput.value = "";
-                    alert('Tanggal check-out harus setelah check-in');
+                    alert('<?= t('Tanggal check-out harus setelah check-in') ?>');
                 }
             }
         }
@@ -1283,7 +1284,7 @@ $conn->close();
 
                     hotelsContainer.innerHTML = '';
                     if (filtered.length === 0) {
-                        hotelsContainer.innerHTML = '<div class="col-12"><div class="alert alert-info">Tidak ada hotel yang sesuai dengan filter</div></div>';
+                        hotelsContainer.innerHTML = '<div class="col-12"><div class="alert alert-info"><?= t('Tidak ada hotel yang sesuai dengan filter') ?></div></div>';
                     } else {
                         filtered.forEach(card => hotelsContainer.appendChild(card.cloneNode(true)));
                     }

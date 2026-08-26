@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 
 // Redirect jika user belum login
 if (!isset($_SESSION['id_user'])) {
@@ -29,7 +30,7 @@ $error = null;
 
 // Validasi booking_id
 if (!isset($_GET['id'])) {
-    header("Location: riwayat.php");
+    header("Location: history.php");
     exit;
 }
 
@@ -88,7 +89,7 @@ try {
     $result = $stmt->get_result();
 
     if ($result->num_rows === 0) {
-        throw new Exception("Booking tidak ditemukan atau Anda tidak memiliki akses");
+        throw new Exception(t("Booking tidak ditemukan atau Anda tidak memiliki akses"));
     }
 
     $booking = $result->fetch_assoc();
@@ -143,9 +144,12 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Pesanan - TripVerse</title>
+    <title><?= te('Detail Pesanan') ?> - TripVerse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700</title>family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+
     <style>
         .detail-card {
             border-radius: 10px;
@@ -166,7 +170,7 @@ try {
         }
 
         .status-completed {
-            background-color: #28a745;
+            background-color: #16A34A;
             color: white;
         }
 
@@ -176,17 +180,17 @@ try {
         }
 
         .status-cancelled {
-            background-color: #dc3545;
+            background-color: #DC2626;
             color: white;
         }
 
         .price-tag {
             font-weight: bold;
-            color: #ff6b00;
+            color: #FEA116;
         }
 
         .time-remaining {
-            color: #dc3545;
+            color: #DC2626;
             font-weight: bold;
             margin: 8px 0;
         }
@@ -197,11 +201,11 @@ try {
     <div class="container py-5">
         <div class="row mb-4">
             <div class="col">
-                <a href="riwayat.php" class="btn btn-outline-secondary mb-3">
-                    <i class="fas fa-arrow-left me-2"></i> Kembali ke Riwayat
+                <a href="history.php" class="btn btn-outline-secondary mb-3">
+                    <i class="fas fa-arrow-left me-2"></i> <?= te('Kembali ke Riwayat') ?>
                 </a>
-                <h2>Detail Pesanan</h2>
-                <p class="text-muted">Kode Booking: <?= htmlspecialchars($booking_id) ?></p>
+                <h2><?= te('Detail Pesanan') ?></h2>
+                <p class="text-muted"><?= te('Kode Booking:') ?> <?= htmlspecialchars($booking_id) ?></p>
             </div>
         </div>
 
@@ -236,14 +240,14 @@ try {
 
                         <div class="row mt-3">
                             <div class="col-md-6">
-                                <p><strong>Check-in:</strong> <?= $checkin_display ?></p>
-                                <p><strong>Check-out:</strong> <?= $checkout_display ?></p>
-                                <p><strong>Durasi:</strong> <?= $durasi ?> malam</p>
+                                <p><strong><?= te('Check-In:') ?></strong> <?= $checkin_display ?></p>
+                                <p><strong><?= te('Check-Out:') ?></strong> <?= $checkout_display ?></p>
+                                <p><strong><?= te('Durasi:') ?></strong> <?= $durasi ?> <?= t('malam') ?></p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>Tipe Kamar:</strong> <?= htmlspecialchars($booking['nama_tipe']) ?></p>
-                                <p><strong>Jumlah Kamar:</strong> <?= $booking['jumlah_kamar'] ?></p>
-                                <p><strong>Kapasitas:</strong> <?= $booking['kapasitas_standar'] ?> orang</p>
+                                <p><strong><?= te('Tipe Kamar:') ?></strong> <?= htmlspecialchars($booking['nama_tipe']) ?></p>
+                                <p><strong><?= te('Jumlah Kamar:') ?></strong> <?= $booking['jumlah_kamar'] ?></p>
+                                <p><strong><?= te('Kapasitas:') ?></strong> <?= $booking['kapasitas_standar'] ?> <?= te('orang') ?></p>
                             </div>
                         </div>
 
@@ -253,8 +257,8 @@ try {
                             $minutes_left = max(0, 2 - $minutes_since_booking);
                             ?>
                             <div class="time-remaining">
-                                <i class="fas fa-clock"></i> Waktu tersisa:
-                                <span id="countdown"><?= $minutes_left ?>:00</span> menit
+                                <i class="fas fa-clock"></i> <?= te('Waktu tersisa:') ?>
+                                <span id="countdown"><?= $minutes_left ?>:00</span> <?= te('menit') ?>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -264,50 +268,50 @@ try {
 
                 <div class="row mt-4">
                     <div class="col-md-6">
-                        <h5>Detail Pemesan</h5>
-                        <p><strong>Nama:</strong> <?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?></p>
+                        <h5><?= te('Detail Pemesan') ?></h5>
+                        <p><strong><?= te('Nama') ?>:</strong> <?= htmlspecialchars($booking['first_name'] . ' ' . $booking['last_name']) ?></p>
                         <p><strong>Email:</strong> <?= htmlspecialchars($booking['user_email']) ?></p>
-                        <p><strong>No. HP:</strong> <?= htmlspecialchars($booking['no_hp']) ?></p>
+                        <p><strong><?= te('No. HP:') ?></strong> <?= htmlspecialchars($booking['no_hp']) ?></p>
                     </div>
 
                     <div class="col-md-6">
-                        <h5>Detail Pembayaran</h5>
-                        <p><strong>ID Transaksi:</strong> <?= htmlspecialchars($booking['id_transaksi'] ?? '-') ?></p>
-                        <p><strong>Tanggal Transaksi:</strong> <?= $tanggal_pesan ?></p>
-                        <p><strong>Metode Pembayaran:</strong> <?= htmlspecialchars($booking['metode_pembayaran'] ?? 'QRIS') ?></p>
-                        <p><strong>Total Pembayaran:</strong> <span class="price-tag">Rp <?= number_format($booking['total_harga'], 0, ',', '.') ?></span></p>
+                        <h5><?= te('Detail Pembayaran') ?></h5>
+                        <p><strong><?= te('ID Transaksi:') ?></strong> <?= htmlspecialchars($booking['id_transaksi'] ?? '-') ?></p>
+                        <p><strong><?= te('Tanggal Transaksi:') ?></strong> <?= $tanggal_pesan ?></p>
+                        <p><strong><?= te('Metode Pembayaran:') ?></strong> <?= htmlspecialchars($booking['metode_pembayaran'] ?? 'QRIS') ?></p>
+                        <p><strong><?= te('Total Pembayaran:') ?></strong> <span class="price-tag">Rp <?= number_format($booking['total_harga'], 0, ',', '.') ?></span></p>
                     </div>
                 </div>
 
                 <hr>
 
                 <div class="mt-3">
-                    <h5>Deskripsi Kamar</h5>
+                    <h5><?= te('Deskripsi Kamar') ?></h5>
                     <p><?= htmlspecialchars($booking['deskripsi']) ?></p>
-                    <p><strong>Ukuran Kamar:</strong> <?= $booking['ukuran_standar'] ?> m²</p>
-                    <p><strong>Kamar Tersedia:</strong> <?= $booking['stok_total'] + ($booking['status'] == 'Pending' ? $booking['jumlah_kamar'] : 0) ?></p>
+                    <p><strong><?= te('Ukuran Kamar:') ?></strong> <?= $booking['ukuran_standar'] ?> m²</p>
+                    <p><strong><?= te('Kamar Tersedia:') ?></strong> <?= $booking['stok_total'] + ($booking['status'] == 'Pending' ? $booking['jumlah_kamar'] : 0) ?></p>
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">
                     <?php if ($booking['status'] == 'Completed'): ?>
                         <a href="booking_confirmation.php?booking_id=<?= $booking_id ?>" class="btn btn-primary me-2">
-                            <i class="fas fa-receipt me-2"></i> Lihat Invoice
+                            <i class="fas fa-receipt me-2"></i> <?= te('Lihat Invoice') ?>
                         </a>
                     <?php endif; ?>
 
                     <?php if ($booking['status'] == 'Pending'): ?>
                         <form method="POST" class="d-inline">
-                            <button type="submit" name="cancel_booking" class="btn btn-danger me-2" onclick="return confirm('Apakah Anda yakin ingin membatalkan pesanan ini?')">
-                                <i class="fas fa-times me-2"></i> Batalkan Pesanan
+                            <button type="submit" name="cancel_booking" class="btn btn-danger me-2" onclick="return confirm('<?= t('Apakah Anda yakin ingin membatalkan pesanan ini?') ?>')">
+                                <i class="fas fa-times me-2"></i> <?= te('Batalkan Pesanan') ?>
                             </button>
                         </form>
                         <a href="payment.php?booking_id=<?= $booking_id ?>" class="btn btn-warning me-2">
-                            <i class="fas fa-money-bill-wave me-2"></i> Bayar Sekarang
+                            <i class="fas fa-money-bill-wave me-2"></i> <?= te('Bayar Sekarang') ?>
                         </a>
                     <?php endif; ?>
 
                     <a href="hotel.php" class="btn btn-outline-primary">
-                        <i class="fas fa-search me-2"></i> Cari Hotel Lain
+                        <i class="fas fa-search me-2"></i> <?= te('Cari Hotel Lain') ?>
                     </a>
                 </div>
             </div>
@@ -342,6 +346,7 @@ try {
             updateCountdown(); // Panggil sekali untuk inisialisasi awal
         <?php endif; ?>
     </script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

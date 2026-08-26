@@ -1,0 +1,1742 @@
+/* TripVerse — modern visual layer for the customer booking flow.
+   Loaded alongside the existing bootstrap.min.css / style.css, never replaces them. */
+
+:root {
+    --tv-primary: #FEA116;
+    --tv-primary-dark: #E8890A;
+    --tv-primary-light: #FFC966;
+    --tv-gradient: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
+    --tv-gradient-soft: linear-gradient(135deg, rgba(254, 161, 22, 0.12) 0%, rgba(255, 122, 61, 0.06) 100%);
+    --tv-dark: #0F172B;
+    --tv-dark-soft: #1E293B;
+    --tv-light: #F1F8FF;
+    --tv-surface: #FFFFFF;
+    --tv-muted: #64748B;
+    --tv-border: #E7ECF3;
+    --tv-success: #16A34A;
+    --tv-danger: #DC2626;
+    --tv-radius-sm: 10px;
+    --tv-radius-md: 16px;
+    --tv-radius-lg: 24px;
+    --tv-shadow-sm: 0 2px 8px rgba(15, 23, 43, 0.06);
+    --tv-shadow-md: 0 12px 32px rgba(15, 23, 43, 0.10);
+    --tv-shadow-lg: 0 24px 60px rgba(15, 23, 43, 0.16);
+    --tv-shadow-glow: 0 8px 24px rgba(254, 161, 22, 0.35);
+}
+
+/* ---------- Scroll-reveal animation utility ---------- */
+.tv-reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .7s cubic-bezier(.22, 1, .36, 1), transform .7s cubic-bezier(.22, 1, .36, 1);
+    will-change: opacity, transform;
+}
+
+.tv-reveal.tv-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tv-reveal-scale {
+    opacity: 0;
+    transform: scale(.92);
+    transition: opacity .6s cubic-bezier(.22, 1, .36, 1), transform .6s cubic-bezier(.22, 1, .36, 1);
+}
+
+.tv-reveal-scale.tv-in {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.tv-reveal-left {
+    opacity: 0;
+    transform: translateX(-32px);
+    transition: opacity .7s cubic-bezier(.22, 1, .36, 1), transform .7s cubic-bezier(.22, 1, .36, 1);
+}
+
+.tv-reveal-left.tv-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.tv-reveal-right {
+    opacity: 0;
+    transform: translateX(32px);
+    transition: opacity .7s cubic-bezier(.22, 1, .36, 1), transform .7s cubic-bezier(.22, 1, .36, 1);
+}
+
+.tv-reveal-right.tv-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* stagger children automatically when parent has .tv-stagger */
+.tv-stagger .tv-reveal:nth-child(1) { transition-delay: .04s; }
+.tv-stagger .tv-reveal:nth-child(2) { transition-delay: .10s; }
+.tv-stagger .tv-reveal:nth-child(3) { transition-delay: .16s; }
+.tv-stagger .tv-reveal:nth-child(4) { transition-delay: .22s; }
+.tv-stagger .tv-reveal:nth-child(5) { transition-delay: .28s; }
+.tv-stagger .tv-reveal:nth-child(6) { transition-delay: .34s; }
+.tv-stagger .tv-reveal:nth-child(n+7) { transition-delay: .38s; }
+
+@keyframes tv-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes tv-pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(254, 161, 22, .45); }
+    50% { box-shadow: 0 0 0 10px rgba(254, 161, 22, 0); }
+}
+
+@keyframes tv-shimmer {
+    0% { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+@keyframes tv-spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes tv-check-pop {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+/* ---------- Buttons ---------- */
+.tv-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: .85rem 1.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: .01em;
+    border: none;
+    cursor: pointer;
+    transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s ease, filter .25s ease;
+}
+
+.tv-btn-primary {
+    background: var(--tv-gradient);
+    color: #fff;
+    box-shadow: var(--tv-shadow-glow);
+}
+
+.tv-btn-primary:hover, .tv-btn-primary:focus {
+    transform: translateY(-3px);
+    filter: brightness(1.05);
+    color: #fff;
+    box-shadow: 0 14px 30px rgba(254, 161, 22, .45);
+}
+
+.tv-btn-primary:active {
+    transform: translateY(-1px) scale(.98);
+}
+
+.tv-btn-outline {
+    background: #fff;
+    color: var(--tv-dark);
+    border: 2px solid var(--tv-border);
+}
+
+.tv-btn-outline:hover {
+    border-color: var(--tv-primary);
+    color: var(--tv-primary-dark);
+    transform: translateY(-2px);
+}
+
+/* ---------- Cards ---------- */
+.tv-card {
+    background: var(--tv-surface);
+    border-radius: var(--tv-radius-lg);
+    box-shadow: var(--tv-shadow-md);
+    border: 1px solid var(--tv-border);
+    transition: transform .35s cubic-bezier(.22, 1, .36, 1), box-shadow .35s ease;
+}
+
+.tv-card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--tv-shadow-lg);
+}
+
+.tv-glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Step indicator (used across the 4-step booking wizard) ---------- */
+.tv-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 2.5rem;
+}
+
+.tv-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    position: relative;
+    flex: 1;
+    max-width: 160px;
+}
+
+.tv-step-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    background: #fff;
+    border: 2px solid var(--tv-border);
+    color: var(--tv-muted);
+    transition: all .4s cubic-bezier(.22, 1, .36, 1);
+    z-index: 2;
+}
+
+.tv-step.tv-active .tv-step-circle {
+    background: var(--tv-gradient);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: var(--tv-shadow-glow);
+    animation: tv-pulse-glow 2.2s infinite;
+}
+
+.tv-step.tv-done .tv-step-circle {
+    background: var(--tv-success);
+    border-color: transparent;
+    color: #fff;
+}
+
+.tv-step-label {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--tv-muted);
+}
+
+.tv-step.tv-active .tv-step-label {
+    color: var(--tv-dark);
+}
+
+.tv-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--tv-border);
+    z-index: 1;
+}
+
+.tv-step.tv-done:not(:last-child)::after {
+    background: var(--tv-success);
+}
+
+/* ---------- Hero ---------- */
+.tv-hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.tv-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 43, .55) 0%, rgba(15, 23, 43, .75) 100%);
+}
+
+.tv-hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: .5;
+    animation: tv-float 8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* ---------- Search / form inputs ---------- */
+.tv-input-group {
+    position: relative;
+}
+
+.tv-input-group label {
+    font-size: .78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--tv-muted);
+    margin-bottom: .35rem;
+    display: block;
+}
+
+.tv-input {
+    width: 100%;
+    border: 2px solid var(--tv-border);
+    border-radius: var(--tv-radius-sm);
+    padding: .75rem 1rem;
+    transition: border-color .25s ease, box-shadow .25s ease;
+    background: #fff;
+}
+
+.tv-input:focus {
+    outline: none;
+    border-color: var(--tv-primary);
+    box-shadow: 0 0 0 4px rgba(254, 161, 22, .15);
+}
+
+/* ---------- Badges ---------- */
+.tv-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .3rem .8rem;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.tv-badge-success {
+    background: rgba(22, 163, 74, .12);
+    color: var(--tv-success);
+}
+
+.tv-badge-primary {
+    background: var(--tv-gradient-soft);
+    color: var(--tv-primary-dark);
+}
+
+/* ---------- Success check animation ---------- */
+.tv-check-circle {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: var(--tv-success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 2.4rem;
+    box-shadow: 0 12px 30px rgba(22, 163, 74, .35);
+    animation: tv-check-pop .6s cubic-bezier(.22, 1, .36, 1);
+}
+
+/* ---------- Skeleton shimmer (loading placeholders) ---------- */
+.tv-skeleton {
+    background: linear-gradient(90deg, #eef1f6 25%, #f7f9fc 37%, #eef1f6 63%);
+    background-size: 800px 100%;
+    animation: tv-shimmer 1.6s linear infinite;
+    border-radius: var(--tv-radius-sm);
+}
+
+/* =====================================================================
+   NORMALIZATION LAYER — enforces one type system, one radius scale,
+   one focus treatment and one status-colour language across every
+   customer-facing page. Loaded after the template CSS on every page.
+   ===================================================================== */
+
+/* ---------- Typography: Heebo for body, Montserrat for display ---------- */
+body {
+    font-family: 'Heebo', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.form-title, .section-title, .display-1, .display-2, .display-3 {
+    font-family: 'Montserrat', 'Heebo', system-ui, sans-serif;
+    letter-spacing: -0.01em;
+}
+
+h1, .h1, .display-3 { font-weight: 800; }
+h2, .h2 { font-weight: 700; }
+h3, h4, h5, h6 { font-weight: 600; }
+
+/* comfortable reading measure for body copy */
+p, .text-body {
+    line-height: 1.7;
+}
+
+/* ---------- Accessible focus ring (keyboard users) ---------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid rgba(254, 161, 22, .55);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* never leave users without a visible focus state */
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* ---------- Radius scale: pill for actions, soft for surfaces ---------- */
+.btn,
+.btn-sm,
+.btn-lg,
+.filter-btn,
+.city-btn {
+    border-radius: 999px;
+}
+
+.card,
+.booking-card,
+.hotel-card,
+.room-card,
+.summary-card,
+.facility-card,
+.booking-container,
+.confirmation-card,
+.search-container,
+.hotel-info,
+.hotel-header,
+.booking-summary {
+    border-radius: 18px;
+}
+
+.form-control,
+.form-select,
+.tv-input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+    border-radius: 10px;
+}
+
+/* ---------- Unified form field interaction ---------- */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--tv-primary);
+    box-shadow: 0 0 0 4px rgba(254, 161, 22, .15);
+}
+
+/* ---------- Status colour language (one meaning per colour) ---------- */
+.status-completed,
+.badge.bg-success,
+.status-confirmed {
+    background: var(--tv-success) !important;
+    color: #fff !important;
+}
+
+.status-cancelled,
+.badge.bg-danger {
+    background: var(--tv-danger) !important;
+    color: #fff !important;
+}
+
+.status-pending,
+.badge.bg-warning {
+    background: #F59E0B !important;
+    color: #1F2937 !important;
+}
+
+.status-badge,
+.badge {
+    border-radius: 999px;
+    font-weight: 600;
+    letter-spacing: .01em;
+}
+
+/* ---------- Brand text selection ---------- */
+::selection {
+    background: rgba(254, 161, 22, .28);
+    color: var(--tv-dark);
+}
+
+/* ---------- Slimmer, on-brand scrollbar ---------- */
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: #f1f3f7; }
+::-webkit-scrollbar-thumb {
+    background: #c7ced9;
+    border-radius: 999px;
+    border: 3px solid #f1f3f7;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--tv-primary); }
+
+/* ---------- Images never overflow their container ---------- */
+img { max-width: 100%; }
+
+/* ---------- Respect reduced-motion preference ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .tv-reveal,
+    .tv-reveal-scale,
+    .tv-reveal-left,
+    .tv-reveal-right {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* ---------- Signed-in user chip (navbar) ----------
+   Replaces the old full-sentence greeting that overflowed the navbar. */
+.tv-user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    max-width: 220px;
+    padding: .4rem .9rem;
+    margin-left: .75rem;
+    border-radius: 999px;
+    background: rgba(254, 161, 22, .14);
+    border: 1px solid rgba(254, 161, 22, .35);
+    color: var(--tv-primary);
+    font-size: .875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: background .25s ease, border-color .25s ease;
+}
+
+.tv-user-chip:hover {
+    background: rgba(254, 161, 22, .22);
+    border-color: rgba(254, 161, 22, .55);
+}
+
+.tv-user-chip i {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.tv-user-chip-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 1199.98px) {
+    .tv-user-chip { max-width: 150px; }
+}
+
+/* the navbar must never be the reason the page scrolls sideways */
+.navbar-collapse { min-width: 0; }
+.navbar-nav { flex-wrap: wrap; }
+
+/* ---------- Comfortable tap targets ---------- */
+.footer .btn-link,
+.footer-menu a {
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* ---------- Order-summary readability ----------
+   The sidebar column is narrow; keep label/value pairs on one line
+   and stop long labels from wrapping mid-phrase. */
+.summary-card .summary-row,
+.summary-card .price-item,
+.summary-card .d-flex.justify-content-between {
+    gap: .75rem;
+}
+
+.summary-card .price-item > span:last-child,
+.summary-card .summary-row > span:last-child {
+    white-space: nowrap;
+    text-align: right;
+}
+
+.summary-card h4,
+.summary-card h5,
+.summary-card .summary-title {
+    font-size: 1.05rem;
+    line-height: 1.3;
+}
+
+/* ---------- Brand lockup must fit inside its column ----------
+   The template hard-codes a large h1 that spilled out of the dark
+   logo column and collided with the contact bar on every page. */
+.col-lg-3.bg-dark h1,
+.navbar-brand h1 {
+    font-size: clamp(1.3rem, 1.4vw + .65rem, 1.85rem);
+    line-height: 1.1;
+    white-space: nowrap;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.col-lg-3.bg-dark {
+    padding-inline: 1rem;
+}
+
+.col-lg-3.bg-dark a {
+    max-width: 100%;
+}
+
+.col-lg-3.bg-dark img,
+.navbar-brand img {
+    flex-shrink: 0;
+}
+
+/* ---------- Order summary: keep label/amount pairs on one line ----------
+   The sidebar column is only ~290px wide, so the default heading sizes
+   made "Total Pembayaran" and its amount both wrap onto two lines. */
+.summary-card .d-flex.justify-content-between > *,
+.booking-summary .d-flex.justify-content-between > * {
+    min-width: 0;
+}
+
+.summary-card .d-flex.justify-content-between > .text-end,
+.summary-card .text-end,
+.booking-summary .text-end {
+    white-space: nowrap;
+}
+
+.summary-card .d-flex.justify-content-between h5,
+.summary-card .d-flex.justify-content-between h4,
+.booking-summary .d-flex.justify-content-between h5 {
+    font-size: .95rem;
+    font-weight: 700;
+    white-space: nowrap;
+    margin-bottom: 0;
+}
+
+.summary-card .d-flex.justify-content-between .text-end .fw-bold,
+.summary-card .d-flex.justify-content-between .text-end strong {
+    font-size: 1.02rem;
+}
+
+/* ---------- Room card action column ----------
+   The price/CTA column is only ~150px wide inside the detail page's
+   main column, which squeezed the pill button into a broken circle
+   and wrapped the price onto two lines. */
+.room-card .col-md-3 .btn,
+.room-card .col-md-3 .btn-primary {
+    display: block;
+    width: 100%;
+    padding-left: .75rem;
+    padding-right: .75rem;
+    font-size: .875rem;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.room-card .price,
+.room-card .col-md-3 .price {
+    white-space: nowrap;
+    font-size: 1.15rem;
+    line-height: 1.2;
+}
+
+.room-card .col-md-3 .card-body {
+    padding-left: .75rem;
+    padding-right: 1rem;
+}
+
+.room-card .stock-label {
+    font-size: .8rem;
+    gap: .5rem;
+}
+
+/* keep the three-part room card from getting too tight on mid screens */
+@media (min-width: 768px) and (max-width: 1399.98px) {
+    .room-card .col-md-5 .card-body { padding-right: .5rem; }
+    .room-card .card-title { font-size: 1.05rem; }
+}
+
+/* Rebalance the room card's 3 columns so the CTA column is wide enough
+   for its label instead of letting the text spill outside the button. */
+@media (min-width: 768px) {
+    .room-card > .row > .col-md-4 { flex: 0 0 auto; width: 29%; }
+    .room-card > .row > .col-md-5 { flex: 0 0 auto; width: 41%; }
+    .room-card > .row > .col-md-3 { flex: 0 0 auto; width: 30%; }
+}
+
+.room-card .col-md-3 .btn,
+.room-card .col-md-3 .btn-primary {
+    padding-left: .5rem;
+    padding-right: .5rem;
+    font-size: .85rem;
+    letter-spacing: 0;
+}
+
+/* ---------- Brand wordmark ----------
+   Previously an <h1> in both the header and the footer, which gave every
+   page three competing level-1 headings. Now a styled, non-heading mark. */
+.tv-wordmark {
+    display: inline-block;
+    font-family: 'Montserrat', 'Heebo', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.tv-wordmark-header {
+    font-size: clamp(1.25rem, 1.3vw + .6rem, 1.75rem);
+    color: var(--tv-primary);
+    margin: 0;
+}
+
+.tv-wordmark-footer {
+    font-size: clamp(1.15rem, 1.1vw + .6rem, 1.5rem);
+    background: linear-gradient(135deg, #FEA116, #FF7A3D);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+a:hover .tv-wordmark-header { color: var(--tv-primary-light); }
+
+/* Footer brand panel: replace the heavy flat orange block with a
+   softer tinted panel that sits better on the dark footer. */
+.footer .bg-primary.rounded {
+    background: linear-gradient(135deg, rgba(254, 161, 22, .16), rgba(255, 122, 61, .07)) !important;
+    border: 1px solid rgba(254, 161, 22, .32);
+    border-radius: 18px !important;
+}
+
+/* ---------- Primary navigation fits on one line ----------
+   With 7 links plus the account control, the template's generous link
+   spacing pushed the last item onto a second row between ~992-1400px. */
+@media (min-width: 992px) and (max-width: 1399.98px) {
+    .navbar .navbar-nav .nav-link,
+    .navbar-dark .navbar-nav .nav-link {
+        padding-left: .5rem !important;
+        padding-right: .5rem !important;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        font-size: .875rem;
+    }
+}
+
+@media (min-width: 1400px) {
+    .navbar .navbar-nav .nav-link,
+    .navbar-dark .navbar-nav .nav-link {
+        padding-left: .7rem !important;
+        padding-right: .7rem !important;
+        margin-right: 0 !important;
+    }
+}
+
+/* account control shouldn't dominate the bar */
+.profile-dropdown-container .profile-text .email {
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+.profile-dropdown-container .profile-text .name {
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---------- Default avatar ----------
+   Users without a photo previously fell back to an empty grey square.
+   Swap that placeholder for a branded SVG so it always reads as an
+   intentional avatar rather than a broken image. */
+img[src$="default.jpg"] {
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FEA116'/%3E%3Cstop offset='1' stop-color='%23FF7A3D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='128' height='128' fill='url(%23g)'/%3E%3Ccircle cx='64' cy='49' r='21' fill='%23ffffff' opacity='0.92'/%3E%3Cpath d='M64 76c-19 0-34 11-34 25v27h68v-27c0-14-15-25-34-25z' fill='%23ffffff' opacity='0.92'/%3E%3C/svg%3E");
+    object-fit: cover;
+}
+
+.profile-photo-container {
+    overflow: hidden;
+    background: linear-gradient(135deg, #FEA116, #FF7A3D);
+}
+
+.profile-photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ---------- Account control must not widen the navbar ----------
+   The name/email block beside the avatar had no width limit, so long
+   addresses pushed the whole bar past the viewport. */
+.profile-text,
+.profile-text .name,
+.profile-text .email {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.navbar .dropdown,
+.navbar .dropdown-toggle {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.navbar .dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+}
+
+/* Pages with eight primary nav items need a little more breathing room
+   before the account control, otherwise the last link wraps. */
+@media (min-width: 992px) and (max-width: 1399.98px) {
+    .navbar .navbar-nav .nav-link,
+    .navbar-dark .navbar-nav .nav-link {
+        padding-left: .38rem !important;
+        padding-right: .38rem !important;
+        font-size: .84rem;
+        letter-spacing: 0;
+    }
+}
+
+/* ---------- Action buttons never break their own label ----------
+   Inside a flex row a default inline-block .btn shrinks below its
+   content width, which pushed the icon and the label onto separate
+   lines (the "Kembali" pill turned into a tall oval). */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    line-height: 1.4;
+}
+
+.d-flex > .btn,
+.d-flex > form > .btn,
+.d-flex > div > form > .btn {
+    flex-shrink: 0;
+}
+
+/* the wizard's footer action rows */
+.d-flex.justify-content-between {
+    gap: .75rem;
+}
+
+.d-flex.justify-content-between > div {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+
+/* forms used purely as button wrappers shouldn't add layout of their own */
+.d-flex form[style*="inline"] {
+    display: inline-flex !important;
+    margin: 0;
+}
+
+/* the me-2 utility is redundant once the row owns the gap */
+.d-flex.justify-content-between > div > form > .btn.me-2 {
+    margin-right: 0 !important;
+}
+
+/* ---------- Secondary + destructive actions on brand ---------- */
+.btn-outline-secondary {
+    border: 2px solid var(--tv-border);
+    color: var(--tv-muted);
+    background: #fff;
+    font-weight: 600;
+    transition: transform .3s cubic-bezier(.22, 1, .36, 1), border-color .25s ease, color .25s ease;
+}
+
+.btn-outline-secondary:hover {
+    border-color: var(--tv-primary);
+    color: var(--tv-primary-dark);
+    background: #fff;
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background: var(--tv-danger);
+    border: none;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(220, 38, 38, .28);
+    transition: transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .25s ease, filter .25s ease;
+}
+
+.btn-danger:hover {
+    background: #B91C1C;
+    filter: none;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(220, 38, 38, .38);
+}
+
+@media (max-width: 575.98px) {
+    .d-flex.justify-content-between {
+        flex-wrap: wrap;
+    }
+    .d-flex.justify-content-between > *,
+    .d-flex.justify-content-between > div > form,
+    .d-flex.justify-content-between > div > form > .btn {
+        width: 100%;
+    }
+}
+
+/* =====================================================================
+   ACCOUNT MENU — one shared control for the whole customer navbar
+   (see php/_account_menu.php)
+   ===================================================================== */
+.tv-account {
+    position: relative;
+    margin-left: .75rem;
+    flex-shrink: 0;
+}
+
+.tv-account-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    max-width: 260px;
+    padding: .35rem .8rem .35rem .35rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, .16);
+    background: rgba(255, 255, 255, .07);
+    color: #fff;
+    cursor: pointer;
+    transition: background .25s ease, border-color .25s ease, transform .25s cubic-bezier(.22, 1, .36, 1);
+}
+
+.tv-account-toggle:hover,
+.tv-account-toggle[aria-expanded="true"] {
+    background: rgba(254, 161, 22, .18);
+    border-color: rgba(254, 161, 22, .55);
+    transform: translateY(-1px);
+}
+
+.tv-account-avatar {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #FEA116, #FF7A3D);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, .25);
+}
+
+.tv-account-toggle[aria-expanded="true"] .tv-account-avatar {
+    box-shadow: 0 0 0 2px rgba(254, 161, 22, .9);
+}
+
+.tv-account-avatar img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* initial sits underneath, so it shows through whenever there is no photo */
+.tv-account-initial {
+    font-family: 'Montserrat', 'Heebo', sans-serif;
+    font-weight: 700;
+    font-size: .95rem;
+    color: #fff;
+    line-height: 1;
+    z-index: 0;
+}
+
+.tv-account-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.tv-account-name {
+    font-size: .84rem;
+    font-weight: 600;
+    color: #fff;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tv-account-email {
+    font-size: .72rem;
+    color: rgba(255, 255, 255, .68);
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tv-account-caret {
+    font-size: .7rem;
+    color: rgba(255, 255, 255, .8);
+    transition: transform .3s cubic-bezier(.22, 1, .36, 1);
+    flex-shrink: 0;
+}
+
+.tv-account-toggle[aria-expanded="true"] .tv-account-caret {
+    transform: rotate(180deg);
+    color: var(--tv-primary);
+}
+
+/* ---------- the menu itself (self-contained, no Bootstrap JS) ---------- */
+.tv-account-menu {
+    position: absolute;
+    top: calc(100% + .6rem);
+    right: 0;
+    z-index: 1080;
+    min-width: 272px;
+    margin: 0;
+    padding: .5rem;
+    list-style: none;
+    border: 1px solid var(--tv-border);
+    border-radius: 16px;
+    box-shadow: 0 24px 50px rgba(15, 23, 43, .18);
+    background: #fff;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(.98);
+    transform-origin: top right;
+    transition: opacity .2s ease, transform .22s cubic-bezier(.22, 1, .36, 1), visibility .22s;
+}
+
+.tv-account.is-open .tv-account-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.tv-account-menu > li { list-style: none; }
+
+.tv-account-head {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .65rem .6rem .75rem;
+}
+
+.tv-account-avatar-lg {
+    width: 44px;
+    height: 44px;
+    box-shadow: none;
+}
+
+.tv-account-avatar-lg .tv-account-initial { font-size: 1.15rem; }
+
+.tv-account-head-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.tv-account-head-text .tv-account-name {
+    color: var(--tv-dark);
+    font-size: .92rem;
+    max-width: 180px;
+}
+
+.tv-account-head-text .tv-account-email {
+    color: var(--tv-muted);
+    font-size: .76rem;
+    max-width: 180px;
+}
+
+.tv-account-sep {
+    margin: .3rem .35rem;
+    border: 0;
+    border-top: 1px solid var(--tv-border);
+    opacity: 1;
+}
+
+.tv-account-item {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .62rem .7rem;
+    border-radius: 10px;
+    font-size: .89rem;
+    font-weight: 500;
+    color: var(--tv-dark);
+    text-decoration: none;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+
+.tv-account-item i {
+    width: 18px;
+    text-align: center;
+    font-size: .95rem;
+    color: var(--tv-muted);
+    transition: color .2s ease;
+}
+
+.tv-account-item:hover,
+.tv-account-item:focus-visible {
+    background: rgba(254, 161, 22, .12);
+    color: var(--tv-primary-dark);
+    transform: translateX(3px);
+}
+
+.tv-account-item:hover i,
+.tv-account-item:focus-visible i { color: var(--tv-primary); }
+
+.tv-account-logout:hover,
+.tv-account-logout:focus-visible {
+    background: rgba(220, 38, 38, .10);
+    color: var(--tv-danger);
+}
+
+.tv-account-logout:hover i,
+.tv-account-logout:focus-visible i { color: var(--tv-danger); }
+
+/* on a light navbar (pages that don't use the dark bar) */
+.navbar-light .tv-account-toggle,
+.bg-white .tv-account-toggle {
+    border-color: var(--tv-border);
+    background: #fff;
+    color: var(--tv-dark);
+}
+
+.navbar-light .tv-account-name,
+.bg-white .tv-account-name { color: var(--tv-dark); }
+
+.navbar-light .tv-account-email,
+.bg-white .tv-account-email { color: var(--tv-muted); }
+
+/* Keep the name and e-mail visible wherever there is room -- the control
+   read as an empty circle when the text was hidden on mid-size screens. */
+@media (max-width: 1399.98px) {
+    .tv-account-name,
+    .tv-account-email { max-width: 118px; }
+}
+
+@media (max-width: 991.98px) {
+    .tv-account-name,
+    .tv-account-email { max-width: 96px; }
+    .tv-account-email { font-size: .68rem; }
+    .tv-account-toggle { padding: .3rem .6rem .3rem .3rem; gap: .5rem; }
+}
+
+/* only drop the text on genuinely narrow screens */
+@media (max-width: 575.98px) {
+    .tv-account-meta { display: none; }
+    .tv-account-toggle { padding: .28rem .5rem .28rem .28rem; }
+}
+
+/* The wizard footer row is a flex container with the default
+   align-items:stretch, so the lone "Kembali" button grew to match the
+   height of the wrapped button group beside it and rendered as a tall
+   oval with the icon stacked above the label. Centre the items and keep
+   the labels compact enough that all three fit on one line. */
+.d-flex.justify-content-between:has(> .btn),
+.d-flex.justify-content-between:has(> form > .btn),
+.d-flex.justify-content-between:has(> div > form > .btn) {
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.d-flex.justify-content-between > .btn,
+.d-flex.justify-content-between > form > .btn,
+.d-flex.justify-content-between > div > .btn,
+.d-flex.justify-content-between > div > form > .btn {
+    align-self: center;
+    padding-left: 1.15rem !important;
+    padding-right: 1.15rem !important;
+    font-size: .875rem;
+}
+
+/* fallback for browsers without :has() */
+.d-flex.justify-content-between.mt-4,
+.d-flex.justify-content-between.mt-5 {
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Clear three-level hierarchy in the wizard footer so all actions fit on
+   one line and read in the right order:
+   primary (filled) > secondary (outline) > tertiary (ghost).            */
+.d-flex.justify-content-between .btn[name="skip_services"] {
+    background: transparent;
+    border: none;
+    color: var(--tv-muted);
+    box-shadow: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding-left: .6rem !important;
+    padding-right: .6rem !important;
+    font-weight: 500;
+}
+
+.d-flex.justify-content-between .btn[name="skip_services"]:hover {
+    background: transparent;
+    color: var(--tv-primary-dark);
+    transform: none;
+}
+
+/* every action in the row shares one height so the group looks aligned */
+.d-flex.justify-content-between > .btn,
+.d-flex.justify-content-between > form > .btn,
+.d-flex.justify-content-between > div > .btn,
+.d-flex.justify-content-between > div > form > .btn {
+    min-height: 44px;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* final tightening so the three wizard actions sit on a single line
+   inside the ~536px content column */
+.d-flex.justify-content-between:has(> div > form > .btn) {
+    gap: .5rem;
+}
+
+.d-flex.justify-content-between > div {
+    gap: .5rem;
+    justify-content: flex-end;
+}
+
+.d-flex.justify-content-between > .btn,
+.d-flex.justify-content-between > div > form > .btn {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+.d-flex.justify-content-between .btn[name="continue_to_payment"],
+.d-flex.justify-content-between .btn[name="confirm_payment"] {
+    font-size: .855rem;
+}
+
+/* ---------- Tertiary (ghost) action ----------
+   Only the single primary action in a row should be a filled button. */
+.tv-btn-ghost {
+    background: transparent;
+    border: none;
+    color: var(--tv-muted);
+    box-shadow: none;
+    font-weight: 500;
+    padding-left: .6rem !important;
+    padding-right: .6rem !important;
+}
+
+.tv-btn-ghost:hover {
+    background: transparent;
+    color: var(--tv-primary-dark);
+    transform: none;
+}
+
+/* A cancel action is destructive but secondary: outline, not filled, so it
+   never competes with "Saya Sudah Bayar". */
+.d-flex.justify-content-between .btn[name="cancel_booking"] {
+    background: transparent;
+    border: 2px solid rgba(220, 38, 38, .45);
+    color: var(--tv-danger);
+    box-shadow: none;
+    font-weight: 600;
+}
+
+.d-flex.justify-content-between .btn[name="cancel_booking"]:hover {
+    background: rgba(220, 38, 38, .08);
+    border-color: var(--tv-danger);
+    color: var(--tv-danger);
+    box-shadow: none;
+    transform: translateY(-2px);
+}
+
+/* =====================================================================
+   PROFILE PAGE — account overview, security form, settings list
+   ===================================================================== */
+.tv-account-overview {
+    background: #fff;
+    border-radius: 18px;
+    padding: 1.6rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 6px 18px rgba(15, 23, 43, .07);
+    border-top: 4px solid transparent;
+    border-image: linear-gradient(135deg, #FEA116, #FF7A3D) 1;
+    animation: tv-card-in-up .55s cubic-bezier(.22, 1, .36, 1);
+}
+
+@keyframes tv-card-in-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tv-overview-id {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--tv-border);
+}
+
+.tv-overview-avatar {
+    width: 68px;
+    height: 68px;
+    box-shadow: 0 0 0 3px rgba(254, 161, 22, .22);
+}
+
+.tv-overview-avatar .tv-account-initial { font-size: 1.7rem; }
+
+.tv-overview-text { min-width: 0; }
+
+.tv-overview-text h2 {
+    margin: 0 0 .15rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--tv-dark);
+    line-height: 1.2;
+}
+
+.tv-overview-text p {
+    margin: 0 0 .5rem;
+    font-size: .88rem;
+    color: var(--tv-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tv-member-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .28rem .75rem;
+    border-radius: 999px;
+    background: rgba(254, 161, 22, .13);
+    color: var(--tv-primary-dark);
+    font-size: .76rem;
+    font-weight: 600;
+}
+
+.tv-overview-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .75rem;
+    padding: 1.25rem 0;
+}
+
+.tv-stat {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    padding: .85rem;
+    border-radius: 12px;
+    background: #F8FAFC;
+    border: 1px solid var(--tv-border);
+    transition: transform .3s cubic-bezier(.22, 1, .36, 1), border-color .25s ease;
+}
+
+.tv-stat:hover {
+    transform: translateY(-3px);
+    border-color: rgba(254, 161, 22, .5);
+}
+
+.tv-stat-value {
+    font-family: 'Montserrat', 'Heebo', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--tv-dark);
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.tv-stat-label {
+    font-size: .74rem;
+    font-weight: 600;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    color: var(--tv-muted);
+}
+
+/* ---------- profile completeness ---------- */
+.tv-completion {
+    padding-top: 1rem;
+    border-top: 1px solid var(--tv-border);
+}
+
+.tv-completion-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: .85rem;
+    color: var(--tv-muted);
+    margin-bottom: .45rem;
+}
+
+.tv-completion-head strong { color: var(--tv-primary-dark); font-size: .95rem; }
+
+.tv-completion-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: #EEF2F7;
+    overflow: hidden;
+}
+
+.tv-completion-bar > span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #FEA116, #FF7A3D);
+    transition: width .6s cubic-bezier(.22, 1, .36, 1);
+}
+
+.tv-completion small {
+    display: block;
+    margin-top: .5rem;
+    font-size: .78rem;
+    color: var(--tv-muted);
+}
+
+.tv-completion-done {
+    color: var(--tv-success);
+    font-size: .88rem;
+    font-weight: 600;
+}
+
+/* ---------- shared helpers ---------- */
+.tv-section-note {
+    color: var(--tv-muted);
+    font-size: .88rem;
+    line-height: 1.65;
+    margin-bottom: 1.35rem;
+}
+
+.tv-section-note a { color: var(--tv-primary-dark); font-weight: 600; }
+
+.tv-field-hint {
+    display: block;
+    margin-top: .35rem;
+    font-size: .76rem;
+    color: var(--tv-muted);
+}
+
+/* ---------- password strength ---------- */
+.tv-pw-strength { margin: .4rem 0 .9rem; }
+
+.tv-pw-bar {
+    height: 7px;
+    border-radius: 999px;
+    background: #EEF2F7;
+    overflow: hidden;
+}
+
+.tv-pw-bar > span {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    background: var(--tv-danger);
+    transition: width .35s ease, background .35s ease;
+}
+
+.tv-pw-label {
+    display: block;
+    margin-top: .4rem;
+    font-size: .78rem;
+    color: var(--tv-muted);
+}
+
+.tv-pw-rules {
+    list-style: none;
+    margin: 0 0 1.3rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: .35rem .9rem;
+}
+
+.tv-pw-rules li {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .81rem;
+    color: var(--tv-muted);
+    transition: color .2s ease;
+}
+
+.tv-pw-rules li i {
+    font-size: .5rem;
+    transition: all .2s ease;
+}
+
+.tv-pw-rules li.ok {
+    color: var(--tv-success);
+    font-weight: 600;
+}
+
+.tv-pw-rules li.ok i {
+    font-size: .8rem;
+    color: var(--tv-success);
+}
+
+/* Hotel recommendation cards (home.php): source images differ in aspect
+   ratio and descriptions differ in length, which left the three cards at
+   uneven heights. Force a matching image height and pin the action buttons
+   to the bottom of each card so all three line up. */
+.hotel-item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.hotel-item img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.hotel-item > .p-4 {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+.hotel-item > .p-4 > p {
+    flex: 1 1 auto;
+}
+
+/* ---------- settings shortcut list ---------- */
+.tv-settings-links {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    margin-top: 1.5rem;
+}
+
+.tv-settings-link {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    padding: .95rem 1.1rem;
+    border-radius: 14px;
+    border: 1px solid var(--tv-border);
+    background: #fff;
+    color: var(--tv-dark);
+    text-decoration: none;
+    transition: border-color .25s ease, transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .25s ease;
+}
+
+.tv-settings-link:hover {
+    border-color: rgba(254, 161, 22, .55);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(15, 23, 43, .08);
+    color: var(--tv-dark);
+}
+
+.tv-settings-link > i:first-child {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(254, 161, 22, .13);
+    color: var(--tv-primary);
+}
+
+.tv-settings-link span {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.tv-settings-link span strong { font-size: .92rem; font-weight: 600; }
+.tv-settings-link span small { font-size: .78rem; color: var(--tv-muted); }
+
+.tv-settings-arrow {
+    color: var(--tv-muted);
+    font-size: .8rem;
+    transition: transform .25s ease, color .25s ease;
+}
+
+.tv-settings-link:hover .tv-settings-arrow {
+    color: var(--tv-primary);
+    transform: translateX(3px);
+}
+
+/* logout in the profile sidebar reads as destructive */
+.menu-link-logout:hover,
+.menu-link-logout.active {
+    background: linear-gradient(135deg, #DC2626, #B91C1C) !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, .32) !important;
+}
+
+@media (max-width: 767.98px) {
+    .tv-overview-stats { grid-template-columns: 1fr; }
+    .tv-overview-id { flex-direction: column; text-align: center; }
+}
+
+/* Between ~992px and ~1200px the navbar carries eight links plus the
+   account control, so the name/e-mail block has to give up some width
+   to keep everything on a single row. */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .tv-account-name,
+    .tv-account-email { max-width: 92px; }
+    .tv-account-email { font-size: .69rem; }
+    .tv-account { margin-left: .4rem; }
+    .tv-account-toggle { gap: .5rem; padding-right: .6rem; }
+}
+
+/* ---------- Account menu inside the collapsed (hamburger) navbar ----------
+   Right-aligning an absolutely positioned menu to a control that sits at the
+   left edge pushed it off-screen. Below the navbar breakpoint the menu flows
+   inline instead, which is the expected mobile pattern. */
+@media (max-width: 991.98px) {
+    .tv-account {
+        width: 100%;
+        margin-left: 0;
+        margin-top: .5rem;
+    }
+
+    .tv-account-toggle {
+        width: 100%;
+        max-width: none;
+        justify-content: flex-start;
+    }
+
+    .tv-account-meta {
+        display: flex;
+        flex: 1;
+    }
+
+    .tv-account-name,
+    .tv-account-email { max-width: none; }
+
+    .tv-account-caret { margin-left: auto; }
+
+    .tv-account-menu {
+        position: static;
+        width: 100%;
+        min-width: 0;
+        margin-top: .5rem;
+        transform: none;
+        box-shadow: none;
+        display: none;
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .tv-account.is-open .tv-account-menu {
+        display: block;
+        transform: none;
+    }
+}
+
+/* =====================================================================
+   LANGUAGE SWITCHER (see php/_lang_switch.php)
+   ===================================================================== */
+.tv-lang {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .09);
+    border: 1px solid rgba(255, 255, 255, .16);
+    flex-shrink: 0;
+}
+
+.tv-lang-opt {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    padding: .26rem .55rem;
+    border-radius: 999px;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: rgba(255, 255, 255, .72);
+    text-decoration: none;
+    transition: background .25s ease, color .25s ease;
+}
+
+.tv-lang-opt:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .1);
+}
+
+.tv-lang-opt.is-active {
+    background: linear-gradient(135deg, #FEA116, #FF7A3D);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(254, 161, 22, .4);
+}
+
+/* on light backgrounds (auth pages) */
+.tv-lang-light {
+    background: #fff;
+    border-color: var(--tv-border);
+}
+
+.tv-lang-light .tv-lang-opt { color: var(--tv-muted); }
+.tv-lang-light .tv-lang-opt:hover { color: var(--tv-dark); background: #F1F5F9; }
+.tv-lang-light .tv-lang-opt.is-active { color: #fff; }
+
+/* auth pages: float it above the card */
+.tv-lang-floating {
+    position: fixed;
+    top: 22px;
+    right: 24px;
+    z-index: 1090;
+}
+
+@media (max-width: 991.98px) {
+    .tv-lang { margin-top: .5rem; }
+}
+
+/* ---------- Navbar balance ----------
+   Removing "Logout" from the nav left a large empty gap between the links
+   and the account controls (~160px at 1280px). Let the links breathe so the
+   bar reads as one band instead of two clusters far apart. */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+    .navbar .navbar-nav .nav-link,
+    .navbar-dark .navbar-nav .nav-link {
+        padding-left: .95rem !important;
+        padding-right: .95rem !important;
+        font-size: .875rem;
+    }
+}
+
+@media (min-width: 1400px) {
+    .navbar .navbar-nav .nav-link,
+    .navbar-dark .navbar-nav .nav-link {
+        padding-left: 1.2rem !important;
+        padding-right: 1.2rem !important;
+        font-size: .9rem;
+    }
+}
+
+/* keep the language switcher and the account chip reading as one group */
+.navbar .tv-lang + .tv-account,
+.tv-lang + .tv-account {
+    margin-left: .55rem;
+}
+
+/* 992–1199px also has spare room now that the nav carries seven links. */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .navbar .navbar-nav .nav-link,
+    .navbar-dark .navbar-nav .nav-link {
+        padding-left: .62rem !important;
+        padding-right: .62rem !important;
+        font-size: .85rem;
+    }
+}

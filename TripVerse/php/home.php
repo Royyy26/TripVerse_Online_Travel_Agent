@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 
 /*
  * Try to require connect.php with a couple of common relative paths.
@@ -25,7 +26,7 @@ $username = $_SESSION['username'] ?? '';
 
 // Cek format id_user (awalan 'USR') — jika kamu memang pakai format ini
 if (!str_starts_with($id_user, 'USR')) {
-    echo "<script>alert('Akses ditolak! Halaman ini hanya untuk user.'); window.location='dashboard.php';</script>";
+    echo "<script>alert('" . t('Akses ditolak! Halaman ini hanya untuk user.') . "'); window.location='dashboard.php';</script>";
     exit;
 }
 
@@ -102,7 +103,7 @@ if ($is_new_user) {
         $show_popup = true;
         
         // Buat notifikasi untuk navbar
-        $new_user_notification = "Diskon {$diskon_pengguna_baru['nilai_diskon']}% berlaku {$remaining_days} hari lagi";
+        $new_user_notification = t('Diskon') . " {$diskon_pengguna_baru['nilai_diskon']}% " . t('berlaku') . " {$remaining_days} " . t('hari lagi');
     }
 }
 
@@ -128,13 +129,13 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
 
 <head>
     <meta charset="utf-8">
-    <title>TripVerse</title>
+    <title><?= te('Beranda') ?> - TripVerse</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
-    <link href="../css/wa.css" rel="stylesheet">
+    <link href="../css/wa.css?v=2.0" rel="stylesheet">
 
-    <link href="img/favicon.ico" rel="icon">
+    <link href="../img/favicon.ico" rel="icon">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -152,11 +153,12 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style.css?v=2.0" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-    <link href="../css/home.css" rel="stylesheet">
+    <link href="../css/home.css?v=2.0" rel="stylesheet">
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         /* PROFIL STYLES - DIPERBAIKI TOTAL UNTUK BOOTSTRAP DROPDOWN */
@@ -184,8 +186,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
         /* Mengatur border saat hover atau ketika dropdown aktif */
         .profile-dropdown-container:hover .profile-photo-container,
         .profile-dropdown-container .dropdown-toggle[aria-expanded="true"] .profile-photo-container {
-            border-color: #0d6efd;
-            /* Warna biru primer Bootstrap saat aktif/hover */
+            border-color: #FEA116;
         }
 
         .profile-photo {
@@ -250,7 +251,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
 
         .dropdown-menu a.dropdown-item:hover {
             background-color: #f8f9fa;
-            color: #0d6efd;
+            color: #FEA116;
         }
 
         .dropdown-menu .material-icons {
@@ -297,7 +298,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
             padding: 30px;
             animation: popIn 0.5s ease-out;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            border: 4px solid #ff6600;
+            border: 4px solid #FEA116;
             position: relative;
             overflow: hidden;
         }
@@ -309,7 +310,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
             left: 0;
             right: 0;
             height: 6px;
-            background: linear-gradient(90deg, #ff6600, #ff8c00, #ffcc00, #ff8c00, #ff6600);
+            background: linear-gradient(90deg, #FEA116, #FF7A3D, #FFC966, #FF7A3D, #FEA116);
             background-size: 200% 100%;
             animation: shimmer 3s infinite linear;
         }
@@ -320,11 +321,11 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
             object-fit: cover;
             border-radius: 12px;
             margin-bottom: 20px;
-            border: 3px solid #ff6600;
+            border: 3px solid #FEA116;
         }
 
         .promo-text {
-            color: #ff3300;
+            color: #E8890A;
             font-size: 2.2rem;
             font-weight: 900;
             margin: 15px 0;
@@ -338,7 +339,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
             padding: 15px;
             margin: 20px 0;
             text-align: left;
-            border: 2px dashed #ffcc00;
+            border: 2px dashed #FEA116;
         }
 
         .voucher-detail {
@@ -353,7 +354,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
         }
 
         .voucher-detail .material-icons {
-            color: #ff6600;
+            color: #FEA116;
             margin-right: 10px;
             font-size: 20px;
         }
@@ -367,7 +368,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
         }
 
         .popup-btn {
-            background: linear-gradient(135deg, #ff6600, #ff3300);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             border: none;
             padding: 15px 30px;
             width: 100%;
@@ -386,15 +387,15 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
 
         .popup-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 102, 0, 0.4);
+            box-shadow: 0 10px 25px rgba(254, 161, 22, 0.4);
         }
 
         .popup-secondary-btn {
             background: transparent;
-            border: 2px solid #ff6600;
+            border: 2px solid #FEA116;
             padding: 12px 30px;
             width: 100%;
-            color: #ff6600;
+            color: #FEA116;
             font-size: 1rem;
             border-radius: 10px;
             cursor: pointer;
@@ -408,14 +409,14 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
         }
 
         .popup-secondary-btn:hover {
-            background: #ff6600;
+            background: #FEA116;
             color: white;
         }
 
         /* Notifikasi Voucher di Navbar */
         .voucher-notification {
-            background: rgba(255, 102, 0, 0.2);
-            border: 1px solid rgba(255, 102, 0, 0.5);
+            background: rgba(254, 161, 22, 0.2);
+            border: 1px solid rgba(254, 161, 22, 0.5);
             border-radius: 20px;
             padding: 5px 15px;
             margin-left: 10px;
@@ -428,7 +429,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
         .voucher-notification .material-icons {
             font-size: 18px;
             margin-right: 5px;
-            color: #ff6600;
+            color: #FEA116;
         }
 
         @keyframes popIn {
@@ -504,7 +505,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                     <a href="about.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
-                        <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                        <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
                 </div>
 
@@ -534,23 +535,23 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                     <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
                         <a href="home.php" class="navbar-brand d-block d-lg-none">
                             <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
-                            <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                            <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                         </a>
                         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a href="home.php" class="nav-item nav-link active">Beranda</a>
-                                <a href="about.php" class="nav-item nav-link">Tentang Kami</a>
-                                <a href="hotel.php" class="nav-item nav-link">Hotel</a>
-                                <a href="service.php" class="nav-item nav-link">Fitur</a>
-                                <a href="team.php" class="nav-item nav-link">Tim Kami</a>
-                                <a href="contact.php" class="nav-item nav-link">Kontak</a>
-                                <a href="riwayat.php" class="nav-item nav-link">Riwayat</a>
+                                <a href="home.php" class="nav-item nav-link active"><?= te("Beranda") ?></a>
+                                <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
+                                <a href="hotel.php" class="nav-item nav-link"><?= te("Hotel") ?></a>
+                                <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
+                                <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
+                                <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
+                                <a href="history.php" class="nav-item nav-link"><?= te("Riwayat") ?></a>
                             </div>
 
-                            <div class="ms-auto me-2 dropdown profile-dropdown-container">
+                            <div class="ms-auto me-2 d-flex align-items-center gap-2">
                                 <?php if ($is_new_user && $show_popup && !empty($new_user_notification)): ?>
                                 <div class="voucher-notification d-none d-lg-flex">
                                     <span class="material-icons">local_offer</span>
@@ -560,63 +561,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                 </div>
                                 <?php endif; ?>
 
-                                <a class="nav-link p-0 d-flex align-items-center" href="#" id="profileDropdownToggle"
-                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
-                                    <div class="profile-photo-container">
-                                        <img src="<?= htmlspecialchars($fotoPath) ?>"
-                                            alt="Profile Photo"
-                                            class="profile-photo"
-                                            id="profilePhoto"
-                                            onerror="this.src='../img/default.jpg'">
-                                    </div>
-
-                                    <div class="profile-text d-none d-lg-block ms-2 me-2">
-                                        <div class="name fw-semibold text-white">
-                                            <?= htmlspecialchars(trim($firstName . ' ' . $lastName)) ?: htmlspecialchars($username) ?>
-                                        </div>
-                                        <div class="email small text-light"><?= htmlspecialchars($email) ?></div>
-                                    </div>
-
-                                    <span class="material-icons text-white d-none d-lg-block me-3">expand_more</span>
-                                </a>
-
-                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="profileDropdownToggle">
-
-                                    <li>
-                                        <div class="dropdown-header text-truncate">
-                                            <span class="fw-bold"><?= htmlspecialchars(trim($firstName . ' ' . $lastName)) ?: htmlspecialchars($username) ?></span><br>
-                                            <span class="small text-muted"><?= htmlspecialchars($email) ?></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="profile_customer.php">
-                                            <span class="material-icons me-2">person</span> Profil Saya
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="riwayat.php">
-                                            <span class="material-icons me-2">receipt_long</span> Pesanan Saya
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="daftar_pembelian.php">
-                                            <span class="material-icons me-2">shopping_bag</span> Daftar Pembelian
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                                            <span class="material-icons me-2">logout</span> Logout
-                                        </a>
-                                    </li>
-                                </ul>
+                                <?php include __DIR__ . '/_lang_switch.php'; ?><?php include __DIR__ . '/_account_menu.php'; ?>
                             </div>
                         </div>
                     </nav>
@@ -632,10 +577,8 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                         <img class="w-100" src="../img/carousel-3.jpg" alt="Image">
                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                             <div class="p-3" style="max-width: 700px;">
-                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">Jelajahi
-                                    Dunia, Ciptakan Cerita Anda!</h6>
-                                <h1 class="display-3 text-white mb-4 animated slideInDown">Perjalanan Anda Dimulai di
-                                    Sini!
+                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown"><?= te('Jelajahi Dunia, Ciptakan Cerita Anda!') ?></h6>
+                                <h1 class="display-3 text-white mb-4 animated slideInDown"><?= te('Perjalanan Anda Dimulai di Sini!') ?>
                                 </h1>
                             </div>
                         </div>
@@ -644,26 +587,11 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                         <img class="w-100" src="../img/carousel-2.jpg" alt="Image">
                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                             <div class="p-3" style="max-width: 700px;">
-                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">Jelajahi
-                                    Dunia, Ciptakan Cerita Anda!</h6>
-                                <h1 class="display-3 text-white mb-4 animated slideInDown">Tetap Nyaman, Bepergian
-                                    dengan Kenangan!</h1>
+                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown"><?= te('Jelajahi Dunia, Ciptakan Cerita Anda!') ?></h6>
+                                <h1 class="display-3 text-white mb-4 animated slideInDown"><?= te('Tetap Nyaman, Bepergian dengan Kenangan!') ?></h1>
                             </div>
                         </div>
                     </div>
-                    <div class="carousel-item">
-                        <img class="w-100" src="../img/carousel-4.jpg" alt="Image">
-                        <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
-                            <div class="p-3" style="max-width: 700px;">
-                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">Jelajahi
-                                    Dunia, Ciptakan Cerita Anda!</h6>
-                                <h1 class="display-3 text-white mb-4 animated slideInDown">Terbang dengan Mudah,
-                                    Petualangan
-                                    Menanti!</h1>
-                            </div>
-                        </div>
-                    </div>
-
                     <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
                         data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -680,13 +608,13 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
         <div class="container">
             <div class="search-container">
                 <div class="mb-3">
-                    <label class="form-label">Kota dan tujuan</label>
-                    <input type="text" class="form-control" id="cityInput" placeholder="Kota dan tujuan hotel" value="">
+                    <label class="form-label"><?= te('Kota dan tujuan') ?></label>
+                    <input type="text" class="form-control" id="cityInput" placeholder="<?= te('Kota dan tujuan hotel') ?>" value="">
                 </div>
 
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Check-In:</label>
+                        <label class="form-label"><?= te('Check-In:') ?></label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             <input type="date" id="checkin" class="form-control">
@@ -694,20 +622,20 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Durasi:</label>
+                        <label class="form-label"><?= te('Durasi:') ?></label>
                         <select id="durasi" class="form-select">
-                            <option value="1" selected>1 malam</option>
-                            <option value="2">2 malam</option>
-                            <option value="3">3 malam</option>
-                            <option value="4">4 malam</option>
-                            <option value="5">5 malam</option>
-                            <option value="6">6 malam</option>
-                            <option value="7">7 malam</option>
+                            <option value="1" selected>1 <?= te('malam') ?></option>
+                            <option value="2">2 <?= te('malam') ?></option>
+                            <option value="3">3 <?= te('malam') ?></option>
+                            <option value="4">4 <?= te('malam') ?></option>
+                            <option value="5">5 <?= te('malam') ?></option>
+                            <option value="6">6 <?= te('malam') ?></option>
+                            <option value="7">7 <?= te('malam') ?></option>
                         </select>
                     </div>
 
                     <div class="col-md-4 mb-3">
-                        <label class="form-label">Check-Out:</label>
+                        <label class="form-label"><?= te('Check-Out:') ?></label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             <input type="text" id="checkout" class="form-control" readonly>
@@ -716,16 +644,16 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                 </div>
 
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Tamu dan Kamar:</label>
+                    <label class="form-label"><?= te('Tamu dan Kamar:') ?></label>
                     <div class="dropdown">
                         <button class="form-control text-start dropdown-toggle" type="button" id="guestToggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <span id="guestSummary">2 Dewasa, 0 Anak, 1 Kamar</span>
+                            <span id="guestSummary">2 <?= t('Dewasa') ?>, 0 <?= t('Anak') ?>, 1 <?= t('Kamar') ?></span>
                         </button>
                         <ul class="dropdown-menu p-3" aria-labelledby="guestToggle" style="min-width: 250px;">
                             <li class="mb-2">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div><i class="fas fa-user"></i> Dewasa</div>
+                                    <div><i class="fas fa-user"></i> <?= te('Dewasa') ?></div>
                                     <div>
                                         <button class="btn btn-sm btn-outline-secondary"
                                             onclick="adjustGuest('adult', -1)">–</button>
@@ -737,7 +665,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                             </li>
                             <li class="mb-2">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div><i class="fas fa-child"></i> Anak</div>
+                                    <div><i class="fas fa-child"></i> <?= te('Anak') ?></div>
                                     <div>
                                         <button class="btn btn-sm btn-outline-secondary"
                                             onclick="adjustGuest('child', -1)">–</button>
@@ -749,7 +677,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                             </li>
                             <li class="mb-2">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div><i class="fas fa-door-open"></i> Kamar</div>
+                                    <div><i class="fas fa-door-open"></i> <?= te('Kamar') ?></div>
                                     <div>
                                         <button class="btn btn-sm btn-outline-secondary"
                                             onclick="adjustGuest('room', -1)">–</button>
@@ -761,7 +689,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                             </li>
                             <li class="text-end">
                                 <button class="btn btn-primary btn-sm mt-2"
-                                    onclick="closeGuestDropdown()">Selesai</button>
+                                    onclick="closeGuestDropdown()"><?= tv_lang() === 'en' ? 'Done' : 'Selesai' ?></button>
                             </li>
                         </ul>
                     </div>
@@ -769,7 +697,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
 
                 <a href="hotel.php" class="text-decoration-none">
                     <button class="btn btn-search w-100" type="button">
-                        <i class="fa fa-search"></i> Cari Hotel
+                        <i class="fa fa-search"></i> <?= te('Cari Hotel') ?>
                     </button>
                 </a>
             </div>
@@ -779,35 +707,22 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
             <div class="container">
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-6">
-                        <h6 class="section-title text-start text-primary text-uppercase">Tentang Kami</h6>
-                        <h1 class="mb-4">Selamat datang di <span
-                                class="text-primary text-uppercase">TripVerse</span></h1>
+                        <h6 class="section-title text-start text-primary text-uppercase"><?= te('Tentang Kami') ?></h6>
+                        <h2 class="mb-4"><?= te('Selamat datang di') ?> <span
+                                class="text-primary text-uppercase">TripVerse</span></h2>
                         <div class="about-container">
-                            <p>Dalam era digital yang semakin berkembang, perencanaan perjalanan kini menjadi lebih
-                                mudah dan praktis. TripVerse hadir sebagai solusi inovatif berbasis web yang
-                                dirancang untuk memberikan pengalaman perjalanan yang seamless, nyaman, dan
-                                terjangkau.
+                            <p><?= te('Dalam era digital yang semakin berkembang, perencanaan perjalanan kini menjadi lebih mudah dan praktis. TripVerse hadir sebagai solusi inovatif berbasis web yang dirancang untuk memberikan pengalaman perjalanan yang seamless, nyaman, dan terjangkau.') ?>
                                 <span class="dots">...</span>
                                 <span class="more-text">
                                     <br><br>
-                                    Sebagai platform pemesanan perjalanan, TripVerse memungkinkan pengguna untuk
-                                    mencari dan memesan tiket pesawat serta akomodasi dengan cepat dan efisien. Kami
-                                    menawarkan transparansi harga, rekomendasi perjalanan berbasis preferensi,
-                                    manajemen pemesanan yang fleksibel, serta kemudahan dalam pembatalan dan
-                                    perubahan jadwal. <br><br>
+                                    <?= te('Sebagai platform pemesanan perjalanan, TripVerse memungkinkan pengguna untuk mencari dan memesan akomodasi hotel dengan cepat dan efisien. Kami menawarkan transparansi harga, rekomendasi perjalanan berbasis preferensi, manajemen pemesanan yang fleksibel, serta kemudahan dalam pembatalan dan perubahan jadwal.') ?> <br><br>
 
-                                    Lebih dari sekadar platform reservasi, TripVerse adalah mitra perjalanan Anda.
-                                    Dengan fitur unggulan seperti informasi harga yang jelas, kalender perjalanan,
-                                    serta layanan pelanggan yang responsif, kami membantu Anda merancang perjalanan
-                                    yang lebih terorganisir dan sesuai kebutuhan. <br><br>
+                                    <?= te('Lebih dari sekadar platform reservasi, TripVerse adalah mitra perjalanan Anda. Dengan fitur unggulan seperti informasi harga yang jelas, kalender perjalanan, serta layanan pelanggan yang responsif, kami membantu Anda merancang perjalanan yang lebih terorganisir dan sesuai kebutuhan.') ?> <br><br>
 
-                                    Melalui TripVerse, kami berkomitmen untuk mendukung digitalisasi industri
-                                    perjalanan dan meningkatkan kepuasan pengguna dalam mengelola perjalanan mereka.
-                                    Bersama TripVerse, jelajahi dunia dengan lebih mudah, fleksibel, dan
-                                    menyenangkan!
+                                    <?= te('Melalui TripVerse, kami berkomitmen untuk mendukung digitalisasi industri perjalanan dan meningkatkan kepuasan pengguna dalam mengelola perjalanan mereka. Bersama TripVerse, jelajahi dunia dengan lebih mudah, fleksibel, dan menyenangkan!') ?>
                                 </span>
                             </p>
-                            <span class="read-more" onclick="toggleReadMore()">Selengkapnya...</span>
+                            <span class="read-more" onclick="toggleReadMore()"><?= te('Selengkapnya...') ?></span>
                         </div>
                         <script>
                             function toggleReadMore() {
@@ -818,11 +733,11 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                 if (moreText.style.display === "none" || moreText.style.display === "") {
                                     moreText.style.display = "inline";
                                     dots.style.display = "none";
-                                    btnText.innerHTML = "Lebih Sedikit";
+                                    btnText.innerHTML = "<?= t('Lebih Sedikit') ?>";
                                 } else {
                                     moreText.style.display = "none";
                                     dots.style.display = "inline";
-                                    btnText.innerHTML = "Selengkapnya...";
+                                    btnText.innerHTML = "<?= t('Selengkapnya...') ?>";
                                 }
                             }
                         </script>
@@ -832,7 +747,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                     <div class="border rounded text-center p-3">
                                         <i class="fa fa-hotel fa-2x text-primary mb-2"></i>
                                         <h2 class="mb-1" data-toggle="counter-up">1000</h2>
-                                        <p class="mb-0">Hotel</p>
+                                        <p class="mb-0"><?= te('Hotel') ?></p>
                                     </div>
                                 </div>
                             </div>
@@ -841,7 +756,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                     <div class="border rounded text-center p-3">
                                         <i class="fa fa-users-cog fa-2x text-primary mb-2"></i>
                                         <h2 class="mb-1" data-toggle="counter-up">500</h2>
-                                        <p class="mb-0">Pegawai</p>
+                                        <p class="mb-0"><?= te('Pegawai') ?></p>
                                     </div>
                                 </div>
                             </div>
@@ -850,12 +765,12 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                     <div class="border rounded text-center p-3">
                                         <i class="fa fa-users fa-2x text-primary mb-2"></i>
                                         <h2 class="mb-1" data-toggle="counter-up">10000</h2>
-                                        <p class="mb-0">Klien</p>
+                                        <p class="mb-0"><?= te('Klien') ?></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <a class="btn btn-primary py-3 px-5 mt-2" href="about.php">Jelajahi Lebih Lanjut</a>
+                        <a class="btn btn-primary py-3 px-5 mt-2" href="about.php"><?= te('Jelajahi Lebih Lanjut') ?></a>
                     </div>
                     <div class="col-lg-6">
                         <div class="row g-3">
@@ -869,11 +784,11 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                             </div>
                             <div class="col-6 text-end">
                                 <img class="img-fluid rounded w-75 wow zoomIn" data-wow-delay="0.5s"
-                                    src="../img/about-3.jpg">
+                                    src="../img/hotel5.jpg">
                             </div>
                             <div class="col-6 text-start">
                                 <img class="img-fluid rounded w-90 wow zoomIn" data-wow-delay="0.7s"
-                                    src="../img/about-4.jpg">
+                                    src="../img/hotel6.jpg">
                             </div>
                         </div>
                     </div>
@@ -883,8 +798,8 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
         <div class="container-xxl py-5">
             <div class="container">
                 <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 class="section-title text-center text-primary text-uppercase">Hotel</h6>
-                    <h1 class="mb-5">Rekomendasi <span class="text-primary text-uppercase">Hotel</span></h1>
+                    <h6 class="section-title text-center text-primary text-uppercase"><?= te('Hotel') ?></h6>
+                    <h2 class="mb-5"><?php if (tv_lang() === 'en'): ?>Recommended <span class="text-primary text-uppercase">Hotels</span><?php else: ?>Rekomendasi <span class="text-primary text-uppercase">Hotel</span><?php endif; ?></h2>
                 </div>
                 <div class="row g-4">
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -892,7 +807,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                             <div class="position-relative">
                                 <img class="img-fluid" src="../img/hotel-1.jpg" alt="">
                                 <small
-                                    class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">Mulai dari Rp200.000/malam</small>
+                                    class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4"><?= te('Mulai dari') ?> Rp200.000/<?= t('malam') ?></small>
                             </div>
                             <div class="p-4 mt-2">
                                 <div class="d-flex justify-content-between mb-3">
@@ -900,16 +815,15 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                 </div>
                                 <div class="d-flex mb-3">
                                     <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>3
-                                        Tempat Tidur</small>
+                                        <?= te('Tempat Tidur') ?></small>
                                     <small class="border-end me-3 pe-3"><i
-                                            class="fa fa-bath text-primary me-2"></i>2 Kamar Mandi</small>
+                                            class="fa fa-bath text-primary me-2"></i>2 <?= te('Kamar Mandi') ?></small>
                                     <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
                                 </div>
-                                <p class="text-body mb-3">Kamar nyaman dengan desain modern, cocok untuk keluarga
-                                    kecil atau perjalanan bisnis.</p>
+                                <p class="text-body mb-3"><?= te('Kamar nyaman dengan desain modern, cocok untuk keluarga kecil atau perjalanan bisnis.') ?></p>
                                 <div class="d-flex justify-content-between">
-                                    <a class="btn btn-sm btn-primary rounded py-2 px-4" href="hotel.php">Lihat Detail</a>
-                                    <a class="btn btn-sm btn-dark rounded py-2 px-4" href="hotel.php">Pesan Sekarang</a>
+                                    <a class="btn btn-sm btn-primary rounded py-2 px-4" href="hotel.php"><?= te('Lihat Detail') ?></a>
+                                    <a class="btn btn-sm btn-dark rounded py-2 px-4" href="hotel.php"><?= te('Pesan Sekarang') ?></a>
                                 </div>
                             </div>
                         </div>
@@ -920,7 +834,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                             <div class="position-relative">
                                 <img class="img-fluid" src="../img/hotel-2.jpg" alt="">
                                 <small
-                                    class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">Mulai dari Rp500.000/malam</small>
+                                    class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4"><?= te('Mulai dari') ?> Rp500.000/<?= t('malam') ?></small>
                             </div>
                             <div class="p-4 mt-2">
                                 <div class="d-flex justify-content-between mb-3">
@@ -928,16 +842,15 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                 </div>
                                 <div class="d-flex mb-3">
                                     <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>4
-                                        Tempat Tidur</small>
+                                        <?= te('Tempat Tidur') ?></small>
                                     <small class="border-end me-3 pe-3"><i
-                                            class="fa fa-bath text-primary me-2"></i>3 Kamar Mandi</small>
+                                            class="fa fa-bath text-primary me-2"></i>3 <?= te('Kamar Mandi') ?></small>
                                     <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
                                 </div>
-                                <p class="text-body mb-3">Suite luas dengan fasilitas lengkap dan pemandangan kota
-                                    yang menakjubkan.</p>
+                                <p class="text-body mb-3"><?= te('Suite luas dengan fasilitas lengkap dan pemandangan kota yang menakjubkan.') ?></p>
                                 <div class="d-flex justify-content-between">
-                                    <a class="btn btn-sm btn-primary rounded py-2 px-4" href="hotel.php">Lihat Detail</a>
-                                    <a class="btn btn-sm btn-dark rounded py-2 px-4" href="hotel.php">Pesan Sekarang</a>
+                                    <a class="btn btn-sm btn-primary rounded py-2 px-4" href="hotel.php"><?= te('Lihat Detail') ?></a>
+                                    <a class="btn btn-sm btn-dark rounded py-2 px-4" href="hotel.php"><?= te('Pesan Sekarang') ?></a>
                                 </div>
                             </div>
                         </div>
@@ -948,7 +861,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                             <div class="position-relative">
                                 <img class="img-fluid" src="../img/hotel-3.jpg" alt="">
                                 <small
-                                    class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4">Mulai dari Rp800.000/malam</small>
+                                    class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-1 px-3 ms-4"><?= te('Mulai dari') ?> Rp800.000/<?= t('malam') ?></small>
                             </div>
                             <div class="p-4 mt-2">
                                 <div class="d-flex justify-content-between mb-3">
@@ -956,23 +869,22 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                 </div>
                                 <div class="d-flex mb-3">
                                     <small class="border-end me-3 pe-3"><i class="fa fa-bed text-primary me-2"></i>5
-                                        Tempat Tidur</small>
+                                        <?= te('Tempat Tidur') ?></small>
                                     <small class="border-end me-3 pe-3"><i
-                                            class="fa fa-bath text-primary me-2"></i>4 Kamar Mandi</small>
+                                            class="fa fa-bath text-primary me-2"></i>4 <?= te('Kamar Mandi') ?></small>
                                     <small><i class="fa fa-wifi text-primary me-2"></i>Wifi</small>
                                 </div>
-                                <p class="text-body mb-3">Kamar eksklusif dengan kenyamanan maksimal dan pelayanan
-                                    bintang lima.</p>
+                                <p class="text-body mb-3"><?= te('Kamar eksklusif dengan kenyamanan maksimal dan pelayanan bintang lima.') ?></p>
                                 <div class="d-flex justify-content-between">
-                                    <a class="btn btn-sm btn-primary rounded py-2 px-4" href="hotel.php">Lihat Detail</a>
-                                    <a class="btn btn-sm btn-dark rounded py-2 px-4" href="hotel.php">Pesan Sekarang</a>
+                                    <a class="btn btn-sm btn-primary rounded py-2 px-4" href="hotel.php"><?= te('Lihat Detail') ?></a>
+                                    <a class="btn btn-sm btn-dark rounded py-2 px-4" href="hotel.php"><?= te('Pesan Sekarang') ?></a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="text-center mt-4 wow fadeInUp" data-wow-delay="0.9s">
-                        <a class="btn btn-primary py-3 px-5" href="hotel.php">Jelajahi Lebih Lanjut</a>
+                        <a class="btn btn-primary py-3 px-5" href="hotel.php"><?= te('Jelajahi Lebih Lanjut') ?></a>
                     </div>
                 </div>
             </div>
@@ -981,14 +893,9 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
             <div class="row g-0">
                 <div class="col-md-6 bg-dark d-flex align-items-center">
                     <div class="p-5">
-                        <h6 class="section-title text-start text-white text-uppercase mb-3">Jelajahi Dunia, Ciptakan
-                            Cerita Anda!</h6>
-                        <h1 class="text-white mb-4">Perjalanan Anda Dimulai di Sini!</h1>
-                        <p class="text-white mb-4">Pernah dengar tentang Online Travel Agent, tapi masih bingung
-                            apa
-                            itu sebenarnya? 🤔✨ Jangan khawatir! Di video ini, kita akan membahas semuanya—mulai
-                            dari cara kerja, manfaat, hingga bagaimana OTA bisa membantu perjalananmu jadi lebih
-                            mudah dan praktis! 🎥✈️ Yuk, tonton sekarang dan temukan jawabannya! 🚀🌍</p>
+                        <h6 class="section-title text-start text-white text-uppercase mb-3"><?= te('Jelajahi Dunia, Ciptakan Cerita Anda!') ?></h6>
+                        <h2 class="text-white mb-4"><?= te('Perjalanan Anda Dimulai di Sini!') ?></h2>
+                        <p class="text-white mb-4"><?= te('Pernah dengar tentang Online Travel Agent, tapi masih bingung apa itu sebenarnya? 🤔✨ Jangan khawatir! Di video ini, kita akan membahas semuanya—mulai dari cara kerja, manfaat, hingga bagaimana OTA bisa membantu perjalananmu jadi lebih mudah dan praktis! 🎥✈️ Yuk, tonton sekarang dan temukan jawabannya! 🚀🌍') ?></p>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -1023,8 +930,8 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
         <div class="container-xxl py-5">
             <div class="container">
                 <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 class="section-title text-center text-primary text-uppercase">Fitur</h6>
-                    <h1 class="mb-5">Jelajahi <span class="text-primary text-uppercase">Fitur</span> Kami</h1>
+                    <h6 class="section-title text-center text-primary text-uppercase"><?= te('Fitur') ?></h6>
+                    <h2 class="mb-5"><?php if (tv_lang() === 'en'): ?>Explore Our <span class="text-primary text-uppercase">Features</span><?php else: ?>Jelajahi <span class="text-primary text-uppercase">Fitur</span> Kami<?php endif; ?></h2>
                 </div>
                 <div class="row g-4">
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -1035,10 +942,8 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                     <i class="fa fa-search fa-2x text-primary"></i>
                                 </div>
                             </div>
-                            <h5 class="mb-3">Pencarian & Pemesanan</h5>
-                            <p class="text-body mb-0">Cari tiket pesawat & hotel dengan mudah berdasarkan
-                                tanggal
-                                dan lokasi tujuan Anda.</p>
+                            <h5 class="mb-3"><?= te('Pencarian & Pemesanan') ?></h5>
+                            <p class="text-body mb-0"><?= te('Cari hotel dengan mudah berdasarkan tanggal dan lokasi tujuan Anda.') ?></p>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
@@ -1049,10 +954,8 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                     <i class="fa fa-tags fa-2x text-primary"></i>
                                 </div>
                             </div>
-                            <h5 class="mb-3">Informasi Harga Transparan</h5>
-                            <p class="text-body mb-0">Harga yang ditampilkan sudah termasuk pajak & biaya
-                                layanan
-                                tanpa tambahan tersembunyi.</p>
+                            <h5 class="mb-3"><?= te('Informasi Harga Transparan') ?></h5>
+                            <p class="text-body mb-0"><?= te('Harga yang ditampilkan sudah termasuk pajak & biaya layanan tanpa tambahan tersembunyi.') ?></p>
                         </a>
                     </div>
 
@@ -1064,9 +967,8 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                     <i class="fa fa-receipt fa-2x text-primary"></i>
                                 </div>
                             </div>
-                            <h5 class="mb-3">Manajemen Pemesanan</h5>
-                            <p class="text-body mb-0">Akses riwayat pemesanan, cetak tiket, dan lihat detail
-                                perjalanan dengan mudah.</p>
+                            <h5 class="mb-3"><?= te('Manajemen Pemesanan') ?></h5>
+                            <p class="text-body mb-0"><?= te('Akses riwayat pemesanan, cetak tiket, dan lihat detail perjalanan dengan mudah.') ?></p>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
@@ -1077,9 +979,8 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                     <i class="fa fa-gift fa-2x text-primary"></i>
                                 </div>
                             </div>
-                            <h5 class="mb-3">Poin & Reward</h5>
-                            <p class="text-body mb-0">Kumpulkan poin dari setiap pemesanan dan tukarkan dengan
-                                diskon eksklusif.</p>
+                            <h5 class="mb-3"><?= te('Poin & Reward') ?></h5>
+                            <p class="text-body mb-0"><?= te('Kumpulkan poin dari setiap pemesanan dan tukarkan dengan diskon eksklusif.') ?></p>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.9s">
@@ -1091,9 +992,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                 </div>
                             </div>
                             <h5 class="mb-3">Customer Service</h5>
-                            <p class="text-body mb-0">Dapatkan bantuan cepat melalui WhatsApp untuk segala
-                                kendala
-                                perjalanan.</p>
+                            <p class="text-body mb-0"><?= te('Dapatkan bantuan cepat melalui WhatsApp untuk segala kendala perjalanan.') ?></p>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="1.0s">
@@ -1101,13 +1000,11 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                             <div class="service-icon bg-transparent border rounded p-1">
                                 <div
                                     class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-plane-departure fa-2x text-primary"></i>
+                                    <i class="fa fa-calendar-check fa-2x text-primary"></i>
                                 </div>
                             </div>
-                            <h5 class="mb-3">Pemesanan Pulang Pergi</h5>
-                            <p class="text-body mb-0">Pesan tiket pulang pergi dengan pilihan terbaik sesuai
-                                jadwal
-                                Anda.</p>
+                            <h5 class="mb-3"><?= te('Pembatalan Fleksibel') ?></h5>
+                            <p class="text-body mb-0"><?= te('Ubah atau batalkan pemesanan hotel Anda dengan mudah sesuai kebijakan yang berlaku.') ?></p>
                         </a>
                     </div>
                 </div>
@@ -1116,8 +1013,8 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
         <div class="container-xxl py-5">
             <div class="container">
                 <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 class="section-title text-center text-primary text-uppercase">Tim Kami</h6>
-                    <h1 class="mb-5">Temui <span class="text-primary text-uppercase">Tim</span> Kami</h1>
+                    <h6 class="section-title text-center text-primary text-uppercase"><?= te('Tim Kami') ?></h6>
+                    <h2 class="mb-5"><?php if (tv_lang() === 'en'): ?>Meet Our <span class="text-primary text-uppercase">Team</span><?php else: ?>Temui <span class="text-primary text-uppercase">Tim</span> Kami<?php endif; ?></h2>
                 </div>
                 <div class="row g-4 justify-content-center">
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -1198,7 +1095,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                 <img src="../img/logo.png" alt="TripVerse Logo" width="50" class="me-3">
                             </a>
                             <a href="home.php">
-                                <h1 class="text-white text-uppercase mb-0">TripVerse</h1>
+                                <span class="tv-wordmark tv-wordmark-footer">TripVerse</span>
                             </a>
                         </div>
                     </div>
@@ -1238,7 +1135,6 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                                 <h6 class="section-title text-start text-primary text-uppercase mb-4">Services
                                 </h6>
                                 <a class="btn btn-link" href="#">Hotel Booking</a>
-                                <a class="btn btn-link" href="#">Flight Tickets</a>
                                 <a class="btn btn-link" href="#">Event & Activities</a>
                                 <a class="btn btn-link" href="#">Spa & Wellness</a>
                                 <a class="btn btn-link" href="#">Travel Insurance</a>
@@ -1270,63 +1166,63 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
             <div class="popup-content">
                 <img src="../img/promo-new-user.png" class="popup-banner" alt="Promo Pengguna Baru">
                 
-                <h2>Selamat Datang di TripVerse! 🎉</h2>
-                <p>Karena kamu adalah pengguna baru, kamu mendapatkan</p>
-                
+                <h2><?= te('Selamat Datang di') ?> TripVerse! 🎉</h2>
+                <p><?= te('Karena kamu adalah pengguna baru, kamu mendapatkan') ?></p>
+
                 <?php if ($diskon_pengguna_baru['tipe_diskon'] == 'percentage'): ?>
-                <h1 class="promo-text">DISKON KHUSUS <?= $diskon_pengguna_baru['nilai_diskon'] ?>% 🔥</h1>
+                <h2 class="promo-text"><?= te('DISKON KHUSUS') ?> <?= $diskon_pengguna_baru['nilai_diskon'] ?>% 🔥</h2>
                 <?php else: ?>
-                <h1 class="promo-text">DISKON KHUSUS Rp <?= number_format($diskon_pengguna_baru['nilai_diskon'], 0, ',', '.') ?> 🔥</h1>
+                <h2 class="promo-text"><?= te('DISKON KHUSUS') ?> Rp <?= number_format($diskon_pengguna_baru['nilai_diskon'], 0, ',', '.') ?> 🔥</h2>
                 <?php endif; ?>
-                
+
                 <div class="voucher-info">
                     <div class="voucher-detail">
                         <span class="material-icons">confirmation_number</span>
-                        <span>Kode: <strong><?= htmlspecialchars($diskon_pengguna_baru['kode_promo']) ?></strong></span>
+                        <span><?= te('Kode:') ?> <strong><?= htmlspecialchars($diskon_pengguna_baru['kode_promo']) ?></strong></span>
                     </div>
                     <div class="voucher-detail">
                         <span class="material-icons">schedule</span>
                         <span id="daysText">
                             <?php if ($remaining_days == 1): ?>
-                                Voucher berlaku HARI INI SAJA!
+                                <?= te('Voucher berlaku HARI INI SAJA!') ?>
                             <?php else: ?>
-                                Voucher berlaku <?= $remaining_days ?> hari lagi
+                                <?= te('Voucher berlaku') ?> <?= $remaining_days ?> <?= te('hari lagi') ?>
                             <?php endif; ?>
                         </span>
                     </div>
                     <div class="voucher-detail">
                         <span class="material-icons">event</span>
                         <span>
-                            Berlaku hingga: <?= date('d M Y', strtotime($diskon_pengguna_baru['tanggal_berakhir'])) ?>
+                            <?= te('Berlaku hingga:') ?> <?= date('d M Y', strtotime($diskon_pengguna_baru['tanggal_berakhir'])) ?>
                         </span>
                     </div>
                     <?php if ($diskon_pengguna_baru['minimal_pembelian'] > 0): ?>
                     <div class="voucher-detail">
                         <span class="material-icons">shopping_cart</span>
-                        <span>Min. pembelian: Rp <?= number_format($diskon_pengguna_baru['minimal_pembelian'], 0, ',', '.') ?></span>
+                        <span><?= te('Min. pembelian:') ?> Rp <?= number_format($diskon_pengguna_baru['minimal_pembelian'], 0, ',', '.') ?></span>
                     </div>
                     <?php endif; ?>
                     <?php if ($diskon_pengguna_baru['maksimal_diskon']): ?>
                     <div class="voucher-detail">
                         <span class="material-icons">trending_up</span>
-                        <span>Maks. diskon: Rp <?= number_format($diskon_pengguna_baru['maksimal_diskon'], 0, ',', '.') ?></span>
+                        <span><?= te('Maks. diskon:') ?> Rp <?= number_format($diskon_pengguna_baru['maksimal_diskon'], 0, ',', '.') ?></span>
                     </div>
                     <?php endif; ?>
                 </div>
-                
+
                 <div class="popup-instruction">
-                    <p><strong>Cara pakai:</strong> Gunakan kode <strong><?= htmlspecialchars($diskon_pengguna_baru['kode_promo']) ?></strong> saat checkout</p>
-                    <p class="small text-muted mb-0">Voucher otomatis diterapkan untuk pemesanan pertama</p>
+                    <p><strong><?= te('Cara pakai:') ?></strong> <?= te('Gunakan kode') ?> <strong><?= htmlspecialchars($diskon_pengguna_baru['kode_promo']) ?></strong> <?= te('saat checkout') ?></p>
+                    <p class="small text-muted mb-0"><?= te('Voucher otomatis diterapkan untuk pemesanan pertama') ?></p>
                 </div>
-                
+
                 <button class="popup-btn" onclick="closePopup()">
                     <span class="material-icons">check_circle</span>
-                    Oke, Mengerti!
+                    <?= te('Oke, Mengerti!') ?>
                 </button>
-                
+
                 <button class="popup-secondary-btn" onclick="window.location.href='hotel.php'">
                     <span class="material-icons">hotel</span>
-                    Cari Hotel Sekarang
+                    <?= te('Cari Hotel') ?> <?= te('Sekarang') ?>
                 </button>
             </div>
         </div>
@@ -1344,7 +1240,8 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
         <script src="../lib/tempusdominus/js/moment-timezone.min.js"></script>
         <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../js/main.js"></script>
+        <script src="../js/main.js?v=2.0"></script>
+        <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 
         <script>
             // HAPUS FUNGSI toggleDropdown() DAN document.addEventListener('click')
@@ -1383,7 +1280,7 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
             // Fungsi WhatsApp
             function sendWhatsApp() {
                 const phoneNumber = "6287806776235";
-                const message = "Halo TripVerse, saya ingin bertanya tentang...";
+                const message = "<?= t('Halo TripVerse, saya ingin bertanya tentang...') ?>";
                 const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
                 window.open(url, '_blank');
             }

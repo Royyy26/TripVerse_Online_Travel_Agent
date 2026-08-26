@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
@@ -10,13 +11,13 @@ if (!isset($_SESSION['id_user'])) {
 
 <head>
     <meta charset="utf-8">
-    <title>TripVerse</title>
+    <title><?= te('Fitur') ?> - TripVerse</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="../img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,18 +31,19 @@ if (!isset($_SESSION['id_user'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="../lib/animate/animate.min.css" rel="stylesheet">
+    <link href="../lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style.css?v=2.0" rel="stylesheet">
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="../css/service.css" rel="stylesheet">
+    <link href="../css/service.css?v=2.0" rel="stylesheet">
 </head>
 
 <body>
@@ -62,7 +64,7 @@ if (!isset($_SESSION['id_user'])) {
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                     <a href="home.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
-                        <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                        <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
                 </div>
 
@@ -94,7 +96,7 @@ if (!isset($_SESSION['id_user'])) {
                     <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
                         <a href="home.php" class="navbar-brand d-block d-lg-none">
                             <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
-                            <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                            <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                         </a>
                         <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
                             data-bs-target="#navbarCollapse">
@@ -102,23 +104,15 @@ if (!isset($_SESSION['id_user'])) {
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a href="home.php" class="nav-item nav-link">Beranda</a>
-                                <a href="about.php" class="nav-item nav-link">Tentang Kami</a>
-                                <a href="hotel.php" class="nav-item nav-link">Hotel</a>
-                                <a href="service.php" class="nav-item nav-link active">Fitur</a>
-                                <a href="team.php" class="nav-item nav-link">Tim Kami</a>
-                                <a href="contact.php" class="nav-item nav-link">Kontak</a>
-                                <a href="riwayat.php" class="nav-item nav-link">Riwayat</a>
-                                <a href="logout.php" class="nav-item nav-link">Logout</a>
+                                <a href="home.php" class="nav-item nav-link"><?= te("Beranda") ?></a>
+                                <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
+                                <a href="hotel.php" class="nav-item nav-link"><?= te("Hotel") ?></a>
+                                <a href="service.php" class="nav-item nav-link active"><?= te("Fitur") ?></a>
+                                <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
+                                <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
+                                <a href="history.php" class="nav-item nav-link"><?= te("Riwayat") ?></a>
                             </div>
-                            <?php if (isset($_SESSION['username'])): ?>
-                                <span class="navbar-text fw-bold me-3"
-                                    style="background: linear-gradient(to right, #FFA500, #FF6347);
-                                    -webkit-background-clip: text; background-clip: text;
-                                    -webkit-text-fill-color: transparent; text-decoration: underline;">
-                                    Hi <?= htmlspecialchars($_SESSION['username']); ?>, selamat datang di TripVerse
-                                </span>
-                            <?php endif; ?>
+                            <?php include __DIR__ . '/_lang_switch.php'; ?><?php include __DIR__ . '/_account_menu.php'; ?>
                         </div>
                     </nav>
                 </div>
@@ -130,11 +124,11 @@ if (!isset($_SESSION['id_user'])) {
         <div class="container-fluid page-header mb-5 p-0" style="background-image: url(../img/carousel-1.jpg);">
             <div class="container-fluid page-header-inner py-5">
                 <div class="container text-center pb-5">
-                    <h1 class="display-3 text-white mb-3 animated slideInDown">Fitur</h1>
+                    <h1 class="display-3 text-white mb-3 animated slideInDown"><?= te('Fitur') ?></h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center text-uppercase">
-                            <li class="breadcrumb-item"><a href="#">Beranda</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Fitur</li>
+                            <li class="breadcrumb-item"><a href="#"><?= te('Beranda') ?></a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page"><?= te('Fitur') ?></li>
                         </ol>
                     </nav>
                 </div>
@@ -146,8 +140,8 @@ if (!isset($_SESSION['id_user'])) {
         <div class="container-xxl py-5">
             <div class="container">
                 <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 class="section-title text-center text-primary text-uppercase">Fitur</h6>
-                    <h1 class="mb-5">Jelajahi <span class="text-primary text-uppercase">Fitur</span> Kami</h1>
+                    <h6 class="section-title text-center text-primary text-uppercase"><?= te('Fitur') ?></h6>
+                    <h2 class="mb-5"><?php if (tv_lang() === 'en'): ?>Explore Our <span class="text-primary text-uppercase">Features</span><?php else: ?>Jelajahi <span class="text-primary text-uppercase">Fitur</span> Kami<?php endif; ?></h2>
                 </div>
                 <div class="row g-4">
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -158,9 +152,8 @@ if (!isset($_SESSION['id_user'])) {
                                     <i class="fa fa-search fa-2x text-primary"></i>
                                 </div>
                             </div>
-                            <h5 class="mb-3">Pencarian & Pemesanan</h5>
-                            <p class="text-body mb-0">Cari tiket pesawat & hotel dengan mudah berdasarkan tanggal
-                                dan lokasi tujuan Anda.</p>
+                            <h5 class="mb-3"><?= te('Pencarian & Pemesanan') ?></h5>
+                            <p class="text-body mb-0"><?= te('Cari hotel dengan mudah berdasarkan tanggal dan lokasi tujuan Anda.') ?></p>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
@@ -171,9 +164,8 @@ if (!isset($_SESSION['id_user'])) {
                                     <i class="fa fa-tags fa-2x text-primary"></i>
                                 </div>
                             </div>
-                            <h5 class="mb-3">Informasi Harga Transparan</h5>
-                            <p class="text-body mb-0">Harga yang ditampilkan sudah termasuk pajak & biaya layanan
-                                tanpa tambahan tersembunyi.</p>
+                            <h5 class="mb-3"><?= te('Informasi Harga Transparan') ?></h5>
+                            <p class="text-body mb-0"><?= te('Harga yang ditampilkan sudah termasuk pajak & biaya layanan tanpa tambahan tersembunyi.') ?></p>
                         </a>
                     </div>
 
@@ -185,9 +177,8 @@ if (!isset($_SESSION['id_user'])) {
                                     <i class="fa fa-receipt fa-2x text-primary"></i>
                                 </div>
                             </div>
-                            <h5 class="mb-3">Manajemen Pemesanan</h5>
-                            <p class="text-body mb-0">Akses riwayat pemesanan, cetak tiket, dan lihat detail
-                                perjalanan dengan mudah.</p>
+                            <h5 class="mb-3"><?= te('Manajemen Pemesanan') ?></h5>
+                            <p class="text-body mb-0"><?= te('Akses riwayat pemesanan, cetak tiket, dan lihat detail perjalanan dengan mudah.') ?></p>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
@@ -198,9 +189,8 @@ if (!isset($_SESSION['id_user'])) {
                                     <i class="fa fa-gift fa-2x text-primary"></i>
                                 </div>
                             </div>
-                            <h5 class="mb-3">Poin & Reward</h5>
-                            <p class="text-body mb-0">Kumpulkan poin dari setiap pemesanan dan tukarkan dengan
-                                diskon eksklusif.</p>
+                            <h5 class="mb-3"><?= te('Poin & Reward') ?></h5>
+                            <p class="text-body mb-0"><?= te('Kumpulkan poin dari setiap pemesanan dan tukarkan dengan diskon eksklusif.') ?></p>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.9s">
@@ -212,8 +202,7 @@ if (!isset($_SESSION['id_user'])) {
                                 </div>
                             </div>
                             <h5 class="mb-3">Customer Service</h5>
-                            <p class="text-body mb-0">Dapatkan bantuan cepat melalui WhatsApp untuk segala kendala
-                                perjalanan.</p>
+                            <p class="text-body mb-0"><?= te('Dapatkan bantuan cepat melalui WhatsApp untuk segala kendala perjalanan.') ?></p>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="1.0s">
@@ -221,12 +210,11 @@ if (!isset($_SESSION['id_user'])) {
                             <div class="service-icon bg-transparent border rounded p-1">
                                 <div
                                     class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-plane-departure fa-2x text-primary"></i>
+                                    <i class="fa fa-calendar-check fa-2x text-primary"></i>
                                 </div>
                             </div>
-                            <h5 class="mb-3">Pemesanan Pulang Pergi</h5>
-                            <p class="text-body mb-0">Pesan tiket pulang pergi dengan pilihan terbaik sesuai jadwal
-                                Anda.</p>
+                            <h5 class="mb-3"><?= te('Pembatalan Fleksibel') ?></h5>
+                            <p class="text-body mb-0"><?= te('Ubah atau batalkan pemesanan hotel Anda dengan mudah sesuai kebijakan yang berlaku.') ?></p>
                         </a>
                     </div>
                 </div>
@@ -245,7 +233,7 @@ if (!isset($_SESSION['id_user'])) {
                                 <img src="../img/logo.png" alt="TripVerse Logo" width="50" class="me-3">
                             </a>
                             <a href="home.php">
-                                <h1 class="text-white text-uppercase mb-0">TripVerse</h1>
+                                <span class="tv-wordmark tv-wordmark-footer">TripVerse</span>
                             </a>
                         </div>
                     </div>
@@ -287,7 +275,6 @@ if (!isset($_SESSION['id_user'])) {
                                 <h6 class="section-title text-start text-primary text-uppercase mb-4">Services
                                 </h6>
                                 <a class="btn btn-link" href="#">Hotel Booking</a>
-                                <a class="btn btn-link" href="#">Flight Tickets</a>
                                 <a class="btn btn-link" href="#">Event & Activities</a>
                                 <a class="btn btn-link" href="#">Spa & Wellness</a>
                                 <a class="btn btn-link" href="#">Travel Insurance</a>
@@ -319,17 +306,18 @@ if (!isset($_SESSION['id_user'])) {
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/counterup/counterup.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="../lib/wow/wow.min.js"></script>
+    <script src="../lib/easing/easing.min.js"></script>
+    <script src="../lib/waypoints/waypoints.min.js"></script>
+    <script src="../lib/counterup/counterup.min.js"></script>
+    <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment.min.js"></script>
+    <script src="../lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="../js/main.js?v=2.0"></script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 
     <script>
         window.addEventListener('load', function() {

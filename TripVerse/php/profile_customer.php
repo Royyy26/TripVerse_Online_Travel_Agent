@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 require 'connect.php';
 
 // Cek apakah user sudah login
@@ -10,7 +11,71 @@ if (!isset($_SESSION['id_user'])) {
 
 $id_user = $_SESSION['id_user'];
 
-// Handle form submission 
+// ---------------------------------------------------------------------------
+// Ganti kata sandi
+// The settings screen used to show a "Ganti Kata Sandi" button that was not
+// wired to anything. This is the real implementation: it verifies the current
+// password, enforces the same strength rules as registration, and stores the
+// new one hashed.
+// ---------------------------------------------------------------------------
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_password'])) {
+    $currentPassword = $_POST['current_password'] ?? '';
+    $newPassword     = $_POST['new_password'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? '';
+
+    $pwError = '';
+
+    if ($currentPassword === '' || $newPassword === '' || $confirmPassword === '') {
+        $pwError = t('Semua kolom kata sandi wajib diisi.');
+    } elseif ($newPassword !== $confirmPassword) {
+        $pwError = t('Konfirmasi kata sandi tidak cocok.');
+    } elseif (strlen($newPassword) < 8) {
+        $pwError = t('Kata sandi baru minimal 8 karakter.');
+    } elseif (!preg_match('/[A-Z]/', $newPassword)) {
+        $pwError = t('Kata sandi baru harus memuat minimal satu huruf kapital.');
+    } elseif (!preg_match('/[0-9]/', $newPassword)) {
+        $pwError = t('Kata sandi baru harus memuat minimal satu angka.');
+    } elseif (!preg_match('/[^A-Za-z0-9]/', $newPassword)) {
+        $pwError = t('Kata sandi baru harus memuat minimal satu karakter spesial.');
+    } elseif ($newPassword === $currentPassword) {
+        $pwError = t('Kata sandi baru harus berbeda dari kata sandi lama.');
+    }
+
+    if ($pwError === '') {
+        $pwStmt = $conn->prepare("SELECT password FROM user WHERE id_user = ? LIMIT 1");
+        $pwStmt->bind_param('s', $id_user);
+        $pwStmt->execute();
+        $pwRow = $pwStmt->get_result()->fetch_assoc();
+        $pwStmt->close();
+
+        if (!$pwRow || !password_verify($currentPassword, $pwRow['password'])) {
+            $pwError = t('Kata sandi saat ini salah.');
+        } else {
+            $newHash = password_hash($newPassword, PASSWORD_DEFAULT);
+            $updStmt = $conn->prepare("UPDATE user SET password = ? WHERE id_user = ?");
+            $updStmt->bind_param('ss', $newHash, $id_user);
+
+            if ($updStmt->execute()) {
+                $_SESSION['password_notification'] = t('Kata sandi berhasil diperbarui.');
+                $_SESSION['password_notification_ok'] = true;
+            } else {
+                $_SESSION['password_notification'] = t('Gagal memperbarui kata sandi. Silakan coba lagi.');
+                $_SESSION['password_notification_ok'] = false;
+            }
+            $updStmt->close();
+
+            header('Location: profile_customer.php?section=security');
+            exit();
+        }
+    }
+
+    $_SESSION['password_notification'] = $pwError;
+    $_SESSION['password_notification_ok'] = false;
+    header('Location: profile_customer.php?section=security');
+    exit();
+}
+
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
     $first_name = trim($_POST['first_name']);
     $last_name = trim($_POST['last_name']);
@@ -40,12 +105,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         // Check file size (max 5MB)
         if ($_FILES['foto']['size'] > 5 * 1024 * 1024) {
             $upload_success = false;
-            $upload_message = "Ukuran file terlalu besar. Maksimal 5MB.";
+            $upload_message = t("Ukuran file terlalu besar. Maksimal 5MB.");
         }
         // Check file type
         elseif (!in_array($imageFileType, $allowedTypes)) {
             $upload_success = false;
-            $upload_message = "Tipe file tidak valid. Hanya JPG, PNG, GIF, WEBP yang diizinkan.";
+            $upload_message = t("Tipe file tidak valid. Hanya JPG, PNG, GIF, WEBP yang diizinkan.");
         }
         // Try to upload
         else {
@@ -66,10 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
                     }
                 }
                 $oldStmt->close();
-                $upload_message = "Foto profil berhasil diupload.";
+                $upload_message = t("Foto profil berhasil diupload.");
             } else {
                 $upload_success = false;
-                $upload_message = "Gagal mengupload foto.";
+                $upload_message = t("Gagal mengupload foto.");
             }
         }
     } elseif (isset($_FILES['foto']) && $_FILES['foto']['error'] !== UPLOAD_ERR_NO_FILE) {
@@ -78,22 +143,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         switch ($_FILES['foto']['error']) {
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
-                $upload_message = "Ukuran file terlalu besar.";
+                $upload_message = t("Ukuran file terlalu besar.");
                 break;
             case UPLOAD_ERR_PARTIAL:
-                $upload_message = "File hanya terupload sebagian.";
+                $upload_message = t("File hanya terupload sebagian.");
                 break;
             case UPLOAD_ERR_NO_TMP_DIR:
-                $upload_message = "Folder temporary tidak ditemukan.";
+                $upload_message = t("Folder temporary tidak ditemukan.");
                 break;
             case UPLOAD_ERR_CANT_WRITE:
-                $upload_message = "Gagal menulis file ke disk.";
+                $upload_message = t("Gagal menulis file ke disk.");
                 break;
             case UPLOAD_ERR_EXTENSION:
-                $upload_message = "Upload dihentikan oleh extension.";
+                $upload_message = t("Upload dihentikan oleh extension.");
                 break;
             default:
-                $upload_message = "Error unknown saat upload file.";
+                $upload_message = t("Error unknown saat upload file.");
         }
     }
 
@@ -117,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         $currentStmt->close();
 
         $profile_picture = 'default.jpg';
-        $upload_message = "Foto profil berhasil dihapus.";
+        $upload_message = t("Foto profil berhasil dihapus.");
     }
 
     // Only proceed with profile update if file upload was successful or no file was uploaded
@@ -147,7 +212,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
         }
 
         if ($stmt->execute()) {
-            $_SESSION['upload_notification'] = "Profil berhasil diperbarui!" . ($upload_message ? " " . $upload_message : "");
+            $_SESSION['upload_notification'] = t("Profil berhasil diperbarui!") . ($upload_message ? " " . $upload_message : "");
+            $_SESSION['upload_notification_ok'] = true;
 
             // Update session data
             $_SESSION['first_name'] = $first_name;
@@ -161,12 +227,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_profile'])) {
             header("Location: profile_customer.php?section=profile");
             exit();
         } else {
-            $_SESSION['upload_notification'] = "Gagal memperbarui profil: " . $stmt->error;
+            $_SESSION['upload_notification'] = t("Gagal memperbarui profil: ") . $stmt->error;
+            $_SESSION['upload_notification_ok'] = false;
         }
 
         $stmt->close();
     } else {
         $_SESSION['upload_notification'] = $upload_message;
+        $_SESSION['upload_notification_ok'] = false;
     }
 }
 
@@ -210,6 +278,7 @@ if ($data = $result->fetch_assoc()) {
     $_SESSION['profile_picture'] = $data['profile_picture'];
 } else {
     // Fallback if data not found
+    $data = [];
     $username = "Unknown";
     $email = "unknown@tripverse.com";
     $firstName = $lastName = $mobile = $gender = "-";
@@ -217,10 +286,55 @@ if ($data = $result->fetch_assoc()) {
 }
 
 $stmt->close();
-$conn->close();
+// NOTE: $conn stays open here — the account summary below still needs it.
+// It is closed once that query has run.
 
 // Determine active section
 $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
+
+// ---------------------------------------------------------------------------
+// Account summary shown at the top of the profile screen, so the page leads
+// with something meaningful instead of an empty form.
+// ---------------------------------------------------------------------------
+$stats = ['total' => 0, 'completed' => 0, 'spent' => 0, 'since' => null];
+
+if ($statStmt = $conn->prepare(
+    "SELECT COUNT(*) AS total,
+            SUM(bh.status = 'Completed') AS completed,
+            SUM(CASE WHEN bh.status = 'Completed' THEN bh.total_harga ELSE 0 END) AS spent,
+            MIN(c.created_at) AS since
+     FROM customer c
+     LEFT JOIN booking_hotel bh ON bh.customer_id = c.customer_id
+     WHERE c.id_user = ?"
+)) {
+    $statStmt->bind_param('s', $id_user);
+    if ($statStmt->execute()) {
+        if ($row = $statStmt->get_result()->fetch_assoc()) {
+            $stats['total']     = (int) ($row['total'] ?? 0);
+            $stats['completed'] = (int) ($row['completed'] ?? 0);
+            $stats['spent']     = (float) ($row['spent'] ?? 0);
+            $stats['since']     = $row['since'] ?? null;
+        }
+    }
+    $statStmt->close();
+}
+
+$memberSince = $stats['since'] ? date('M Y', strtotime($stats['since'])) : '-';
+
+// Profile completeness gives the user a concrete reason to finish the form.
+$profileFields = [
+    t('Nama depan')     => $firstName,
+    t('Nama belakang')  => $lastName,
+    t('Email')          => $email,
+    t('Nomor HP')       => $mobile,
+    t('Jenis kelamin')  => $gender,
+    t('Foto profil')    => (!empty($data['profile_picture'] ?? '') ? 'y' : ''),
+];
+$filledCount = count(array_filter($profileFields, function ($v) { return trim((string) $v) !== '' && trim((string) $v) !== '-'; }));
+$profileCompletion = (int) round($filledCount / count($profileFields) * 100);
+$missingFields = array_keys(array_filter($profileFields, function ($v) { return trim((string) $v) === '' || trim((string) $v) === '-'; }));
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -229,12 +343,12 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Customer - TripVerse</title>
+    <title><?= te('Profil Customer') ?> - TripVerse</title>
     <meta content="" name="keywords">
     <meta content="" name="description">
-    <link href="../css/wa.css" rel="stylesheet">
+    <link href="../css/wa.css?v=2.0" rel="stylesheet">
 
-    <link href="img/favicon.ico" rel="icon">
+    <link href="../img/favicon.ico" rel="icon">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -251,14 +365,16 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
     <link href="../lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style.css?v=2.0" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link href="../css/home.css" rel="stylesheet">
+    <link href="../css/home.css?v=2.0" rel="stylesheet">
+
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         :root {
-            --primary-color: #3a86ff;
-            --secondary-color: #8338ec;
+            --primary-color: #FEA116;
+            --secondary-color: #FF7A3D;
             --text-color: #333;
             --light-gray: #f5f5f5;
             --border-color: #e0e0e0;
@@ -270,7 +386,7 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Heebo', Tahoma, Geneva, sans-serif;
         }
 
         body {
@@ -502,14 +618,14 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
 
         .notification.success {
             background-color: rgba(76, 175, 80, 0.1);
-            color: #4caf50;
-            border-left-color: #4caf50;
+            color: #16A34A;
+            border-left-color: #16A34A;
         }
 
         .notification.error {
             background-color: rgba(244, 67, 54, 0.1);
-            color: #f44336;
-            border-left-color: #f44336;
+            color: #DC2626;
+            border-left-color: #DC2626;
         }
 
         .sidebar-menu {
@@ -537,11 +653,11 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
 
         .menu-link:hover,
         .menu-link.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             color: white;
             border-right: 4px solid var(--primary-color);
             transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(254, 161, 22, 0.35);
         }
 
         .menu-icon {
@@ -633,7 +749,7 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
 
         .profile-dropdown-container:hover .profile-photo-container,
         .profile-dropdown-container .dropdown-toggle[aria-expanded="true"] .profile-photo-container {
-            border-color: #0d6efd;
+            border-color: var(--primary-color);
         }
 
         .profile-photo {
@@ -690,7 +806,7 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
 
         .dropdown-menu a.dropdown-item:hover {
             background-color: #f8f9fa;
-            color: #0d6efd;
+            color: var(--primary-color);
         }
 
         .dropdown-menu .material-icons {
@@ -797,7 +913,7 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
             <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                 <a href="about.php" class="d-flex align-items-center text-decoration-none">
                     <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
-                    <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                    <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                 </a>
             </div>
 
@@ -829,83 +945,24 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
                 <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
                     <a href="home.php" class="navbar-brand d-block d-lg-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
-                        <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                        <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
                     <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a href="home.php" class="nav-item nav-link">Beranda</a>
-                            <a href="about.php" class="nav-item nav-link">Tentang Kami</a>
-                            <a href="hotel.php" class="nav-item nav-link">Hotel</a>
-                            <a href="service.php" class="nav-item nav-link">Fitur</a>
-                            <a href="team.php" class="nav-item nav-link">Tim Kami</a>
-                            <a href="contact.php" class="nav-item nav-link">Kontak</a>
-                            <a href="riwayat.php" class="nav-item nav-link">Riwayat</a>
-                            <a href="logout.php" class="nav-item nav-link">Logout</a>
+                            <a href="home.php" class="nav-item nav-link"><?= te("Beranda") ?></a>
+                            <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
+                            <a href="hotel.php" class="nav-item nav-link"><?= te("Hotel") ?></a>
+                            <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
+                            <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
+                            <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
+                            <a href="history.php" class="nav-item nav-link"><?= te("Riwayat") ?></a>
                         </div>
 
                         <!-- PERBAIKAN: Profile Dropdown yang Benar -->
-                        <div class="ms-auto me-2 dropdown profile-dropdown-container">
-                            <a class="nav-link dropdown-toggle p-0 d-flex align-items-center text-decoration-none"
-                                href="#"
-                                id="profileDropdown"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false">
-
-                                <div class="profile-photo-container">
-                                    <img src="<?= htmlspecialchars($foto) ?>"
-                                        alt="Profile Photo"
-                                        class="profile-photo"
-                                        id="profilePhoto"
-                                        onerror="this.src='../images/default.jpg'">
-                                </div>
-
-                                <div class="profile-text d-none d-lg-block ms-2 me-2">
-                                    <div class="name fw-semibold text-white">
-                                        <?= htmlspecialchars(trim($firstName . ' ' . $lastName)) ?: htmlspecialchars($username) ?>
-                                    </div>
-                                    <div class="email small text-light"><?= htmlspecialchars($email) ?></div>
-                                </div>
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="profileDropdown">
-                                <li>
-                                    <div class="dropdown-header text-truncate">
-                                        <span class="fw-bold"><?= htmlspecialchars(trim($firstName . ' ' . $lastName)) ?: htmlspecialchars($username) ?></span><br>
-                                        <span class="small text-muted"><?= htmlspecialchars($email) ?></span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="profile_customer.php">
-                                        <span class="material-icons me-2">person</span> Profil Saya
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="riwayat.php">
-                                        <span class="material-icons me-2">receipt_long</span> Pesanan Saya
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="daftar_pembelian.php">
-                                        <span class="material-icons me-2">person</span> Daftar Pembelian
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                                        <span class="material-icons me-2">logout</span> Logout
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                        <?php include __DIR__ . "/_lang_switch.php"; ?><?php include __DIR__ . "/_account_menu.php"; ?>
                     </div>
                 </nav>
             </div>
@@ -923,29 +980,38 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
             <ul class="sidebar-menu">
                 <li class="menu-item">
                     <a href="profile_customer.php" class="menu-link <?php echo $active_section == 'profile' ? 'active' : ''; ?>">
-                        <span class="menu-icon">👤</span>
-                        <span>Profil Saya</span>
+                        <i class="menu-icon fas fa-user"></i>
+                        <span><?= te('Profil Saya') ?></span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="?section=orders" class="menu-link <?php echo $active_section == 'orders' ? 'active' : ''; ?>">
-                        <span class="menu-icon">📦</span>
-                        <span>Pesanan Saya</span>
+                    <a href="history.php" class="menu-link">
+                        <i class="menu-icon fas fa-receipt"></i>
+                        <span><?= te('Pesanan Saya') ?></span>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="daftar_pembelian.php" class="menu-link ">
-                        <i class="menu-icon material-icons">shopping_bag</i> Daftar Pembelian</a>
+                    <a href="purchase_history.php" class="menu-link">
+                        <i class="menu-icon fas fa-shopping-bag"></i>
+                        <span><?= te('Daftar Pembelian') ?></span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="?section=security" class="menu-link <?php echo $active_section == 'security' ? 'active' : ''; ?>">
+                        <i class="menu-icon fas fa-lock"></i>
+                        <span><?= te('Keamanan') ?></span>
+                    </a>
                 </li>
                 <li class="menu-item">
                     <a href="?section=settings" class="menu-link <?php echo $active_section == 'settings' ? 'active' : ''; ?>">
-                        <span class="menu-icon">⚙️</span>
-                        <span>Pengaturan</span>
+                        <i class="menu-icon fas fa-cog"></i>
+                        <span><?= te('Pengaturan') ?></span>
                     </a>
                 </li>
-                <li>
-                    <a class="dropdown-item d-flex align-items-center" href="logout.php">
-                        <span class="material-icons me-2">logout</span> Logout
+                <li class="menu-item">
+                    <a href="logout.php" class="menu-link menu-link-logout">
+                        <i class="menu-icon fas fa-sign-out-alt"></i>
+                        <span><?= te('Logout') ?></span>
                     </a>
                 </li>
             </ul>
@@ -954,152 +1020,222 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
         <!-- Main Content -->
         <div class="main-content">
             <?php if ($active_section == 'profile'): ?>
+                <!-- Account overview: gives the page something to say before
+                     it asks the user to fill in a form. -->
+                <div class="tv-account-overview">
+                    <div class="tv-overview-id">
+                        <span class="tv-account-avatar tv-overview-avatar">
+                            <img src="<?php echo htmlspecialchars($foto); ?>" alt=""
+                                onerror="this.style.display='none'">
+                            <span class="tv-account-initial"><?php
+                                echo htmlspecialchars(mb_strtoupper(mb_substr(trim($firstName ?: $username), 0, 1)));
+                            ?></span>
+                        </span>
+                        <div class="tv-overview-text">
+                            <h2><?php echo htmlspecialchars(trim($firstName . ' ' . $lastName)) ?: htmlspecialchars($username); ?></h2>
+                            <p><?php echo htmlspecialchars($email); ?></p>
+                            <span class="tv-member-badge">
+                                <i class="fas fa-star"></i> <?= te('Member sejak') ?> <?php echo htmlspecialchars($memberSince); ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="tv-overview-stats">
+                        <div class="tv-stat">
+                            <span class="tv-stat-value"><?php echo (int) $stats['total']; ?></span>
+                            <span class="tv-stat-label"><?= te('Total Pesanan') ?></span>
+                        </div>
+                        <div class="tv-stat">
+                            <span class="tv-stat-value"><?php echo (int) $stats['completed']; ?></span>
+                            <span class="tv-stat-label"><?= te('Selesai') ?></span>
+                        </div>
+                        <div class="tv-stat">
+                            <span class="tv-stat-value">Rp <?php echo number_format($stats['spent'], 0, ',', '.'); ?></span>
+                            <span class="tv-stat-label"><?= te('Total Transaksi') ?></span>
+                        </div>
+                    </div>
+
+                    <?php if ($profileCompletion < 100): ?>
+                        <div class="tv-completion">
+                            <div class="tv-completion-head">
+                                <span><?= te('Kelengkapan profil') ?></span>
+                                <strong><?php echo $profileCompletion; ?>%</strong>
+                            </div>
+                            <div class="tv-completion-bar">
+                                <span style="width: <?php echo $profileCompletion; ?>%"></span>
+                            </div>
+                            <small><?= te('Lengkapi:') ?> <?php echo htmlspecialchars(implode(', ', $missingFields)); ?></small>
+                        </div>
+                    <?php else: ?>
+                        <div class="tv-completion tv-completion-done">
+                            <i class="fas fa-check-circle"></i> <?= te('Profil kamu sudah lengkap.') ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
                 <!-- Profile Edit Section -->
                 <div class="profile-edit-section">
-                    <h2 class="section-title">Edit Profil</h2>
+                    <h2 class="section-title"><?= te('Edit Profil') ?></h2>
 
                     <?php if (isset($_SESSION['upload_notification'])): ?>
-                        <div class="notification <?php echo strpos($_SESSION['upload_notification'], 'berhasil') !== false ? 'success' : 'error'; ?>">
+                        <div class="notification <?php echo ($_SESSION['upload_notification_ok'] ?? (strpos($_SESSION['upload_notification'], 'berhasil') !== false)) ? 'success' : 'error'; ?>">
                             <?php echo $_SESSION['upload_notification']; ?>
                         </div>
-                        <?php unset($_SESSION['upload_notification']); ?>
+                        <?php unset($_SESSION['upload_notification'], $_SESSION['upload_notification_ok']); ?>
                     <?php endif; ?>
 
                     <form action="profile_customer.php?section=profile" method="POST" enctype="multipart/form-data">
                         <div class="profile-avatar">
                             <img src="<?php echo $foto; ?>" alt="Profile Picture" class="avatar-image" id="avatar-preview">
                             <div class="avatar-upload">
-                                <label for="foto" class="avatar-upload-btn">Unggah Foto Baru</label>
+                                <label for="foto" class="avatar-upload-btn"><?= te('Unggah Foto Baru') ?></label>
                                 <input type="file" id="foto" name="foto" accept="image/*" onchange="previewImage(this)" style="display: none;">
 
                                 <div class="delete-avatar">
                                     <input type="checkbox" id="delete_avatar" name="delete_avatar" value="1">
-                                    <label for="delete_avatar">Hapus avatar saat ini</label>
+                                    <label for="delete_avatar"><?= te('Hapus avatar saat ini') ?></label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="first_name">Nama Depan</label>
-                                <input type="text" id="first_name" name="first_name" class="form-control" value="<?php echo htmlspecialchars($firstName); ?>" required placeholder="Masukkan nama depan">
+                                <label for="first_name"><?= te('Nama Depan') ?></label>
+                                <input type="text" id="first_name" name="first_name" class="form-control" value="<?php echo htmlspecialchars($firstName); ?>" required placeholder="<?= te('Masukkan nama depan') ?>">
                             </div>
 
                             <div class="form-group">
-                                <label for="last_name">Nama Belakang</label>
-                                <input type="text" id="last_name" name="last_name" class="form-control" value="<?php echo htmlspecialchars($lastName); ?>" required placeholder="Masukkan nama belakang">
+                                <label for="last_name"><?= te('Nama Belakang') ?></label>
+                                <input type="text" id="last_name" name="last_name" class="form-control" value="<?php echo htmlspecialchars($lastName); ?>" required placeholder="<?= te('Masukkan nama belakang') ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>" required placeholder="Masukkan alamat email">
+                            <label for="email"><?= te('Email') ?></label>
+                            <input type="email" id="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>" required placeholder="<?= te('Masukkan alamat email') ?>">
                         </div>
 
                         <div class="form-group">
-                            <label for="mobile">Nomor HP</label>
-                            <input type="tel" id="mobile" name="no_hp" class="form-control" value="<?php echo htmlspecialchars($mobile); ?>" placeholder="Masukkan nomor handphone">
+                            <label for="mobile"><?= te('Nomor HP') ?></label>
+                            <input type="tel" id="mobile" name="no_hp" class="form-control" value="<?php echo htmlspecialchars($mobile); ?>" placeholder="<?= te('Masukkan nomor handphone') ?>">
                         </div>
 
                         <div class="form-group">
-                            <label for="gender">Jenis Kelamin</label>
+                            <label for="gender"><?= te('Jenis Kelamin') ?></label>
                             <select id="gender" name="gender" class="form-control">
-                                <option value="">Pilih Jenis Kelamin</option>
-                                <option value="Male" <?php echo $gender == 'Male' ? 'selected' : ''; ?>>Laki-laki</option>
-                                <option value="Female" <?php echo $gender == 'Female' ? 'selected' : ''; ?>>Perempuan</option>
-                                <option value="Other" <?php echo $gender == 'Other' ? 'selected' : ''; ?>>Lainnya</option>
+                                <option value=""><?= te('Pilih Jenis Kelamin') ?></option>
+                                <option value="Male" <?php echo $gender == 'Male' ? 'selected' : ''; ?>><?= te('Laki-laki') ?></option>
+                                <option value="Female" <?php echo $gender == 'Female' ? 'selected' : ''; ?>><?= te('Perempuan') ?></option>
+                                <option value="Other" <?php echo $gender == 'Other' ? 'selected' : ''; ?>><?= te('Lainnya') ?></option>
                             </select>
                         </div>
 
                         <input type="hidden" name="update_profile" value="1">
-                        <button type="submit" class="btn btn-primary">SIMPAN PERUBAHAN</button>
+                        <button type="submit" class="btn btn-primary"><?= te('SIMPAN PERUBAHAN') ?></button>
                     </form>
                 </div>
 
-            <?php elseif ($active_section == 'account'): ?>
-                <!-- Account Information Section -->
+            <?php elseif ($active_section == 'security'): ?>
+                <!-- Security / change password -->
                 <div class="profile-edit-section">
-                    <h2 class="section-title">Akun</h2>
-                    <p class="account-description">
-                        <strong>bibliē tiket</strong><br>
-                        <strong>Pusat Akun</strong><br>
-                        Untuk mengakses detail profilmu dan kategorī di bawah ini, masuk ke <strong>Pusat Akun Biblai Tiket</strong> aja, ya.
+                    <h2 class="section-title"><?= te('Keamanan Akun') ?></h2>
+
+                    <?php if (isset($_SESSION['password_notification'])): ?>
+                        <div class="notification <?php echo ($_SESSION['password_notification_ok'] ?? (strpos($_SESSION['password_notification'], 'berhasil') !== false)) ? 'success' : 'error'; ?>">
+                            <?php echo htmlspecialchars($_SESSION['password_notification']); ?>
+                        </div>
+                        <?php unset($_SESSION['password_notification'], $_SESSION['password_notification_ok']); ?>
+                    <?php endif; ?>
+
+                    <p class="tv-section-note">
+                        <?= te('Gunakan kata sandi yang kuat dan tidak dipakai di layanan lain. Setelah diganti, kata sandi lama langsung tidak berlaku.') ?>
                     </p>
 
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <strong><?php echo htmlspecialchars($firstName . ' ' . $lastName); ?></strong>
+                    <form action="profile_customer.php?section=security" method="POST" id="passwordForm">
+                        <div class="form-group">
+                            <label for="current_password"><?= te('Kata Sandi Saat Ini') ?></label>
+                            <input type="password" id="current_password" name="current_password"
+                                class="form-control" required autocomplete="current-password"
+                                placeholder="<?= te('Masukkan kata sandi saat ini') ?>">
                         </div>
-                        <div class="contact-item">
-                            <span><?php echo htmlspecialchars($mobile); ?></span>
-                        </div>
-                        <div class="contact-item">
-                            <span><?php echo htmlspecialchars($email); ?></span>
-                        </div>
-                    </div>
 
-                    <div class="account-center">
-                        <h3 class="section-title">Ke Pusat Akun</h3>
-                        <ul class="account-links">
-                            <li class="account-link">
-                                <a href="?section=profile">
-                                    <input type="checkbox" class="account-link-checkbox" checked disabled>
-                                    <span>Akun</span>
-                                </a>
-                            </li>
-                            <li class="account-link">
-                                <a href="?section=payment">
-                                    <input type="checkbox" class="account-link-checkbox" disabled>
-                                    <span>Metode Pembayaran</span>
-                                </a>
-                            </li>
-                            <li class="account-link">
-                                <a href="?section=reviews">
-                                    <input type="checkbox" class="account-link-checkbox" disabled>
-                                    <span>Kumpulan Review Kamu</span>
-                                </a>
-                            </li>
-                            <li class="account-link">
-                                <a href="?section=wishlist">
-                                    <input type="checkbox" class="account-link-checkbox" disabled>
-                                    <span>Wishlist</span>
-                                </a>
-                            </li>
-                            <li class="account-link">
-                                <a href="?section=orders">
-                                    <input type="checkbox" class="account-link-checkbox" disabled>
-                                    <span>Your Orders</span>
-                                </a>
-                            </li>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="new_password"><?= te('Kata Sandi Baru') ?></label>
+                                <input type="password" id="new_password" name="new_password"
+                                    class="form-control" required autocomplete="new-password"
+                                    placeholder="<?= te('Minimal 8 karakter') ?>">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirm_password"><?= te('Ulangi Kata Sandi Baru') ?></label>
+                                <input type="password" id="confirm_password" name="confirm_password"
+                                    class="form-control" required autocomplete="new-password"
+                                    placeholder="<?= te('Ketik ulang kata sandi baru') ?>">
+                            </div>
+                        </div>
+
+                        <div class="tv-pw-strength">
+                            <div class="tv-pw-bar"><span id="pwBar"></span></div>
+                            <span class="tv-pw-label" id="pwLabel"><?= te('Kekuatan kata sandi') ?></span>
+                        </div>
+
+                        <ul class="tv-pw-rules" id="pwRules">
+                            <li data-rule="len"><i class="fas fa-circle"></i> <?= te('Minimal 8 karakter') ?></li>
+                            <li data-rule="upper"><i class="fas fa-circle"></i> <?= te('Satu huruf kapital') ?></li>
+                            <li data-rule="num"><i class="fas fa-circle"></i> <?= te('Satu angka') ?></li>
+                            <li data-rule="spec"><i class="fas fa-circle"></i> <?= te('Satu karakter spesial') ?></li>
+                            <li data-rule="match"><i class="fas fa-circle"></i> <?= te('Konfirmasi cocok') ?></li>
                         </ul>
-                    </div>
+
+                        <input type="hidden" name="change_password" value="1">
+                        <button type="submit" class="btn btn-primary" id="pwSubmit"><?= te('PERBARUI KATA SANDI') ?></button>
+                    </form>
                 </div>
 
             <?php elseif ($active_section == 'settings'): ?>
                 <!-- Settings Section -->
                 <div class="profile-edit-section">
-                    <h2 class="section-title">Pengaturan</h2>
+                    <h2 class="section-title"><?= te('Pengaturan') ?></h2>
+
+                    <p class="tv-section-note">
+                        <?= te('Preferensi tampilan akun kamu. Untuk mengubah kata sandi, buka') ?>
+                        <a href="?section=security"><?= te('Keamanan Akun') ?></a>.
+                    </p>
 
                     <div class="form-group">
-                        <label for="language">Bahasa</label>
-                        <select id="language" class="form-control">
+                        <label for="language"><?= te('Bahasa') ?></label>
+                        <select id="language" class="form-control" disabled>
                             <option value="id" selected>Indonesia</option>
-                            <option value="en">English</option>
                         </select>
+                        <small class="tv-field-hint"><?= te('Ubah bahasa TripVerse kapan saja lewat pengalih ID/EN di bagian atas halaman.') ?></small>
                     </div>
 
                     <div class="form-group">
-                        <label for="country">Negara atau Wilayah</label>
-                        <select id="country" class="form-control">
+                        <label for="country"><?= te('Negara atau Wilayah') ?></label>
+                        <select id="country" class="form-control" disabled>
                             <option value="id" selected>Indonesia</option>
-                            <option value="my">Malaysia</option>
-                            <option value="sg">Singapore</option>
-                            <option value="th">Thailand</option>
                         </select>
+                        <small class="tv-field-hint"><?= te('Pemesanan hotel tersedia untuk wilayah Jabodetabek.') ?></small>
                     </div>
 
-                    <div class="form-group">
-                        <button class="btn btn-block">Ganti Kata Sandi</button>
+                    <div class="tv-settings-links">
+                        <a href="?section=security" class="tv-settings-link">
+                            <i class="fas fa-lock"></i>
+                            <span>
+                                <strong><?= te('Keamanan Akun') ?></strong>
+                                <small><?= te('Ganti kata sandi kamu') ?></small>
+                            </span>
+                            <i class="fas fa-chevron-right tv-settings-arrow"></i>
+                        </a>
+                        <a href="history.php" class="tv-settings-link">
+                            <i class="fas fa-receipt"></i>
+                            <span>
+                                <strong><?= te('Riwayat Pesanan') ?></strong>
+                                <small><?= te('Lihat semua pemesanan kamu') ?></small>
+                            </span>
+                            <i class="fas fa-chevron-right tv-settings-arrow"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -1108,7 +1244,7 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
                 <div class="profile-edit-section">
                     <h2 class="section-title"><?php echo ucfirst($active_section); ?></h2>
                     <p class="account-description">
-                        Halaman ini sedang dalam pengembangan. Fitur <?php echo $active_section; ?> akan segera tersedia.
+                        <?= te('Halaman ini sedang dalam pengembangan. Fitur') ?> <?php echo $active_section; ?> <?= te('akan segera tersedia.') ?>
                     </p>
                 </div>
             <?php endif; ?>
@@ -1144,7 +1280,7 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
         // Fungsi untuk hapus foto profil
         document.getElementById('delete_avatar').addEventListener('change', function() {
             if (this.checked) {
-                if (!confirm('Apakah Anda yakin ingin menghapus foto profil?')) {
+                if (!confirm('<?= t('Apakah Anda yakin ingin menghapus foto profil?') ?>')) {
                     this.checked = false;
                 }
             }
@@ -1165,7 +1301,7 @@ $active_section = isset($_GET['section']) ? $_GET['section'] : 'profile';
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

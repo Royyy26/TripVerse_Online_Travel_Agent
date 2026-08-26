@@ -53,7 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_owner'])) {
 
                 $stmt = $conn->prepare("INSERT INTO user (id_user, first_name, last_name, username, no_hp, email, password, role) VALUES (?,?,?,?,?,?,?, 'owner')");
                 if ($stmt) {
-                    $stmt->bind_param('sssssss', $newId, $first, $last, $username, $phone, $email, $password);
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                    $stmt->bind_param('sssssss', $newId, $first, $last, $username, $phone, $email, $hashed_password);
                     if ($stmt->execute()) {
                         $message = 'Owner berhasil dibuat: ' . htmlspecialchars($newId) . ' | Email: ' . htmlspecialchars($email);
                     } else {

@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 if (!isset($_SESSION['id_user'])) {
     header("Location: login.php");
     exit;
@@ -156,7 +157,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
 <head>
     <meta charset="utf-8">
-    <title>TripVerse - Detail Hotel</title>
+    <title>TripVerse - <?= te('Detail Hotel') ?></title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -182,17 +183,16 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
     <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/style.css?v=2.0" rel="stylesheet">
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
 
     <style>
         :root {
-            --primary-color: #ff6b00;
-            --secondary-color: #ffa500;
+            --primary-color: #FEA116;
+            --secondary-color: #FEA116;
             --dark-color: #2c3e50;
             --light-color: #f8f9fa;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -201,16 +201,30 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
         .hotel-header {
             background-color: white;
-            border-radius: 12px;
+            border-radius: 18px;
             padding: 30px;
             margin-bottom: 30px;
             box-shadow: var(--shadow);
+            animation: tv-card-in-up .6s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        @keyframes tv-card-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .hotel-gallery {
-            border-radius: 12px;
+            border-radius: 18px;
             overflow: hidden;
             box-shadow: var(--shadow);
+        }
+
+        .main-image {
+            transition: transform .6s ease;
+        }
+
+        .hotel-gallery:hover .main-image {
+            transform: scale(1.03);
         }
 
         .main-image {
@@ -265,21 +279,26 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
         .room-card {
             border: none;
-            border-radius: 12px;
+            border-radius: 18px;
             overflow: hidden;
             box-shadow: var(--shadow);
-            transition: var(--transition);
+            transition: transform .4s cubic-bezier(.22, 1, .36, 1), box-shadow .4s ease;
             margin-bottom: 30px;
         }
 
         .room-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 24px 44px rgba(15, 23, 43, 0.16);
         }
 
         .room-img {
             height: 200px;
             object-fit: cover;
+            transition: transform .5s ease;
+        }
+
+        .room-card:hover .room-img {
+            transform: scale(1.06);
         }
 
         .price {
@@ -289,21 +308,30 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
         }
 
         .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            padding: 10px 25px;
-            border-radius: 8px;
-            font-weight: 500;
+            background: linear-gradient(135deg, #FEA116 0%, #FF7A3D 100%);
+            border: none;
+            padding: 11px 26px;
+            border-radius: 999px;
+            font-weight: 600;
+            box-shadow: 0 10px 24px rgba(254, 161, 22, 0.35);
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1), box-shadow .3s ease, filter .3s ease;
         }
 
         .btn-primary:hover {
-            background-color: #0052a3;
-            border-color: #0052a3;
+            filter: brightness(1.06);
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(254, 161, 22, 0.45);
         }
 
         .btn-outline-primary {
-            border-radius: 8px;
+            border-radius: 999px;
             padding: 10px 25px;
+            border-width: 2px;
+            transition: transform .3s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        .btn-outline-primary:hover {
+            transform: translateY(-3px);
         }
 
         .star-rating {
@@ -312,11 +340,13 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
         .booking-summary {
             background-color: white;
-            border-radius: 12px;
+            border-radius: 18px;
             padding: 25px;
             box-shadow: var(--shadow);
             position: sticky;
             top: 20px;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(135deg, #FEA116, #FF7A3D) 1;
         }
 
         .stock-info {
@@ -435,7 +465,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
         .footer .btn-link:hover {
             text-decoration: underline;
-            color: #f5b70a;
+            color: #FEA116;
         }
 
         .footer .btn-social {
@@ -452,7 +482,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
         }
 
         .footer .btn-social:hover {
-            background-color: #f5b70a;
+            background-color: #FEA116;
             color: #000;
         }
 
@@ -464,7 +494,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
         .footer-menu a:hover {
             text-decoration: underline;
-            color: #f5b70a;
+            color: #FEA116;
         }
 
         .footer hr {
@@ -506,7 +536,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                     <a href="about.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
-                        <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                        <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
                 </div>
 
@@ -536,29 +566,21 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                     <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
                         <a href="home.php" class="navbar-brand d-block d-lg-none">
                             <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
-                            <h1 class="m-0 text-primary text-uppercase">TripVerse</h1>
+                            <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                         </a>
                         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a href="home.php" class="nav-item nav-link">Beranda</a>
-                                <a href="about.php" class="nav-item nav-link">Tentang Kami</a>
-                                <a href="hotel.php" class="nav-item nav-link active">Hotel</a>
-                                <a href="service.php" class="nav-item nav-link">Fitur</a>
-                                <a href="team.php" class="nav-item nav-link">Tim Kami</a>
-                                <a href="contact.php" class="nav-item nav-link">Kontak</a>
-                                <a href="logout.php" class="nav-item nav-link">Logout</a>
+                                <a href="home.php" class="nav-item nav-link"><?= te("Beranda") ?></a>
+                                <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
+                                <a href="hotel.php" class="nav-item nav-link active"><?= te("Hotel") ?></a>
+                                <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
+                                <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
+                                <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
                             </div>
-                            <?php if (isset($_SESSION['username'])): ?>
-                                <span class="navbar-text fw-bold me-3"
-                                    style="background: linear-gradient(to right, #FFA500, #FF6347);
-                                    -webkit-background-clip: text; background-clip: text;
-                                    -webkit-text-fill-color: transparent; text-decoration: underline;">
-                                    Hi <?= htmlspecialchars($_SESSION['username']); ?>, selamat datang di TripVerse
-                                </span>
-                            <?php endif; ?>
+                            <?php include __DIR__ . '/_lang_switch.php'; ?><?php include __DIR__ . '/_account_menu.php'; ?>
                         </div>
                     </nav>
                 </div>
@@ -569,12 +591,12 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
         <div class="container-fluid page-header mb-5 p-0" style="background-image: url(../img/carousel-1.jpg);">
             <div class="container-fluid page-header-inner py-5">
                 <div class="container text-center pb-5">
-                    <h1 class="display-3 text-white mb-3 animated slideInDown">Detail Hotel</h1>
+                    <h1 class="display-3 text-white mb-3 animated slideInDown"><?= te('Detail Hotel') ?></h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center text-uppercase">
-                            <li class="breadcrumb-item"><a href="home.php">Beranda</a></li>
-                            <li class="breadcrumb-item"><a href="hotel.php">Hotel</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Detail Hotel</li>
+                            <li class="breadcrumb-item"><a href="home.php"><?= te('Beranda') ?></a></li>
+                            <li class="breadcrumb-item"><a href="hotel.php"><?= te('Hotel') ?></a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page"><?= te('Detail Hotel') ?></li>
                         </ol>
                     </nav>
                 </div>
@@ -598,10 +620,10 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                             </div>
                         </div>
                         <div class="col-md-4 text-md-end">
-                            <div class="price mb-2">Rp <?= number_format($hotel['harga_dasar'], 0, ',', '.') ?> <small class="text-muted">/malam</small></div>
+                            <div class="price mb-2">Rp <?= number_format($hotel['harga_dasar'], 0, ',', '.') ?> <small class="text-muted">/<?= t('malam') ?></small></div>
                             <div class="text-success">
                                 <i class="fas fa-check-circle me-1"></i>
-                                Tersedia kamar
+                                <?= te('Tersedia kamar') ?>
                             </div>
                         </div>
                     </div>
@@ -617,10 +639,10 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
                         <!-- Hotel Info -->
                         <div class="hotel-info mb-4">
-                            <h3 class="mb-4">Tentang Hotel Ini</h3>
+                            <h3 class="mb-4"><?= te('Tentang Hotel Ini') ?></h3>
                             <p><?= htmlspecialchars($hotel['info_hotel']) ?></p>
 
-                            <h4 class="mt-5 mb-3">Fasilitas Hotel</h4>
+                            <h4 class="mt-5 mb-3"><?= te('Fasilitas Hotel') ?></h4>
                             <div>
                                 <?php foreach ($facilities as $facility): ?>
                                     <span class="facility-badge">
@@ -632,7 +654,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
                         <!-- Location Map -->
                         <div class="hotel-info mb-4">
-                            <h3 class="mb-4">Lokasi Hotel</h3>
+                            <h3 class="mb-4"><?= te('Lokasi Hotel') ?></h3>
 
                             <div class="map-container">
                                 <?php if (!empty($hotel['maps_embed_url'])): ?>
@@ -644,14 +666,14 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                                         allowfullscreen=""
                                         loading="lazy"
                                         referrerpolicy="no-referrer-when-downgrade"
-                                        aria-label="Peta Lokasi <?= htmlspecialchars($hotel['nama_hotel'], ENT_QUOTES, 'UTF-8') ?>">
+                                        aria-label="<?= te('Peta Lokasi') ?> <?= htmlspecialchars($hotel['nama_hotel'], ENT_QUOTES, 'UTF-8') ?>">
                                     </iframe>
                                 <?php else: ?>
                                     <div class="alert alert-info d-flex align-items-center">
                                         <i class="fas fa-info-circle me-3 fa-lg"></i>
                                         <div>
-                                            <h5 class="alert-heading mb-1">Informasi Peta Tidak Tersedia</h5>
-                                            <p class="mb-0">Silakan hubungi hotel untuk petunjuk arah</p>
+                                            <h5 class="alert-heading mb-1"><?= te('Informasi Peta Tidak Tersedia') ?></h5>
+                                            <p class="mb-0"><?= te('Silakan hubungi hotel untuk petunjuk arah') ?></p>
                                         </div>
                                     </div>
                                 <?php endif; ?>
@@ -659,11 +681,11 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                         </div>
                         <!-- Room Types -->
                         <div class="hotel-info">
-                            <h3 class="mb-4">Pilihan Kamar</h3>
+                            <h3 class="mb-4"><?= te('Pilihan Kamar') ?></h3>
 
                             <?php if (count($rooms) > 0): ?>
                                 <?php foreach ($rooms as $room): ?>
-                                    <div class="card room-card">
+                                    <div class="card room-card tv-reveal">
                                         <div class="row g-0">
                                             <div class="col-md-4">
                                                 <?php
@@ -683,14 +705,14 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
                                                     <div class="mt-3">
                                                         <span class="badge bg-light text-dark me-1 mb-1">
-                                                            <i class="fas fa-bed text-primary me-1"></i> <?= $room['kapasitas'] ?> Orang
+                                                            <i class="fas fa-bed text-primary me-1"></i> <?= $room['kapasitas'] ?> <?= te('Orang') ?>
                                                         </span>
                                                         <span class="badge bg-light text-dark me-1 mb-1">
                                                             <i class="fas fa-ruler-combined text-primary me-1"></i> <?= $room['ukuran_kamar'] ?> m²
                                                         </span>
                                                         <?php if ($room['sarapan']): ?>
                                                             <span class="badge bg-light text-dark me-1 mb-1">
-                                                                <i class="fas fa-coffee text-primary me-1"></i> Sarapan
+                                                                <i class="fas fa-coffee text-primary me-1"></i> <?= te('Sarapan') ?>
                                                             </span>
                                                         <?php endif; ?>
                                                         <?php if ($room['wifi']): ?>
@@ -703,8 +725,8 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                                                     <!-- Stock Information -->
                                                     <div class="stock-info mt-3">
                                                         <div class="stock-label">
-                                                            <span class="text-muted">Ketersediaan:</span>
-                                                            <span class="stock-value"><?= $room['stok_info'] ?> kamar</span>
+                                                            <span class="text-muted"><?= te('Ketersediaan:') ?></span>
+                                                            <span class="stock-value"><?= $room['stok_info'] ?> <?= t('kamar') ?></span>
                                                         </div>
                                                         <div class="progress stock-progress">
                                                             <div class="progress-bar bg-<?= $room['available'] > 0 ? 'success' : 'danger' ?>"
@@ -723,15 +745,15 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                                                 <div class="card-body d-flex flex-column h-100 justify-content-between">
                                                     <div class="text-end">
                                                         <div class="price mb-2">Rp <?= number_format($room['harga'], 0, ',', '.') ?></div>
-                                                        <small class="text-muted d-block">per malam</small>
+                                                        <small class="text-muted d-block"><?= te('per malam') ?></small>
                                                         <small class="<?= $room['available'] > 0 ? 'text-success' : 'text-danger' ?> d-block">
                                                             <i class="fas <?= $room['available'] > 0 ? 'fa-check-circle' : 'fa-times-circle' ?>"></i>
-                                                            <?= $room['available'] > 0 ? 'Tersedia' : 'Habis' ?>
+                                                            <?= $room['available'] > 0 ? te('Tersedia') : te('Habis') ?>
                                                         </small>
                                                     </div>
                                                     <a href="booking.php?hotel_id=<?= $hotel['hotel_id'] ?>&tipe_id=<?= $room['tipe_id'] ?>&checkin=<?= $checkin ?>&checkout=<?= $checkout ?>&dewasa=<?= $dewasa ?>&anak=<?= $anak ?>&kamar=<?= $kamar ?>"
                                                         class="btn btn-primary mt-3 <?= $room['available'] == 0 ? 'disabled' : '' ?>">
-                                                        Pesan Sekarang
+                                                        <?= te('Pesan Sekarang') ?>
                                                     </a>
                                                 </div>
                                             </div>
@@ -740,7 +762,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <div class="alert alert-info">
-                                    Maaf, tidak ada kamar yang tersedia untuk periode ini.
+                                    <?= te('Maaf, tidak ada kamar yang tersedia untuk periode ini.') ?>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -749,36 +771,36 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                     <!-- Booking Summary -->
                     <div class="col-lg-4">
                         <div class="booking-summary">
-                            <h4 class="mb-4">Ringkasan Pemesanan</h4>
+                            <h4 class="mb-4"><?= te('Ringkasan Pemesanan') ?></h4>
 
                             <div class="mb-3">
-                                <h6>Detail Tamu</h6>
+                                <h6><?= te('Detail Tamu') ?></h6>
                                 <div class="d-flex justify-content-between">
-                                    <span class="text-muted">Check-in:</span>
+                                    <span class="text-muted"><?= te('Check-In:') ?></span>
                                     <span><?= $checkinDisplay ?></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <span class="text-muted">Check-out:</span>
+                                    <span class="text-muted"><?= te('Check-Out:') ?></span>
                                     <span><?= $checkoutDisplay ?></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <span class="text-muted">Durasi:</span>
-                                    <span><?= $durasi ?> malam</span>
+                                    <span class="text-muted"><?= te('Durasi:') ?></span>
+                                    <span><?= $durasi ?> <?= t('malam') ?></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <span class="text-muted">Tamu:</span>
-                                    <span><?= $dewasa ?> Dewasa, <?= $anak ?> Anak</span>
+                                    <span class="text-muted"><?= te('Tamu:') ?></span>
+                                    <span><?= $dewasa ?> <?= t('Dewasa') ?>, <?= $anak ?> <?= t('Anak') ?></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <span class="text-muted">Kamar:</span>
-                                    <span><?= $kamar ?> Kamar</span>
+                                    <span class="text-muted"><?= te('Kamar:') ?></span>
+                                    <span><?= $kamar ?> <?= te('Kamar') ?></span>
                                 </div>
                             </div>
 
                             <hr>
 
                             <div class="mb-3">
-                                <h6>Detail Hotel</h6>
+                                <h6><?= te('Detail Hotel') ?></h6>
                                 <div class="d-flex align-items-start mb-2">
                                     <img src="../img/<?= htmlspecialchars($hotel['foto_hotel']) ?>" class="rounded me-3" width="60" height="60" style="object-fit: cover;">
                                     <div>
@@ -791,7 +813,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                             <hr>
 
                             <a href="hotel.php?city=<?= urlencode($hotel['kota']) ?>" class="btn btn-outline-primary w-100 mb-2">
-                                <i class="fas fa-arrow-left me-2"></i> Kembali ke Daftar
+                                <i class="fas fa-arrow-left me-2"></i> <?= te('Kembali ke Daftar') ?>
                             </a>
                         </div>
                     </div>
@@ -810,7 +832,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                                 <img src="../img/logo.png" alt="TripVerse Logo" width="50" class="me-3">
                             </a>
                             <a href="home.php">
-                                <h1 class="text-white text-uppercase mb-0">TripVerse</h1>
+                                <span class="tv-wordmark tv-wordmark-footer">TripVerse</span>
                             </a>
                         </div>
                     </div>
@@ -885,7 +907,8 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
     <script src="../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="../js/main.js"></script>
+    <script src="../js/main.js?v=2.0"></script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 
     <script>
         // Hide spinner when page is loaded
@@ -903,62 +926,6 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
             });
         });
 
-        // Initialize Google Maps
-        function initMap() {
-            // Default coordinates (Jakarta)
-            const defaultPosition = {
-                lat: -6.2088,
-                lng: 106.8456
-            };
-
-            // Create a map centered at default position
-            const map = new google.maps.Map(document.getElementById("hotel-map"), {
-                zoom: 15,
-                center: defaultPosition,
-                mapTypeControl: true,
-                streetViewControl: true,
-                fullscreenControl: true
-            });
-
-            // Create a geocoder instance
-            const geocoder = new google.maps.Geocoder();
-
-            // Geocode the hotel address
-            geocoder.geocode({
-                address: "<?= addslashes($full_address) ?>"
-            }, (results, status) => {
-                if (status === "OK" && results[0]) {
-                    // Center the map on the geocoded location
-                    map.setCenter(results[0].geometry.location);
-
-                    // Add a marker at the hotel location
-                    new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location,
-                        title: "<?= addslashes($hotel['nama_hotel']) ?>",
-                        animation: google.maps.Animation.DROP
-                    });
-
-                    // Add an info window
-                    const infowindow = new google.maps.InfoWindow({
-                        content: "<strong><?= addslashes($hotel['nama_hotel']) ?></strong><br><?= addslashes($hotel['alamat']) ?>"
-                    });
-
-                    // Open the info window by default
-                    infowindow.open(map, marker);
-                } else {
-                    // If geocoding fails, use default position with a warning
-                    console.error("Geocode was not successful for the following reason: " + status);
-
-                    // Add a marker at default position
-                    new google.maps.Marker({
-                        map: map,
-                        position: defaultPosition,
-                        title: "<?= addslashes($hotel['nama_hotel']) ?>"
-                    });
-                }
-            });
-        }
     </script>
 </body>
 

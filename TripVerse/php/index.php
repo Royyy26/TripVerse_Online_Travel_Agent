@@ -21,13 +21,13 @@ if (isset($_POST['signIn'])) {
     }
 
     // Query ambil data dari tabel users
-    $query = "SELECT * FROM user WHERE email = ? AND password = ?";
+    $query = "SELECT * FROM user WHERE email = ?";
     $stmt = $conn->prepare($query);
     if ($stmt === false) {
         echo "<script>alert('Login error: Query gagal dipersiapkan'); window.location='login.php';</script>";
         exit;
     }
-    if (!$stmt->bind_param("ss", $email, $password)) {
+    if (!$stmt->bind_param("s", $email)) {
         $stmt->close();
         echo "<script>alert('Login error: Parameter gagal dibind'); window.location='login.php';</script>";
         exit;
@@ -38,9 +38,10 @@ if (isset($_POST['signIn'])) {
         exit;
     }
     $result = $stmt->get_result();
-    
-    // Jika user ditemukan
-    if ($user = $result->fetch_assoc()) {
+    $user = $result->fetch_assoc();
+
+    // Jika user ditemukan dan password cocok
+    if ($user && password_verify($password, $user['password'])) {
         // Validasi khusus untuk owner: pastikan email valid dan tidak kosong
         if ($user['role'] === 'owner') {
             if (empty($user['email']) || !filter_var($user['email'], FILTER_VALIDATE_EMAIL)) {

@@ -1,16 +1,17 @@
-<?php session_start(); ?>
+<?php session_start(); require_once __DIR__ . '/_lang.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password | TripVerse</title>
+    <title><?= te('Lupa Password') ?> | TripVerse</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-    <link href="../css/login.css" rel="stylesheet">
+    <link href="../css/login.css?v=2.0" rel="stylesheet">
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         /* =========================================
@@ -20,30 +21,43 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Heebo', sans-serif;
         }
 
         body,
         html {
             height: 100%;
             width: 100%;
-            background: linear-gradient(135deg, #fff5e6 0%, #ffe0b3 100%);
+            background: radial-gradient(circle at 15% 20%, #1c2a4a 0%, #0F172B 45%, #0a0f1e 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
             min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
         }
 
         .container {
-            background: #fff;
+            background: rgba(255, 255, 255, 0.97);
             width: 100%;
             max-width: 480px;
-            padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+            padding: 44px 34px;
+            border-radius: 24px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
             text-align: center;
             position: relative;
+            animation: tv-card-in .7s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        @keyframes tv-card-in {
+            from { opacity: 0; transform: translateY(24px) scale(.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .container::before {
@@ -53,13 +67,13 @@
             left: 0;
             width: 100%;
             height: 5px;
-            background: linear-gradient(to right, #ff9900, #ff6600);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
         }
 
         .form-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ff6600;
+            color: #FEA116;
             margin-bottom: 30px;
             position: relative;
         }
@@ -75,7 +89,7 @@
             top: 50%;
             left: 12px;
             transform: translateY(-50%);
-            color: #ff6600;
+            color: #FEA116;
         }
 
         .input-group input {
@@ -91,7 +105,7 @@
             padding: 14px;
             border: none;
             border-radius: 8px;
-            background: linear-gradient(to right, #ff9900, #ff6600);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             color: white;
             font-size: 16px;
             font-weight: 600;
@@ -101,9 +115,9 @@
         }
 
         .btn:hover {
-            background: linear-gradient(to right, #ff6600, #ff9900);
+            background: linear-gradient(135deg, #FF7A3D, #FEA116);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(255, 102, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(254, 161, 22, 0.2);
         }
 
         .logo {
@@ -121,14 +135,14 @@
         .logo h3 {
             font-weight: 700;
             font-size: 28px;
-            background: linear-gradient(to right, #000000, #ff6600);
+            background: linear-gradient(90deg, #0F172B, #FEA116);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .logo h3 span {
-            background: linear-gradient(to right, #ff6600, #ffaa33);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -152,9 +166,9 @@
         }
 
         .otp-field:focus {
-            border-color: #ff6600;
+            border-color: #FEA116;
             outline: none;
-            box-shadow: 0 0 5px rgba(255, 102, 0, 0.3);
+            box-shadow: 0 0 5px rgba(254, 161, 22, 0.3);
         }
 
         .alert {
@@ -195,14 +209,14 @@
         .links button {
             background: none;
             border: none;
-            color: #ff6600;
+            color: #FEA116;
             font-weight: 600;
             cursor: pointer;
             text-decoration: underline;
         }
 
         .links button:hover {
-            color: #ff3300;
+            color: #E8890A;
         }
 
         .resend-link {
@@ -211,7 +225,7 @@
         }
 
         .resend-link a {
-            color: #ff6600;
+            color: #FEA116;
             text-decoration: none;
             cursor: pointer;
         }
@@ -233,6 +247,8 @@
 </head>
 
 <body>
+    <div class="tv-aurora tv-aurora-1"></div>
+    <div class="tv-aurora tv-aurora-2"></div>
 
     <!-- =========================================
      CONTAINER 1 — REQUEST OTP
@@ -243,22 +259,22 @@
             <h3>Trip<span>Verse</span></h3>
         </div>
 
-        <h1 class="form-title">Forgot Password</h1>
+        <h1 class="form-title"><?= te('Lupa Password') ?></h1>
 
         <div id="alertRequest" class="alert"></div>
 
-        <p>Enter your WhatsApp number</p>
+        <p><?= te('Masukkan nomor WhatsApp Anda') ?></p>
 
         <div class="input-group">
             <i class="fas fa-phone"></i>
             <input type="text" id="phone" placeholder="+628123456789">
         </div>
 
-        <button class="btn" id="sendOtpBtn">Request OTP</button>
+        <button class="btn" id="sendOtpBtn"><?= te('Minta OTP') ?></button>
 
         <div class="links">
-            <p>Remember password?</p>
-            <button onclick="window.location.href='login.php'">Sign In</button>
+            <p><?= te('Ingat password Anda?') ?></p>
+            <button onclick="window.location.href='login.php'"><?= te('Masuk') ?></button>
         </div>
     </div>
 
@@ -271,11 +287,11 @@
             <h3>Trip<span>Verse</span></h3>
         </div>
 
-        <h1 class="form-title">Verify OTP</h1>
+        <h1 class="form-title"><?= te('Verifikasi OTP') ?></h1>
 
         <div id="alertOtp" class="alert"></div>
 
-        <p>Enter the 6-digit OTP sent to WhatsApp</p>
+        <p><?= te('Masukkan 6 digit OTP yang dikirim ke WhatsApp') ?></p>
         <p id="phoneDisplay" style="color: #666; margin-bottom: 15px;"></p>
 
         <div class="otp-input-wrapper">
@@ -288,11 +304,11 @@
         </div>
 
         <div class="resend-link" id="resendLink">
-            Didn't receive code? <a id="resendOtpLink">Resend OTP</a>
+            <?= te('Tidak menerima kode?') ?> <a id="resendOtpLink"><?= te('Kirim Ulang OTP') ?></a>
             <span id="countdown"></span>
         </div>
 
-        <button class="btn" id="verifyOtpBtn">Verify OTP</button>
+        <button class="btn" id="verifyOtpBtn"><?= te('Verifikasi OTP') ?></button>
     </div>
 
     <!-- =========================================
@@ -304,32 +320,32 @@
             <h3>Trip<span>Verse</span></h3>
         </div>
 
-        <h1 class="form-title">Reset Password</h1>
+        <h1 class="form-title"><?= te('Atur Ulang Password') ?></h1>
 
         <div id="alertReset" class="alert"></div>
 
-        <p>Create a new password</p>
+        <p><?= te('Buat password baru') ?></p>
 
         <div class="input-group">
             <i class="fas fa-lock"></i>
-            <input type="password" id="newPass" placeholder="New Password">
+            <input type="password" id="newPass" placeholder="<?= te('Password Baru') ?>">
         </div>
 
         <div class="input-group">
             <i class="fas fa-lock"></i>
-            <input type="password" id="confirmPass" placeholder="Confirm Password">
+            <input type="password" id="confirmPass" placeholder="<?= te('Konfirmasi Password') ?>">
         </div>
 
         <div id="passwordRequirements" style="text-align: left; margin: 10px 0; font-size: 12px; color: #666;">
-            <p>Password must contain:</p>
+            <p><?= te('Password harus mengandung:') ?></p>
             <ul style="padding-left: 20px; margin: 5px 0;">
-                <li>At least 8 characters</li>
-                <li>At least one uppercase letter</li>
-                <li>At least one number</li>
+                <li><?= te('Minimal 8 karakter') ?></li>
+                <li><?= te('Minimal satu huruf kapital') ?></li>
+                <li><?= te('Minimal satu angka') ?></li>
             </ul>
         </div>
 
-        <button class="btn" id="savePassBtn">Save Password</button>
+        <button class="btn" id="savePassBtn"><?= te('Simpan Password') ?></button>
     </div>
 
     <!-- =========================================
@@ -434,7 +450,7 @@
             let phone = document.getElementById("phone").value.replace(/\D/g, "");
 
             if (!phone) {
-                showAlert("alertRequest", "Please enter phone number");
+                showAlert("alertRequest", "<?= t('Silakan masukkan nomor telepon') ?>");
                 return;
             }
 
@@ -470,15 +486,15 @@
 
                     if (trimmedRes === "sent") {
                         console.log("✓ OTP sent successfully!");
-                        showAlert("alertOtp", "OTP sent successfully!", "success");
+                        showAlert("alertOtp", "<?= t('OTP berhasil dikirim!') ?>", "success");
                     } else {
                         console.log("✗ Expected 'sent' but got:", trimmedRes);
-                        showAlert("alertOtp", "Failed to send OTP. Server returned: " + trimmedRes, "danger");
+                        showAlert("alertOtp", "<?= t('Gagal mengirim OTP. Server merespons:') ?> " + trimmedRes, "danger");
                     }
                 })
                 .catch(error => {
                     console.error("Fetch error:", error);
-                    showAlert("alertOtp", "Network error: " + error.message, "danger");
+                    showAlert("alertOtp", "<?= t('Kesalahan jaringan:') ?> " + error.message, "danger");
                 });
         });
 
@@ -491,7 +507,7 @@
                 .forEach(x => otp += x.value);
 
             if (otp.length !== 6) {
-                showAlert("alertOtp", "Please enter complete OTP", "danger");
+                showAlert("alertOtp", "<?= t('Silakan masukkan OTP lengkap') ?>", "danger");
                 // Highlight empty fields
                 document.querySelectorAll(".otp-field").forEach(field => {
                     if (!field.value) {
@@ -511,7 +527,7 @@
             // Show loading state
             const btn = this;
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <?= t('Memverifikasi...') ?>';
             btn.disabled = true;
 
             console.log("Verifying OTP for:", currentPhone, "OTP:", otp);
@@ -542,32 +558,32 @@
                         setTimeout(() => {
                             document.getElementById("newPass").focus();
                         }, 100);
-                        showAlert("alertReset", "✓ OTP verified successfully!", "success");
+                        showAlert("alertReset", "✓ <?= t('OTP berhasil diverifikasi!') ?>", "success");
                     } else if (trimmedRes === "expired") {
                         console.log("✗ OTP EXPIRED");
-                        showAlert("alertOtp", "OTP expired. Please request a new one.", "danger");
+                        showAlert("alertOtp", "<?= t('OTP telah kedaluwarsa. Silakan minta yang baru.') ?>", "danger");
                         // Clear OTP fields
                         document.querySelectorAll(".otp-field").forEach(f => f.value = '');
                         document.querySelector(".otp-field").focus();
                     } else if (trimmedRes === "failed" || trimmedRes === "wrong") {
                         console.log("✗ WRONG OTP");
-                        showAlert("alertOtp", "Incorrect OTP. Please try again.", "danger");
+                        showAlert("alertOtp", "<?= t('OTP salah. Silakan coba lagi.') ?>", "danger");
                         // Clear OTP fields
                         document.querySelectorAll(".otp-field").forEach(f => f.value = '');
                         document.querySelector(".otp-field").focus();
                     } else if (trimmedRes === "missing_data") {
                         console.log("✗ MISSING DATA");
-                        showAlert("alertOtp", "Invalid request. Please restart the process.", "danger");
+                        showAlert("alertOtp", "<?= t('Permintaan tidak valid. Silakan ulangi proses.') ?>", "danger");
                     } else {
                         console.log("✗ UNKNOWN RESPONSE:", trimmedRes);
-                        showAlert("alertOtp", "Verification failed. Please try again.", "danger");
+                        showAlert("alertOtp", "<?= t('Verifikasi gagal. Silakan coba lagi.') ?>", "danger");
                     }
                 })
                 .catch(error => {
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                     console.error("Fetch error:", error);
-                    showAlert("alertOtp", "Network error. Please check your connection.", "danger");
+                    showAlert("alertOtp", "<?= t('Kesalahan jaringan. Silakan periksa koneksi Anda.') ?>", "danger");
                 });
         });
         /* -----------------------------------------
@@ -577,7 +593,7 @@
             let p1 = document.getElementById("newPass").value;
             let p2 = document.getElementById("confirmPass").value;
 
-            if (p1 !== p2) return showAlert("alertReset", "Passwords do not match");
+            if (p1 !== p2) return showAlert("alertReset", "<?= t('Password tidak cocok') ?>");
 
             fetch("reset_password_process.php", {
                     method: "POST",
@@ -589,12 +605,12 @@
                 .then(r => r.text())
                 .then(res => {
                     if (res === "success") {
-                        showAlert("alertReset", "Password updated! Redirecting...", "success");
+                        showAlert("alertReset", "<?= t('Password berhasil diperbarui! Mengalihkan...') ?>", "success");
                         setTimeout(() => {
                             window.location = "login.php";
                         }, 1500);
                     } else {
-                        showAlert("alertReset", "Failed to update password", "danger");
+                        showAlert("alertReset", "<?= t('Gagal memperbarui password') ?>", "danger");
                     }
                 });
         });
@@ -629,6 +645,7 @@
         });
     </script>
 
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

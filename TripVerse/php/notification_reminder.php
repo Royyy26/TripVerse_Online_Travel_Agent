@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/connect.php');
 require_once(__DIR__ . '/fonnte_api.php');
+require_once __DIR__ . '/_lang.php';
 date_default_timezone_set("Asia/Jakarta");
 
 $tanggalBesok = date("Y-m-d", strtotime("+1 day"));
@@ -48,12 +49,12 @@ Terima kasih atas kepercayaan Anda menggunakan TripVerse. Semoga pengalaman meng
 
         if ($kirim) {
             $conn->query("UPDATE booking_hotel SET is_wa_sent = 1 WHERE booking_id = '$booking_id'");
-            $status = "✅ Pesan berhasil dikirim ke $nama ($no_wa)";
+            $status = "✅ " . t("Pesan berhasil dikirim ke") . " $nama ($no_wa)";
         } else {
-            $status = "❌ Gagal mengirim pesan ke $nama ($no_wa)";
+            $status = "❌ " . t("Gagal mengirim pesan ke") . " $nama ($no_wa)";
         }
     } else {
-        $status = "❌ Data tidak lengkap, pesan tidak dikirim.";
+        $status = "❌ " . t("Data tidak lengkap, pesan tidak dikirim.");
     }
 }
 
@@ -111,7 +112,7 @@ Terima kasih atas kepercayaan Anda menggunakan TripVerse. Semoga pengalaman meng
         }
     }
 
-    $status = $countSent > 0 ? "✅ Berhasil mengirim $countSent pesan." : "❌ Tidak ada pesan yang dikirim.";
+    $status = $countSent > 0 ? "✅ " . t("Berhasil mengirim") . " $countSent " . t('pesan.') : "❌ " . t("Tidak ada pesan yang dikirim.");
 }
 
 // ============================
@@ -136,7 +137,7 @@ $result = $conn->query($sql);
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Manual Reminder Check-In TripVerse</title>
+<title><?= te('Manual Reminder Check-In') ?> TripVerse</title>
 <style>
 body { font-family: Arial; background:#f5f7fa; padding:30px; color:#333; }
 h2 { color:#0077b6; }
@@ -155,33 +156,33 @@ button:hover { background:#005f87; }
 </head>
 <body>
 
-<h2>📅 Pengingat Check-In TripVerse — Besok (<?= date("d M Y", strtotime($tanggalBesok)) ?>)</h2>
+<h2>📅 <?= te('Pengingat Check-In TripVerse') ?> — <?= te('Besok') ?> (<?= date("d M Y", strtotime($tanggalBesok)) ?>)</h2>
 
 <?php if (!empty($status)): ?>
 <div class="status"><?= $status ?></div>
 <?php endif; ?>
 
 <form method="POST" class="send-all">
-    <button type="submit" name="send_all">📤 Kirim Semua Belum Dikirim</button>
+    <button type="submit" name="send_all">📤 <?= te('Kirim Semua Belum Dikirim') ?></button>
 </form>
 
 <table>
 <tr>
     <th>No</th>
-    <th>Nama</th>
+    <th><?= te('Nama') ?></th>
     <th>Hotel</th>
     <th>Check-in</th>
     <th>Check-out</th>
     <th>No. WhatsApp</th>
-    <th>Status WA</th>
-    <th>Aksi</th>
+    <th><?= te('Status WA') ?></th>
+    <th><?= te('Aksi') ?></th>
 </tr>
 <?php
 $no = 1;
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $sentClass = $row['is_wa_sent'] ? "sent" : "not-sent";
-        $sentText = $row['is_wa_sent'] ? "✅ Sudah Dikirim" : "❌ Belum Dikirim";
+        $sentText = $row['is_wa_sent'] ? "✅ " . t("Sudah Dikirim") : "❌ " . t("Belum Dikirim");
 
         echo "<tr>
             <td>$no</td>
@@ -200,7 +201,7 @@ if ($result && $result->num_rows > 0) {
                     <input type='hidden' name='checkin' value='{$row['check_in']}'>
                     <input type='hidden' name='checkout' value='{$row['check_out']}'>
                     <input type='hidden' name='no_wa' value='{$row['no_hp']}'>
-                    <button type='submit' name='send_whatsapp'>Kirim Pesan</button>
+                    <button type='submit' name='send_whatsapp'>" . t('Kirim Pesan') . "</button>
                   </form>";
         } else {
             echo "-";
@@ -209,7 +210,7 @@ if ($result && $result->num_rows > 0) {
         $no++;
     }
 } else {
-    echo "<tr><td colspan='8'>Tidak ada pelanggan yang check-in besok.</td></tr>";
+    echo "<tr><td colspan='8'>" . t('Tidak ada pelanggan yang check-in besok.') . "</td></tr>";
 }
 ?>
 </table>

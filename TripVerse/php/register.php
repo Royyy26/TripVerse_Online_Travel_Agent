@@ -135,9 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signUp'])) {
         // Generate ID baru
         $id_user = generateUserId($conn);
         
-        // Untuk sekarang, kita simpan password plain text (sesuai contoh)
-        // Di production, HARUS menggunakan password_hash()
-        $hashed_password = $password; // Untuk saat ini
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         
         // Simpan data ke tabel user
         $insertQuery = "INSERT INTO user (id_user, first_name, last_name, username, email, no_hp, password, role)

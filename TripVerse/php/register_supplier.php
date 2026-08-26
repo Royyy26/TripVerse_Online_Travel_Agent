@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/_lang.php';
 include 'connect.php';
 
 function sanitize($data, $conn) {
@@ -40,11 +41,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signUp'])) {
 
     // Validasi field wajib
     if (!$firstName || !$username || !$email || !$phone || !$companyName || !$companyAddress || !$password) {
-        $errorMessage = "Mohon isi semua field yang wajib (ditandai *)!";
+        $errorMessage = t("Mohon isi semua field yang wajib (ditandai *)!");
     } elseif ($password !== $confirmPassword) {
-        $errorMessage = "Password dan Konfirmasi Password tidak cocok!";
+        $errorMessage = t("Password dan Konfirmasi Password tidak cocok!");
     } elseif (strlen($password) < 6) {
-        $errorMessage = "Password harus minimal 6 karakter!";
+        $errorMessage = t("Password harus minimal 6 karakter!");
     } else {
         // Cek apakah email sudah digunakan sebagai supplier
         $checkEmail = "SELECT * FROM user WHERE email = ? AND role = ?";
@@ -54,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signUp'])) {
         $result = $stmt->get_result();
 
         if ($result && $result->num_rows > 0) {
-            $errorMessage = "Email sudah terdaftar sebagai supplier!";
+            $errorMessage = t("Email sudah terdaftar sebagai supplier!");
         } else {
             // Cek apakah username sudah digunakan
             $checkUsername = "SELECT * FROM user WHERE username = ?";
@@ -64,21 +65,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signUp'])) {
             $resultUser = $stmtUser->get_result();
 
             if ($resultUser && $resultUser->num_rows > 0) {
-                $errorMessage = "Username sudah digunakan!";
+                $errorMessage = t("Username sudah digunakan!");
             } else {
                 // Generate ID baru
                 $id_supplier = generateSupplierId($conn);
 
                 // Simpan data supplier
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 $insertQuery = "INSERT INTO user (id_user, first_name, last_name, username, email, no_hp, password, role)
                                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($insertQuery);
-                $stmt->bind_param("ssssssss", $id_supplier, $firstName, $lastName, $username, $email, $phone, $password, $role);
+                $stmt->bind_param("ssssssss", $id_supplier, $firstName, $lastName, $username, $email, $phone, $hashed_password, $role);
 
                 if ($stmt->execute()) {
                     // Simpan informasi supplier tambahan jika ada tabel supplier
                     // Anda dapat menambahkan tabel supplier untuk menyimpan info spesifik supplier
-                    $successMessage = "Registrasi supplier berhasil! Silakan login.";
+                    $successMessage = t("Registrasi supplier berhasil! Silakan login.");
                     // Redirect ke login setelah 2 detik
                     echo "<script>
                         setTimeout(function() {
@@ -86,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signUp'])) {
                         }, 2000);
                     </script>";
                 } else {
-                    $errorMessage = "Error saat registrasi: " . $conn->error;
+                    $errorMessage = t("Error saat registrasi: ") . $conn->error;
                 }
             }
             $stmtUser->close();
@@ -103,16 +105,17 @@ $conn->close();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Registrasi Supplier | TripVerse</title>
+    <title><?= te('Daftar Supplier') ?> | TripVerse</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet" />
     <style>
         /* Reset dan Font */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Heebo', sans-serif;
         }
 
         /* Body dan Container Utama */
@@ -280,7 +283,7 @@ $conn->close();
             border-radius: 8px;
             font-size: 14px;
             transition: all 0.3s ease;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Heebo', sans-serif;
         }
 
         .input-group textarea {
@@ -418,14 +421,15 @@ $conn->close();
 </head>
 
 <body>
+    <div class="tv-lang tv-lang-light tv-lang-floating"><?php include __DIR__ . "/_lang_switch_inner.php"; ?></div>
     <div class="container">
         <div class="header">
             <div class="logo">
                 <img src="../img/logo.png" alt="TripVerse Logo" />
                 <h3>Trip<span style="color: #ff6600;">Verse</span></h3>
             </div>
-            <h1 class="form-title">Daftar Supplier</h1>
-            <p class="form-subtitle">Bergabunglah dengan jaringan supplier profesional kami</p>
+            <h1 class="form-title"><?= te('Daftar Supplier') ?></h1>
+            <p class="form-subtitle"><?= te('Bergabunglah dengan jaringan supplier profesional kami') ?></p>
         </div>
 
         <?php if (!empty($successMessage)): ?>
@@ -444,95 +448,95 @@ $conn->close();
             <div class="form-layout">
                 <!-- Informasi Pribadi -->
                 <div class="form-divider" style="grid-column: 1 / -1;">
-                    <i class="fas fa-user me-2"></i>Informasi Pribadi
+                    <i class="fas fa-user me-2"></i><?= te('Informasi Pribadi') ?>
                 </div>
 
                 <div class="input-group">
-                    <label for="fName">Nama Depan <span class="required">*</span></label>
+                    <label for="fName"><?= te('Nama Depan') ?> <span class="required">*</span></label>
                     <i class="fas fa-user"></i>
-                    <input type="text" name="fName" id="fName" placeholder="Nama depan Anda" required />
+                    <input type="text" name="fName" id="fName" placeholder="<?= te('Nama depan Anda') ?>" required />
                 </div>
 
                 <div class="input-group">
-                    <label for="lName">Nama Belakang</label>
+                    <label for="lName"><?= te('Nama Belakang') ?></label>
                     <i class="fas fa-user"></i>
-                    <input type="text" name="lName" id="lName" placeholder="Nama belakang Anda" />
+                    <input type="text" name="lName" id="lName" placeholder="<?= te('Nama belakang Anda') ?>" />
                 </div>
 
                 <div class="input-group full">
-                    <label for="uName">Username <span class="required">*</span></label>
+                    <label for="uName"><?= te('Username') ?> <span class="required">*</span></label>
                     <i class="fas fa-at"></i>
-                    <input type="text" name="uName" id="uName" placeholder="Username unik untuk login" required />
+                    <input type="text" name="uName" id="uName" placeholder="<?= te('Username unik untuk login') ?>" required />
                 </div>
 
                 <div class="input-group full">
-                    <label for="email">Email <span class="required">*</span></label>
+                    <label for="email"><?= te('Email') ?> <span class="required">*</span></label>
                     <i class="fas fa-envelope"></i>
-                    <input type="email" name="email" id="email" placeholder="Email bisnis Anda" required />
+                    <input type="email" name="email" id="email" placeholder="<?= te('Email bisnis Anda') ?>" required />
                 </div>
 
                 <div class="input-group full">
-                    <label for="phone">Nomor Telepon <span class="required">*</span></label>
+                    <label for="phone"><?= te('Nomor Telepon') ?> <span class="required">*</span></label>
                     <i class="fas fa-phone"></i>
-                    <input type="text" name="phone" id="phone" placeholder="Nomor telepon bisnis" pattern="[0-9]+" title="Hanya angka" required />
+                    <input type="text" name="phone" id="phone" placeholder="<?= te('Nomor telepon bisnis') ?>" pattern="[0-9]+" title="<?= te('Hanya angka') ?>" required />
                 </div>
 
                 <!-- Informasi Perusahaan -->
                 <div class="form-divider" style="grid-column: 1 / -1;">
-                    <i class="fas fa-building me-2"></i>Informasi Perusahaan
+                    <i class="fas fa-building me-2"></i><?= te('Informasi Perusahaan') ?>
                 </div>
 
                 <div class="input-group full">
-                    <label for="companyName">Nama Perusahaan <span class="required">*</span></label>
+                    <label for="companyName"><?= te('Nama Perusahaan') ?> <span class="required">*</span></label>
                     <i class="fas fa-briefcase"></i>
-                    <input type="text" name="companyName" id="companyName" placeholder="Nama perusahaan atau bisnis" required />
+                    <input type="text" name="companyName" id="companyName" placeholder="<?= te('Nama perusahaan atau bisnis') ?>" required />
                 </div>
 
                 <div class="input-group full">
-                    <label for="companyAddress">Alamat Perusahaan <span class="required">*</span></label>
+                    <label for="companyAddress"><?= te('Alamat Perusahaan') ?> <span class="required">*</span></label>
                     <i class="fas fa-map-marker-alt"></i>
-                    <textarea name="companyAddress" id="companyAddress" placeholder="Alamat lengkap perusahaan" required></textarea>
+                    <textarea name="companyAddress" id="companyAddress" placeholder="<?= te('Alamat lengkap perusahaan') ?>" required></textarea>
                 </div>
 
                 <div class="input-group full">
-                    <label for="taxId">NPWP / Tax ID <span class="required">*</span></label>
+                    <label for="taxId"><?= te('NPWP / Tax ID') ?> <span class="required">*</span></label>
                     <i class="fas fa-file-invoice"></i>
-                    <input type="text" name="taxId" id="taxId" placeholder="Nomor NPWP atau Tax ID" required />
+                    <input type="text" name="taxId" id="taxId" placeholder="<?= te('Nomor NPWP atau Tax ID') ?>" required />
                 </div>
 
                 <!-- Keamanan -->
                 <div class="form-divider" style="grid-column: 1 / -1;">
-                    <i class="fas fa-lock me-2"></i>Keamanan Akun
+                    <i class="fas fa-lock me-2"></i><?= te('Keamanan Akun') ?>
                 </div>
 
                 <div class="input-group full">
-                    <label for="password">Password <span class="required">*</span></label>
+                    <label for="password"><?= te('Password') ?> <span class="required">*</span></label>
                     <i class="fas fa-lock"></i>
-                    <input type="password" name="password" id="password" placeholder="Buat password yang kuat" required onkeyup="checkPasswordStrength(this.value)" />
+                    <input type="password" name="password" id="password" placeholder="<?= te('Buat password yang kuat') ?>" required onkeyup="checkPasswordStrength(this.value)" />
                     <div class="password-strength">
                         <div class="password-strength-bar" id="passwordStrengthBar"></div>
                     </div>
-                    <small style="color: #999; display: block; margin-top: 5px;">Minimal 6 karakter</small>
+                    <small style="color: #999; display: block; margin-top: 5px;"><?= te('Minimal 6 karakter') ?></small>
                 </div>
 
                 <div class="input-group full">
-                    <label for="confirmPassword">Konfirmasi Password <span class="required">*</span></label>
+                    <label for="confirmPassword"><?= te('Konfirmasi Password') ?> <span class="required">*</span></label>
                     <i class="fas fa-lock"></i>
-                    <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Ulangi password Anda" required />
+                    <input type="password" name="confirmPassword" id="confirmPassword" placeholder="<?= te('Ulangi password Anda') ?>" required />
                 </div>
 
                 <!-- Submit Button -->
-                <input type="submit" class="btn" value="Daftar sebagai Supplier" name="signUp" />
+                <input type="submit" class="btn" value="<?= te('Daftar Sebagai Supplier') ?>" name="signUp" />
             </div>
         </form>
 
         <div class="links">
-            <p>Sudah punya akun?</p>
-            <a href="login.php">Masuk di sini</a>
+            <p><?= te('Sudah punya akun?') ?></p>
+            <a href="login.php"><?= te('Masuk di sini') ?></a>
         </div>
 
         <div class="back-home">
-            <a href="home.php"><i class="fas fa-arrow-left me-2"></i>Kembali ke Beranda</a>
+            <a href="home.php"><i class="fas fa-arrow-left me-2"></i><?= te('Kembali ke Beranda') ?></a>
         </div>
     </div>
 
@@ -575,19 +579,19 @@ $conn->close();
             
             if (password !== confirmPassword) {
                 e.preventDefault();
-                alert('Password dan Konfirmasi Password tidak cocok!');
+                alert('<?= t('Password dan Konfirmasi Password tidak cocok!') ?>');
                 return false;
             }
-            
+
             if (password.length < 6) {
                 e.preventDefault();
-                alert('Password harus minimal 6 karakter!');
+                alert('<?= t('Password harus minimal 6 karakter!') ?>');
                 return false;
             }
-            
+
             if (phone.length < 10) {
                 e.preventDefault();
-                alert('Nomor telepon harus minimal 10 digit!');
+                alert('<?= t('Nomor telepon harus minimal 10 digit!') ?>');
                 return false;
             }
             

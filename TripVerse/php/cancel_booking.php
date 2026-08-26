@@ -96,7 +96,7 @@ try {
     }
 
     $conn->commit();
-    header("Location: riwayat.php");
+    header("Location: history.php");
     exit();
     // file_put_contents('cancel_log.txt', "Transaksi berhasil\n", FILE_APPEND);
     
