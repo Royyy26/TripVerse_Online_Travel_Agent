@@ -1671,27 +1671,17 @@ img[src$="default.jpg"] {
    left edge pushed it off-screen. Below the navbar breakpoint the menu flows
    inline instead, which is the expected mobile pattern. */
 @media (max-width: 1199.98px) {
+    /* The toggle stays its normal compact pill size (matching the language
+       switcher next to it) — only the container behind it spans full width,
+       so the dropdown list below has room to be comfortably wide. */
     .tv-account {
         width: 100%;
         margin-left: 0;
         margin-top: .5rem;
     }
 
-    .tv-account-toggle {
-        width: 100%;
-        max-width: none;
-        justify-content: flex-start;
-    }
-
-    .tv-account-meta {
-        display: flex;
-        flex: 1;
-    }
-
     .tv-account-name,
-    .tv-account-email { max-width: none; }
-
-    .tv-account-caret { margin-left: auto; }
+    .tv-account-email { max-width: 140px; }
 
     .tv-account-menu {
         position: static;
