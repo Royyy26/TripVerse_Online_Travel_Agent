@@ -1448,8 +1448,8 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                             <form action="payment.php" method="POST" style="display:inline;">
                                                 <input type="hidden" name="booking_id" value="<?= htmlspecialchars($booking_id) ?>">
                                                 <button type="submit" name="cancel_booking"
-                                                    class="btn btn-danger me-2"
-                                                    onclick="return confirm('<?= t('Apakah Anda yakin ingin membatalkan pemesanan ini?') ?>')">
+                                                    class="btn btn-danger me-2 js-confirm-submit"
+                                                    data-confirm-message="<?= te('Apakah Anda yakin ingin membatalkan pemesanan ini?') ?>">
                                                     <i class="fas fa-times-circle me-2"></i> <?= te('Batalkan Pemesanan') ?>
                                                 </button>
                                             </form>
@@ -1460,8 +1460,8 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                                 <input type="hidden" name="payment_method" value="QRIS">
 
                                                 <button type="submit" name="confirm_payment"
-                                                    class="btn btn-primary"
-                                                    onclick="return confirm('<?= t('Pastikan Anda sudah menyelesaikan pembayaran. Lanjutkan konfirmasi?') ?>')">
+                                                    class="btn btn-primary js-confirm-submit"
+                                                    data-confirm-message="<?= te('Pastikan Anda sudah menyelesaikan pembayaran. Lanjutkan konfirmasi?') ?>">
                                                     <i class="fas fa-check-circle me-2"></i> <?= te('Saya Sudah Bayar') ?>
                                                 </button>
                                             </form>
@@ -1676,6 +1676,19 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             </div>
         </div>
 
+        <!-- Confirm dialog (replaces the native confirm(), which browsers can silently block) -->
+        <div class="modal fade" id="tvConfirmModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body py-4 text-center" id="tvConfirmModalMessage"></div>
+                    <div class="modal-footer border-0 justify-content-center pb-4">
+                        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-primary px-4" id="tvConfirmModalOk">Ya, Lanjutkan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -1724,26 +1737,39 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                 const timer = setInterval(updateCountdown, 1000);
             <?php endif; ?>
 
-            // Confirmation before cancelling booking
-            document.getElementById('cancel-booking')?.addEventListener('click', function(e) {
-                <?php if ($diskon_id && $nilai_diskon > 0): ?>
-                    const discountName = "<?= !empty($discount_details) ? htmlspecialchars(addslashes($discount_details['nama_diskon'])) : t('Diskon') ?>";
-                    if (!confirm(`<?= t('Apakah Anda yakin ingin membatalkan pemesanan ini?') ?>\n\n<?= t('Kuota diskon') ?> "${discountName}" <?= t('akan otomatis dikembalikan ke sistem.') ?>`)) {
-                        e.preventDefault();
-                    }
-                <?php else: ?>
-                    if (!confirm('<?= t('Apakah Anda yakin ingin membatalkan pemesanan ini?') ?>')) {
-                        e.preventDefault();
-                    }
-                <?php endif; ?>
-            });
+            // Confirm-before-submit for the cancel/confirm-payment buttons, using a
+            // Bootstrap modal instead of window.confirm() (native confirm() gets
+            // silently blocked by some browsers after repeated dialogs, which was
+            // making these buttons appear completely unresponsive).
+            (function() {
+                const modalEl = document.getElementById('tvConfirmModal');
+                if (!modalEl) return;
+                const modal = new bootstrap.Modal(modalEl);
+                const messageEl = document.getElementById('tvConfirmModalMessage');
+                const okBtn = document.getElementById('tvConfirmModalOk');
+                let pendingButton = null;
 
-            // Confirmation before submitting payment
-            document.getElementById('confirm-payment')?.addEventListener('click', function(e) {
-                if (!confirm('<?= t('Apakah Anda sudah menyelesaikan pembayaran?') ?>')) {
-                    e.preventDefault();
-                }
-            });
+                document.querySelectorAll('.js-confirm-submit').forEach(function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        pendingButton = btn;
+                        messageEl.textContent = btn.dataset.confirmMessage || 'Lanjutkan?';
+                        modal.show();
+                    });
+                });
+
+                okBtn.addEventListener('click', function() {
+                    modal.hide();
+                    if (pendingButton) {
+                        // requestSubmit(button) keeps the button's name/value in the
+                        // POST data — plain form.submit() would drop it, since the
+                        // browser only includes a submit button's field when it was
+                        // the one that triggered submission.
+                        pendingButton.form.requestSubmit(pendingButton);
+                        pendingButton = null;
+                    }
+                });
+            })();
         </script>
     </div>
 </body>
