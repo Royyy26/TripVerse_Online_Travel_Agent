@@ -339,6 +339,35 @@ $conn->close();
             transform: scale(1.1);
         }
 
+        /* Toggle Password Eye Icon. Selector has to out-rank ".input-group i"
+           (class + element beats a lone class), otherwise the leading-icon
+           rules pin this to the left as well — left:14px and right:14px at
+           once stretched it across the whole field and dropped it on top of
+           the padlock. */
+        .input-group i.toggle-password {
+            left: auto;
+            right: 14px;
+            top: 41px;
+            width: auto;
+            color: #94a3b8;
+            cursor: pointer;
+            pointer-events: auto;
+            z-index: 2;
+            font-size: 15px;
+            transform: none;
+        }
+
+        .input-group i.toggle-password:hover,
+        .input-group i.toggle-password.active {
+            color: #FEA116;
+        }
+
+        /* keep room for the eye so long values don't run under it */
+        .input-group input[type="password"],
+        .input-group input.has-toggle {
+            padding-right: 42px;
+        }
+
         /* Section heading — was a cramped strip of centred text pinched
            between two grey rules; now a proper left-aligned section label. */
         .form-divider {
@@ -564,6 +593,9 @@ $conn->close();
                     <label for="password"><?= te('Password') ?> <span class="required">*</span></label>
                     <i class="fas fa-lock"></i>
                     <input type="password" name="password" id="password" placeholder="<?= te('Buat password yang kuat') ?>" required onkeyup="checkPasswordStrength(this.value)" />
+                    <i class="fas fa-eye toggle-password" role="button" tabindex="0"
+                        aria-label="<?= te('Tampilkan password') ?>"
+                        onclick="togglePassword('password', this)"></i>
                     <div class="password-strength">
                         <div class="password-strength-bar" id="passwordStrengthBar"></div>
                     </div>
@@ -574,6 +606,9 @@ $conn->close();
                     <label for="confirmPassword"><?= te('Konfirmasi Password') ?> <span class="required">*</span></label>
                     <i class="fas fa-lock"></i>
                     <input type="password" name="confirmPassword" id="confirmPassword" placeholder="<?= te('Ulangi password Anda') ?>" required />
+                    <i class="fas fa-eye toggle-password" role="button" tabindex="0"
+                        aria-label="<?= te('Tampilkan password') ?>"
+                        onclick="togglePassword('confirmPassword', this)"></i>
                 </div>
 
                 <!-- Submit Button -->
@@ -592,6 +627,30 @@ $conn->close();
     </div>
 
     <script>
+        // Toggle Password Visibility
+        function togglePassword(inputId, iconElement) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                iconElement.classList.remove('fa-eye');
+                iconElement.classList.add('fa-eye-slash', 'active');
+            } else {
+                input.type = 'password';
+                iconElement.classList.remove('fa-eye-slash', 'active');
+                iconElement.classList.add('fa-eye');
+            }
+        }
+
+        // keyboard support for the eye toggle
+        document.querySelectorAll('.toggle-password').forEach(function (el) {
+            el.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    el.click();
+                }
+            });
+        });
+
         function checkPasswordStrength(password) {
             const strengthBar = document.getElementById('passwordStrengthBar');
             let strength = 0;

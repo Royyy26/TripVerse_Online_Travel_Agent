@@ -100,6 +100,27 @@
             font-size: 16px;
         }
 
+        /* Toggle Password Eye Icon. Selector has to out-rank
+           ".input-group i" or the leading-icon rules pin it left too. */
+        .input-group i.toggle-password {
+            left: auto;
+            right: 12px;
+            width: auto;
+            color: #999;
+            cursor: pointer;
+            z-index: 2;
+            font-size: 16px;
+        }
+
+        .input-group i.toggle-password:hover,
+        .input-group i.toggle-password.active {
+            color: #FEA116;
+        }
+
+        .input-group input[type="password"] {
+            padding-right: 42px;
+        }
+
         .btn {
             width: 100%;
             padding: 14px;
@@ -329,11 +350,17 @@
         <div class="input-group">
             <i class="fas fa-lock"></i>
             <input type="password" id="newPass" placeholder="<?= te('Password Baru') ?>">
+            <i class="fas fa-eye toggle-password" role="button" tabindex="0"
+                aria-label="<?= te('Tampilkan password') ?>"
+                onclick="togglePassword('newPass', this)"></i>
         </div>
 
         <div class="input-group">
             <i class="fas fa-lock"></i>
             <input type="password" id="confirmPass" placeholder="<?= te('Konfirmasi Password') ?>">
+            <i class="fas fa-eye toggle-password" role="button" tabindex="0"
+                aria-label="<?= te('Tampilkan password') ?>"
+                onclick="togglePassword('confirmPass', this)"></i>
         </div>
 
         <div id="passwordRequirements" style="text-align: left; margin: 10px 0; font-size: 12px; color: #666;">
@@ -352,6 +379,7 @@
      JAVASCRIPT LOGIC
     ========================================= -->
     <script>
+        // togglePassword() comes from js/tv-modern.js, loaded at the bottom.
         let currentEmail = "";
         let resendTimer = null;
         let canResend = false;

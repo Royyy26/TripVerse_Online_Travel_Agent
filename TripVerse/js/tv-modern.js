@@ -165,3 +165,39 @@ document.addEventListener('DOMContentLoaded', function () {
     confirmPw.addEventListener('input', evaluate);
     evaluate();
 });
+
+/* ----------------------------------------------------------------------
+ * Show/hide password toggle.
+ *
+ * The eye icon markup was missing from every password field on the site,
+ * even though login.php already carried the CSS and the handler for it.
+ * Defined here so any page loading this file gets it; pages that ship
+ * their own copy (login.php) keep theirs.
+ * -------------------------------------------------------------------- */
+if (typeof window.togglePassword !== 'function') {
+    window.togglePassword = function (inputId, iconElement) {
+        var input = document.getElementById(inputId);
+        if (!input) return;
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            iconElement.classList.remove('fa-eye');
+            iconElement.classList.add('fa-eye-slash', 'active');
+        } else {
+            input.type = 'password';
+            iconElement.classList.remove('fa-eye-slash', 'active');
+            iconElement.classList.add('fa-eye');
+        }
+    };
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-password').forEach(function (el) {
+        el.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                el.click();
+            }
+        });
+    });
+});

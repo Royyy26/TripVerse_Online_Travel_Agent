@@ -1868,3 +1868,32 @@ img[src$="default.jpg"] {
         font-size: .85rem;
     }
 }
+
+/* ---------- Show/hide password toggle ----------
+   For pages whose password inputs sit in a plain .form-group (no leading
+   icon), the input is wrapped in .tv-pw-field so the eye can be anchored
+   to the field itself rather than the label + field block. */
+.tv-pw-field {
+    position: relative;
+}
+
+.tv-pw-field .form-control {
+    padding-right: 42px;
+}
+
+.tv-pw-field .toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    color: #94a3b8;
+    cursor: pointer;
+    z-index: 2;
+    font-size: 15px;
+}
+
+.tv-pw-field .toggle-password:hover,
+.tv-pw-field .toggle-password.active {
+    color: var(--tv-primary, #FEA116);
+}

@@ -354,11 +354,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             transform: translateY(-50%) scale(1.1);
         }
 
-        /* Toggle Password Eye Icon */
-        .toggle-password {
+        /* Toggle Password Eye Icon. Needs to out-rank ".input-group i"
+           (class + element beats a lone class) or the leading-icon rules
+           pin it to the left as well, stretching it across the field. */
+        .input-group i.toggle-password {
             position: absolute;
+            left: auto;
             right: 12px;
             top: 50%;
+            width: auto;
             transform: translateY(-50%);
             cursor: pointer;
             color: #999;
@@ -366,12 +370,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             font-size: 16px;
         }
 
-        .toggle-password:hover {
+        .input-group i.toggle-password:hover,
+        .input-group i.toggle-password.active {
             color: #FEA116;
         }
 
-        .toggle-password.active {
-            color: #FEA116;
+        /* leave room for the eye so long values don't slide under it */
+        .input-group input[type="password"] {
+            padding-right: 42px;
         }
 
         /* Tombol Submit */
@@ -712,6 +718,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             <div class="input-group">
                 <i class="fas fa-lock"></i>
                 <input type="password" name="password" id="passwordLogin" placeholder="<?= te('Password') ?>" required />
+                <i class="fas fa-eye toggle-password" role="button" tabindex="0"
+                    aria-label="<?= te('Tampilkan password') ?>"
+                    onclick="togglePassword('passwordLogin', this)"></i>
             </div>
 
             <input type="submit" class="btn" value="<?= te('Masuk') ?>" name="signIn" />
@@ -775,6 +784,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             <div class="input-group">
                 <i class="fas fa-lock"></i>
                 <input type="password" name="password" id="passwordCustomer" placeholder="<?= te('Password') ?>" required />
+                <i class="fas fa-eye toggle-password" role="button" tabindex="0"
+                    aria-label="<?= te('Tampilkan password') ?>"
+                    onclick="togglePassword('passwordCustomer', this)"></i>
                 <div class="password-strength">
                     <div class="password-strength-bar" id="passwordStrengthBarCustomer"></div>
                 </div>
@@ -783,6 +795,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
             <div class="input-group">
                 <i class="fas fa-lock"></i>
                 <input type="password" name="confirmPassword" id="confirmPasswordCustomer" placeholder="<?= te('Konfirmasi Password') ?>" required />
+                <i class="fas fa-eye toggle-password" role="button" tabindex="0"
+                    aria-label="<?= te('Tampilkan password') ?>"
+                    onclick="togglePassword('confirmPasswordCustomer', this)"></i>
             </div>
 
             <input type="hidden" name="userType" value="customer" />

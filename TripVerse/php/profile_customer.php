@@ -1155,24 +1155,39 @@ $conn->close();
                     <form action="profile_customer.php?section=security" method="POST" id="passwordForm">
                         <div class="form-group">
                             <label for="current_password"><?= te('Kata Sandi Saat Ini') ?></label>
-                            <input type="password" id="current_password" name="current_password"
-                                class="form-control" required autocomplete="current-password"
-                                placeholder="<?= te('Masukkan kata sandi saat ini') ?>">
+                            <div class="tv-pw-field">
+                                <input type="password" id="current_password" name="current_password"
+                                    class="form-control" required autocomplete="current-password"
+                                    placeholder="<?= te('Masukkan kata sandi saat ini') ?>">
+                                <i class="fas fa-eye toggle-password" role="button" tabindex="0"
+                                    aria-label="<?= te('Tampilkan password') ?>"
+                                    onclick="togglePassword('current_password', this)"></i>
+                            </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="new_password"><?= te('Kata Sandi Baru') ?></label>
-                                <input type="password" id="new_password" name="new_password"
-                                    class="form-control" required autocomplete="new-password"
-                                    placeholder="<?= te('Minimal 8 karakter') ?>">
+                                <div class="tv-pw-field">
+                                    <input type="password" id="new_password" name="new_password"
+                                        class="form-control" required autocomplete="new-password"
+                                        placeholder="<?= te('Minimal 8 karakter') ?>">
+                                    <i class="fas fa-eye toggle-password" role="button" tabindex="0"
+                                        aria-label="<?= te('Tampilkan password') ?>"
+                                        onclick="togglePassword('new_password', this)"></i>
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="confirm_password"><?= te('Ulangi Kata Sandi Baru') ?></label>
-                                <input type="password" id="confirm_password" name="confirm_password"
-                                    class="form-control" required autocomplete="new-password"
-                                    placeholder="<?= te('Ketik ulang kata sandi baru') ?>">
+                                <div class="tv-pw-field">
+                                    <input type="password" id="confirm_password" name="confirm_password"
+                                        class="form-control" required autocomplete="new-password"
+                                        placeholder="<?= te('Ketik ulang kata sandi baru') ?>">
+                                    <i class="fas fa-eye toggle-password" role="button" tabindex="0"
+                                        aria-label="<?= te('Tampilkan password') ?>"
+                                        onclick="togglePassword('confirm_password', this)"></i>
+                                </div>
                             </div>
                         </div>
 
