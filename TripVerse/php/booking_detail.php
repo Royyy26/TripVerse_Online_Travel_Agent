@@ -8,17 +8,8 @@ if (!isset($_SESSION['id_user'])) {
     exit;
 }
 
-// Database configuration
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "tripverse";
-
 // Create database connection
-$conn = new mysqli($host, $username, $password, $database);
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
-}
+require_once __DIR__ . '/db_config.php';
 
 // Enable error reporting
 error_reporting(E_ALL);

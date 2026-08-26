@@ -41,16 +41,7 @@ $debug .= "Using phone from session: $phone (raw: $phone_raw)\n";
 file_put_contents('reset_debug.txt', $debug, FILE_APPEND);
 
 // ========================== DATABASE CONNECTION ===========================
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "tripverse";
-
-$conn = new mysqli($host, $username, $password, $database);
-if ($conn->connect_error) {
-    echo "db_error";
-    exit;
-}
+require_once __DIR__ . '/db_config.php';
 
 // ========================== CARI USER BERDASARKAN NOMOR HP ================
 // Cari dengan berbagai format kemungkinan

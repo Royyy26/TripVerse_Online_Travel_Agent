@@ -7,16 +7,7 @@ if (!isset($_SESSION['id_user'])) {
 }
 
 // Database connection
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "tripverse";
-
-$conn = new mysqli($host, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once __DIR__ . '/db_config.php';
 
 // Get hotel ID from URL
 $hotel_id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -709,7 +700,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                                                             <i class="fas fa-bed text-primary me-1"></i> <?= $room['kapasitas'] ?> <?= te('Orang') ?>
                                                         </span>
                                                         <span class="badge bg-light text-dark me-1 mb-1">
-                                                            <i class="fas fa-ruler-combined text-primary me-1"></i> <?= $room['ukuran_kamar'] ?> m²
+                                                            <i class="fas fa-ruler-combined text-primary me-1"></i> <?= htmlspecialchars($room['ukuran_kamar']) ?>
                                                         </span>
                                                         <?php if ($room['sarapan']): ?>
                                                             <span class="badge bg-light text-dark me-1 mb-1">

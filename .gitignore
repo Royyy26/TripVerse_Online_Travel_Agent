@@ -1,0 +1,2 @@
+# Holds real database credentials (local + production) — never commit.
+TripVerse/php/db_config.php

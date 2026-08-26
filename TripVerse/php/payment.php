@@ -13,10 +13,7 @@ require_once __DIR__ . '/fonnte_api.php';
 require_once __DIR__ . '/notification_payment.php';
 
 // Database configuration
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "tripverse";
+require_once __DIR__ . '/db_config.php';
 
 // Enable error reporting
 error_reporting(E_ALL);
@@ -155,6 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($conn->connect_error) {
             throw new Exception("Database connection failed: " . $conn->connect_error);
         }
+        $conn->set_charset('utf8mb4');
 
         // Handle booking cancellation
         if (isset($_POST['cancel_booking'])) {
@@ -546,6 +544,7 @@ try {
     if ($conn->connect_error) {
         throw new Exception("Database connection failed: " . $conn->connect_error);
     }
+    $conn->set_charset('utf8mb4');
 
     $booking_id = isset($_GET['booking_id']) ? $conn->real_escape_string($_GET['booking_id']) : null;
     if (empty($booking_id)) {

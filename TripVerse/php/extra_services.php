@@ -6,25 +6,12 @@ if (!isset($_SESSION['id_user']) || !isset($_SESSION['temp_booking'])) {
     exit;
 }
 
-// Database connection
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "tripverse";
-
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Create connection with error handling
-try {
-    $conn = new mysqli($host, $username, $password, $database);
-    if ($conn->connect_error) {
-        throw new Exception("Connection failed: " . $conn->connect_error);
-    }
-} catch (Exception $e) {
-    die("Database connection error: " . $e->getMessage());
-}
+require_once __DIR__ . '/db_config.php';
 
 // Get booking data from session
 $booking_data = $_SESSION['temp_booking'];

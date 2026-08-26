@@ -1,21 +1,12 @@
 <?php
 session_start();
 
-// Database connection
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "tripverse";
-
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Create connection
-$conn = new mysqli($host, $username, $password, $database);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require_once __DIR__ . '/db_config.php';
 
 // Verify user is logged in
 if (!isset($_SESSION['id_user'])) {

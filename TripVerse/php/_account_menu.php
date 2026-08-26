@@ -70,10 +70,11 @@ if (isset($conn) && $conn instanceof mysqli) {
 // Otherwise (or if that handle was already closed) open a short-lived one.
 if ($tvRow === null) {
     try {
-        $tvOwn = @new mysqli('localhost', 'root', '', 'tripverse');
-        if (!$tvOwn->connect_errno) {
-            $tvRow = tv_fetch_account_row($tvOwn, $_SESSION['id_user']);
-            $tvOwn->close();
+        $tvHadConn = isset($conn) && $conn instanceof mysqli;
+        require_once __DIR__ . '/db_config.php';
+        $tvRow = tv_fetch_account_row($conn, $_SESSION['id_user']);
+        if (!$tvHadConn) {
+            $conn->close();
         }
     } catch (\Throwable $e) {
         $tvRow = null;
