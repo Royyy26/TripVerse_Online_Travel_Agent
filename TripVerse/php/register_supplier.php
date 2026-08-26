@@ -118,32 +118,42 @@ $conn->close();
             font-family: 'Heebo', sans-serif;
         }
 
-        /* Body dan Container Utama */
+        /* Body dan Container Utama — disamakan dengan login.php dan
+           forgot_password.php. Bedanya form ini panjang, jadi kartunya
+           diratakan ke atas dan halaman tetap bisa di-scroll. */
         body,
         html {
-            height: 100%;
             width: 100%;
-            background: linear-gradient(135deg, #fff5e6 0%, #ffe0b3 100%);
+            min-height: 100%;
+            background: radial-gradient(circle at 15% 20%, #1c2a4a 0%, #0F172B 45%, #0a0f1e 100%);
+            background-attachment: fixed;
+        }
+
+        body {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            padding: 20px;
+            padding: 40px 20px;
             min-height: 100vh;
         }
 
         .container {
-            background-color: white;
+            background: rgba(255, 255, 255, 0.97);
             width: 100%;
             max-width: 600px;
-            padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease-in-out;
+            padding: 44px 34px;
+            border-radius: 24px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
             position: relative;
             overflow: hidden;
+            animation: tv-card-in .7s cubic-bezier(.22, 1, .36, 1);
         }
 
-        /* Animasi background */
+        @keyframes tv-card-in {
+            from { opacity: 0; transform: translateY(24px) scale(.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         .container::before {
             content: '';
             position: absolute;
@@ -151,7 +161,7 @@ $conn->close();
             left: 0;
             width: 100%;
             height: 5px;
-            background: linear-gradient(to right, #667eea, #764ba2);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
         }
 
         /* Header dan Logo */
@@ -181,7 +191,14 @@ $conn->close();
         .logo h3 {
             font-weight: 700;
             font-size: 28px;
-            background: linear-gradient(to right, #000000, #ff6600);
+            background: linear-gradient(90deg, #0F172B, #FEA116);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo h3 span {
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -191,7 +208,7 @@ $conn->close();
         .form-title {
             font-size: 28px;
             font-weight: 700;
-            color: #ff6600;
+            color: #FEA116;
             margin-bottom: 10px;
         }
 
@@ -270,7 +287,7 @@ $conn->close();
             position: absolute;
             top: 38px;
             left: 12px;
-            color: #ff6600;
+            color: #FEA116;
             transition: all 0.3s ease;
             font-size: 14px;
         }
@@ -295,8 +312,8 @@ $conn->close();
         .input-group input:focus,
         .input-group textarea:focus {
             outline: none;
-            border-color: #ff6600;
-            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
+            border-color: #FEA116;
+            box-shadow: 0 0 0 3px rgba(254, 161, 22, 0.15);
         }
 
         .input-group input:focus+i {
@@ -313,7 +330,7 @@ $conn->close();
             border-bottom: 2px solid #f0f0f0;
             font-size: 13px;
             font-weight: 600;
-            color: #ff6600;
+            color: #FEA116;
             text-align: center;
         }
 
@@ -326,17 +343,17 @@ $conn->close();
             font-weight: 600;
             border: none;
             border-radius: 8px;
-            background: linear-gradient(to right, #ff9900, #ff6600);
+            background: linear-gradient(135deg, #FEA116, #FF7A3D);
             color: white;
             cursor: pointer;
             transition: all 0.4s ease;
             margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(254, 161, 22, 0.3);
         }
 
         .btn:hover {
-            background: linear-gradient(to right, #ff6600, #ff9900);
-            box-shadow: 0 6px 20px rgba(255, 102, 0, 0.4);
+            background: linear-gradient(135deg, #FF7A3D, #FEA116);
+            box-shadow: 0 6px 20px rgba(254, 161, 22, 0.4);
             transform: translateY(-2px);
         }
 
@@ -357,14 +374,14 @@ $conn->close();
         }
 
         .links a {
-            color: #ff6600;
+            color: #FEA116;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .links a:hover {
-            color: #e65100;
+            color: #FF7A3D;
             text-decoration: underline;
         }
 
@@ -375,7 +392,7 @@ $conn->close();
         }
 
         .back-home a {
-            color: #ff6600;
+            color: #FEA116;
             text-decoration: none;
             font-size: 14px;
             font-weight: 600;
@@ -383,7 +400,7 @@ $conn->close();
         }
 
         .back-home a:hover {
-            color: #e65100;
+            color: #FF7A3D;
             text-decoration: underline;
         }
 
@@ -426,7 +443,7 @@ $conn->close();
         <div class="header">
             <div class="logo">
                 <img src="../img/logo.png" alt="TripVerse Logo" />
-                <h3>Trip<span style="color: #ff6600;">Verse</span></h3>
+                <h3>Trip<span style="color: #FEA116;">Verse</span></h3>
             </div>
             <h1 class="form-title"><?= te('Daftar Supplier') ?></h1>
             <p class="form-subtitle"><?= te('Bergabunglah dengan jaringan supplier profesional kami') ?></p>
