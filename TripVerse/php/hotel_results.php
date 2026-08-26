@@ -87,6 +87,7 @@ $conn->close();
 
     <!-- Template Stylesheet -->
     <link href="../css/style.css?v=2.0" rel="stylesheet">
+    <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
@@ -111,7 +112,10 @@ $conn->close();
         }
 
         body {
-            font-family: 'Montserrat', sans-serif;
+            /* Every other page runs on Heebo; Montserrat here is wider, so
+               the nav labels wrapped and this header sat ~24px taller than
+               the rest of the site. Montserrat stays on the headings. */
+            font-family: 'Heebo', sans-serif;
             color: var(--text-color);
             background-color: #F5F7FA;
             line-height: 1.6;
@@ -652,7 +656,7 @@ $conn->close();
         <header class="container-fluid bg-dark px-0">
             <div class="row gx-0">
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
-                    <a href="about.php" class="d-flex align-items-center text-decoration-none">
+                    <a href="home.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
                         <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
@@ -698,16 +702,9 @@ $conn->close();
                                 <a href="service.php" class="nav-item nav-link"><?= te('Fitur') ?></a>
                                 <a href="team.php" class="nav-item nav-link"><?= te('Tim Kami') ?></a>
                                 <a href="contact.php" class="nav-item nav-link"><?= te('Kontak') ?></a>
+                                <a href="history.php" class="nav-item nav-link"><?= te('Riwayat') ?></a>
                             </div>
-                            <?php include __DIR__ . '/_lang_switch.php'; ?>
-                            <?php if (isset($_SESSION['username'])): ?>
-                                <span class="navbar-text fw-bold me-3"
-                                    style="background: linear-gradient(to right, #FFA500, #FF6347);
-                                    -webkit-background-clip: text; background-clip: text;
-                                    -webkit-text-fill-color: transparent; text-decoration: underline;">
-                                    Hi <?= htmlspecialchars($_SESSION['username']); ?>, <?= te('selamat datang di TripVerse') ?>
-                                </span>
-                            <?php endif; ?>
+                            <?php include __DIR__ . '/_lang_switch.php'; ?><?php include __DIR__ . '/_account_menu.php'; ?>
                         </div>
                     </nav>
                 </div>
@@ -1071,6 +1068,7 @@ $conn->close();
 
     <!-- Template Javascript -->
     <script src="../js/main.js?v=2.0"></script>
+    <script src="../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
 
     <script>
         // Fungsi untuk pencarian hotel

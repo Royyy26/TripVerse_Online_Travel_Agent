@@ -698,7 +698,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
             <div class="row gx-0">
                 <!-- Logo -->
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
-                    <a href="about.php" class="d-flex align-items-center text-decoration-none">
+                    <a href="home.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
                         <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>

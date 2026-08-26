@@ -525,7 +525,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
         <header class="container-fluid bg-dark px-0">
             <div class="row gx-0">
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
-                    <a href="about.php" class="d-flex align-items-center text-decoration-none">
+                    <a href="home.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
                         <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                     </a>
@@ -571,6 +571,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
                                 <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
                                 <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
                                 <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
+                                <a href="history.php" class="nav-item nav-link"><?= te("Riwayat") ?></a>
                             </div>
                             <?php include __DIR__ . '/_lang_switch.php'; ?><?php include __DIR__ . '/_account_menu.php'; ?>
                         </div>
