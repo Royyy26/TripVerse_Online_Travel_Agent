@@ -140,8 +140,8 @@ $conn->close();
         .container {
             background: rgba(255, 255, 255, 0.97);
             width: 100%;
-            max-width: 600px;
-            padding: 44px 34px;
+            max-width: 680px;
+            padding: 44px 40px;
             border-radius: 24px;
             box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
             position: relative;
@@ -254,11 +254,16 @@ $conn->close();
         .form-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 18px 20px;
         }
 
+        /* The markup tags most fields ".full" to span the whole row, but
+           only ".form-layout.full" existed, so those fields silently stayed
+           in the two-column grid — leaving Phone Number and Tax ID stranded
+           beside an empty cell and squashing the address box. */
+        .input-group.full,
         .form-layout.full {
-            grid-template-columns: 1fr;
+            grid-column: 1 / -1;
         }
 
         /* Grup Input */
@@ -269,10 +274,10 @@ $conn->close();
 
         .input-group label {
             display: block;
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
+            color: #334155;
+            margin-bottom: 7px;
         }
 
         .input-group label .required {
@@ -285,28 +290,39 @@ $conn->close();
 
         .input-group i {
             position: absolute;
-            top: 38px;
-            left: 12px;
+            top: 41px;
+            left: 14px;
             color: #FEA116;
             transition: all 0.3s ease;
             font-size: 14px;
+            pointer-events: none;
         }
 
         .input-group input,
         .input-group textarea {
             width: 100%;
-            padding: 12px 12px 12px 40px;
-            border: 1.5px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 12px 14px 12px 40px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
             font-size: 14px;
+            color: #1e293b;
+            background: #fff;
             transition: all 0.3s ease;
             font-family: 'Heebo', sans-serif;
         }
 
+        .input-group input::placeholder,
+        .input-group textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        /* The textarea used to reset padding to 12px all round, which put
+           the absolutely-positioned icon straight on top of the first line
+           of the address. Keep the icon's gutter and pin it to the top. */
         .input-group textarea {
             resize: vertical;
-            min-height: 80px;
-            padding: 12px;
+            min-height: 92px;
+            line-height: 1.5;
         }
 
         .input-group input:focus,
@@ -316,22 +332,40 @@ $conn->close();
             box-shadow: 0 0 0 3px rgba(254, 161, 22, 0.15);
         }
 
-        .input-group input:focus+i {
-            color: #ff3300;
+        /* The icon sits before the field in the markup, so the old
+           "input:focus + i" sibling rule could never match it. */
+        .input-group:focus-within i {
+            color: #FF7A3D;
             transform: scale(1.1);
         }
 
-        /* Divider */
+        /* Section heading — was a cramped strip of centred text pinched
+           between two grey rules; now a proper left-aligned section label. */
         .form-divider {
             grid-column: 1 / -1;
-            margin: 10px 0;
-            padding: 15px 0;
-            border-top: 2px solid #f0f0f0;
-            border-bottom: 2px solid #f0f0f0;
-            font-size: 13px;
-            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 26px 0 2px;
+            padding: 0;
+            border: 0;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
             color: #FEA116;
-            text-align: center;
+            text-align: left;
+        }
+
+        .form-divider:first-child {
+            margin-top: 8px;
+        }
+
+        .form-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(254, 161, 22, .45), rgba(254, 161, 22, 0));
         }
 
         /* Tombol Submit */
