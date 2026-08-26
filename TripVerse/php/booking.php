@@ -131,20 +131,24 @@ if ($stmt_user = $conn->prepare($sql_user)) {
     $stmt_user->close();
 }
 
-// Jika tidak ditemukan di tabel user, cari di tabel customer
-if (!$user_found) {
-    $sql_customer = "SELECT * FROM customer WHERE id_user = ?";
-    if ($stmt_customer = $conn->prepare($sql_customer)) {
-        $stmt_customer->bind_param("s", $user_id);
-        $stmt_customer->execute();
-        $result_customer = $stmt_customer->get_result();
-        if ($result_customer->num_rows > 0) {
-            $user = $result_customer->fetch_assoc();
-            $customer_id = $user['customer_id'];
-            error_log("User data found in customer table: " . print_r($user, true));
-        }
-        $stmt_customer->close();
+// The customer row is where customer_id and created_at live — the user
+// table has neither. Load it every time, not only as a fallback when the
+// user row is missing: skipping it left customer_id null (so the
+// "has previous booking" check always came back empty) and created_at
+// undefined (so every account read as 0 days old and qualified for the
+// new-user discount forever).
+$sql_customer = "SELECT * FROM customer WHERE id_user = ?";
+if ($stmt_customer = $conn->prepare($sql_customer)) {
+    $stmt_customer->bind_param("s", $user_id);
+    $stmt_customer->execute();
+    $result_customer = $stmt_customer->get_result();
+    if ($result_customer->num_rows > 0) {
+        $customer_row = $result_customer->fetch_assoc();
+        $customer_id = $customer_row['customer_id'];
+        // User-table values win on the fields both tables carry.
+        $user = $user_found ? array_merge($customer_row, $user) : $customer_row;
     }
+    $stmt_customer->close();
 }
 
 // Jika masih tidak ditemukan, gunakan data dari session
@@ -207,20 +211,22 @@ if ($stmt_booking_count = $conn->prepare($sql_check_booking)) {
 
 // Check customer creation date from database
 $customer_created_at = null;
-$days_since_creation = 0;
-if (isset($user['created_at'])) {
+$days_since_creation = null;
+if (!empty($user['created_at'])) {
     try {
         $customer_created_at = new DateTime($user['created_at']);
         $today = new DateTime();
         $interval = $today->diff($customer_created_at);
         $days_since_creation = $interval->days;
     } catch (Exception $e) {
-        $days_since_creation = 0;
+        $days_since_creation = null;
     }
 }
 
-// Conditions for NEWUSER discount eligibility
-if ($days_since_creation <= 7 && !$has_previous_booking) {
+// Conditions for NEWUSER discount eligibility. An unknown signup date
+// can't prove the account is new, so it doesn't qualify — treating it as
+// "0 days old" is what let every account claim this discount.
+if ($days_since_creation !== null && $days_since_creation <= 7 && !$has_previous_booking) {
     $is_new_user_eligible = true;
     
     // Check NEWUSER discount in database
@@ -277,75 +283,101 @@ if ($days_since_creation <= 7 && !$has_previous_booking) {
     }
 }
 
+/**
+ * Look a promo code up and work out what it is worth on this booking.
+ * Returns ['ok' => true, 'discount_applied' => [...], 'discount_value' => n]
+ * or ['ok' => false, 'error' => '...'].
+ *
+ * Kept separate so booking submission can re-check the code as well: the
+ * applied discount used to live only in local variables during the
+ * "apply promo" request, so submitting the booking afterwards silently
+ * dropped it and charged full price.
+ */
+function tv_resolve_promo($conn, $promo_code, $total_harga)
+{
+    if (empty($promo_code)) {
+        return ['ok' => false, 'error' => t("Masukkan kode promo")];
+    }
+
+    $sql_check_promo = "SELECT * FROM diskon_promo
+                       WHERE kode_promo = ?
+                       AND status = 'active'
+                       AND CURDATE() BETWEEN tanggal_mulai AND tanggal_berakhir
+                       AND (kuota IS NULL OR terpakai < kuota)
+                       AND minimal_pembelian <= ?";
+
+    $stmt_promo = $conn->prepare($sql_check_promo);
+    if (!$stmt_promo) {
+        return ['ok' => false, 'error' => t("Kode promo tidak valid atau tidak memenuhi syarat")];
+    }
+
+    $stmt_promo->bind_param("sd", $promo_code, $total_harga);
+    $stmt_promo->execute();
+    $result_promo = $stmt_promo->get_result();
+
+    if ($result_promo->num_rows === 0) {
+        $stmt_promo->close();
+        return ['ok' => false, 'error' => t("Kode promo tidak valid atau tidak memenuhi syarat")];
+    }
+
+    $discount = $result_promo->fetch_assoc();
+    $stmt_promo->close();
+
+    // NEWUSER promo cannot be applied manually
+    if ($discount['kode_promo'] == 'NEWUSER25' || $discount['diskon_id'] == 'NEWUSER') {
+        return ['ok' => false, 'error' => t("Diskon NEWUSER hanya berlaku otomatis untuk pengguna baru")];
+    }
+
+    // Calculate discount value
+    $discount_value = 0;
+    if ($discount['tipe_diskon'] == 'percentage') {
+        $discount_value = ($total_harga * $discount['nilai_diskon']) / 100;
+        if ($discount['maksimal_diskon'] && $discount_value > $discount['maksimal_diskon']) {
+            $discount_value = $discount['maksimal_diskon'];
+        }
+    } else {
+        $discount_value = $discount['nilai_diskon'];
+    }
+
+    return [
+        'ok' => true,
+        'discount_value' => $discount_value,
+        'discount_applied' => [
+            'diskon_id' => $discount['diskon_id'],
+            'nama_diskon' => $discount['nama_diskon'],
+            'kode_promo' => $discount['kode_promo'],
+            'tipe_diskon' => $discount['tipe_diskon'],
+            'nilai_diskon' => $discount['nilai_diskon'],
+            'discount_value' => $discount_value,
+            'minimal_pembelian' => $discount['minimal_pembelian'],
+            'maksimal_diskon' => $discount['maksimal_diskon']
+        ]
+    ];
+}
+
 // ==========================================
 // HANDLE POST REQUESTS
 // ==========================================
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
+
     // Handle promo code application
     if (isset($_POST['apply_promo'])) {
-        if (!empty($promo_code)) {
-            // Check promo validity
-            $sql_check_promo = "SELECT * FROM diskon_promo 
-                               WHERE kode_promo = ? 
-                               AND status = 'active' 
-                               AND CURDATE() BETWEEN tanggal_mulai AND tanggal_berakhir
-                               AND (kuota IS NULL OR terpakai < kuota)
-                               AND minimal_pembelian <= ?";
+        $promo_result = tv_resolve_promo($conn, $promo_code, $total_harga);
 
-            if ($stmt_promo = $conn->prepare($sql_check_promo)) {
-                $stmt_promo->bind_param("sd", $promo_code, $total_harga);
-                $stmt_promo->execute();
-                $result_promo = $stmt_promo->get_result();
+        if ($promo_result['ok']) {
+            $discount_applied = $promo_result['discount_applied'];
+            $selected_discount_id = $discount_applied['diskon_id'];
+            $final_price = $total_harga - $promo_result['discount_value'];
+            $promo_success = t("Kode promo berhasil diterapkan! Anda hemat") . " Rp " . number_format($promo_result['discount_value'], 0, ',', '.');
 
-                if ($result_promo->num_rows > 0) {
-                    $discount = $result_promo->fetch_assoc();
-
-                    // NEWUSER promo cannot be applied manually
-                    if ($discount['kode_promo'] == 'NEWUSER25' || $discount['diskon_id'] == 'NEWUSER') {
-                        $promo_error = t("Diskon NEWUSER hanya berlaku otomatis untuk pengguna baru");
-                    } else {
-                        // Calculate discount value
-                        $discount_value = 0;
-                        if ($discount['tipe_diskon'] == 'percentage') {
-                            $discount_value = ($total_harga * $discount['nilai_diskon']) / 100;
-                            if ($discount['maksimal_diskon'] && $discount_value > $discount['maksimal_diskon']) {
-                                $discount_value = $discount['maksimal_diskon'];
-                            }
-                        } else {
-                            $discount_value = $discount['nilai_diskon'];
-                        }
-
-                        // Apply discount
-                        $selected_discount_id = $discount['diskon_id'];
-                        $discount_applied = [
-                            'diskon_id' => $discount['diskon_id'],
-                            'nama_diskon' => $discount['nama_diskon'],
-                            'kode_promo' => $discount['kode_promo'],
-                            'tipe_diskon' => $discount['tipe_diskon'],
-                            'nilai_diskon' => $discount['nilai_diskon'],
-                            'discount_value' => $discount_value,
-                            'minimal_pembelian' => $discount['minimal_pembelian'],
-                            'maksimal_diskon' => $discount['maksimal_diskon']
-                        ];
-
-                        $final_price = $total_harga - $discount_value;
-                        $promo_success = t("Kode promo berhasil diterapkan! Anda hemat") . " Rp " . number_format($discount_value, 0, ',', '.');
-
-                        // Override new user discount
-                        $new_user_discount = null;
-                        $is_new_user_eligible = false;
-                    }
-                } else {
-                    $promo_error = t("Kode promo tidak valid atau tidak memenuhi syarat");
-                    $selected_discount_id = null;
-                    $discount_applied = null;
-                    $final_price = $total_harga;
-                }
-                $stmt_promo->close();
-            }
+            // Override new user discount
+            $new_user_discount = null;
+            $is_new_user_eligible = false;
         } else {
-            $promo_error = t("Masukkan kode promo");
+            $promo_error = $promo_result['error'];
+            $selected_discount_id = null;
+            $discount_applied = null;
+            $final_price = $total_harga;
         }
     }
     
@@ -363,7 +395,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     // Handle booking submission
     elseif (isset($_POST['submit_booking'])) {
-        
+
+        // The promo field is part of this same form, so re-check the code
+        // here and carry the discount into the session. Without this the
+        // discount only ever existed during the "apply promo" request and
+        // the customer ended up paying full price.
+        if (!empty($promo_code)) {
+            $promo_result = tv_resolve_promo($conn, $promo_code, $total_harga);
+            if ($promo_result['ok']) {
+                $discount_applied = $promo_result['discount_applied'];
+                $selected_discount_id = $discount_applied['diskon_id'];
+                $final_price = $total_harga - $promo_result['discount_value'];
+                $new_user_discount = null;
+                $is_new_user_eligible = false;
+            }
+        }
+
         // Validate form data
         $customer_name = filter_input(INPUT_POST, 'customer_name', FILTER_SANITIZE_STRING);
         $no_hp = filter_input(INPUT_POST, 'no_hp', FILTER_SANITIZE_STRING);
@@ -655,6 +702,18 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             font-weight: 600;
             color: var(--dark);
             margin-bottom: 1.75rem;
+        }
+
+        /* style.css decorates .section-title with dashes pinned 55px outside
+           the element, which suits the centered marketing headings it was
+           written for. In these cards it is a plain left-aligned heading, so
+           those dashes spilled out past the card's rounded edge. The footer
+           on this page keeps its own decoration. */
+        .booking-container .section-title::before,
+        .booking-container .section-title::after,
+        .summary-card .section-title::before,
+        .summary-card .section-title::after {
+            display: none;
         }
 
         .form-label {
@@ -1357,6 +1416,10 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
                                 <?php endif; ?>
 
                                 <?php if ($discount_applied): ?>
+                                    <?php /* The visible promo input is replaced by this summary, so carry the
+                                             code along or submitting the booking would post no promo at all
+                                             and the discount would be lost. */ ?>
+                                    <input type="hidden" name="promo_code" value="<?= htmlspecialchars($discount_applied['kode_promo'] ?? '') ?>">
                                     <div class="applied-promo">
                                         <div class="promo-info">
                                             <i class="fas fa-check-circle"></i>

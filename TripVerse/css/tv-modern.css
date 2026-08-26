@@ -547,6 +547,9 @@ img { max-width: 100%; }
     min-height: 34px;
     display: inline-flex;
     align-items: center;
+    /* .btn sets white-space: nowrap, which pushed the longer labels
+       ("Terms & Conditions") past their narrow footer column. */
+    white-space: normal;
 }
 
 /* ---------- Order-summary readability ----------
@@ -676,6 +679,20 @@ img { max-width: 100%; }
     padding-right: .5rem;
     font-size: .85rem;
     letter-spacing: 0;
+}
+
+/* The room card's CTA sits in a .card-body that is also
+   .d-flex.justify-content-between, so the generous action-row padding
+   defined for the booking steps' Back/Continue buttons landed on it too
+   and pushed "Pesan Sekarang" wider than its own pill. This selector
+   outranks that one; wrapping keeps longer translations inside as well. */
+.room-card .card-body.justify-content-between > .btn,
+.room-card .col-md-3 .card-body > .btn {
+    padding-left: .6rem;
+    padding-right: .6rem;
+    font-size: .82rem;
+    white-space: normal;
+    line-height: 1.3;
 }
 
 /* ---------- Brand wordmark ----------
@@ -1666,38 +1683,53 @@ img[src$="default.jpg"] {
     .tv-account-toggle { gap: .5rem; padding-right: .6rem; }
 }
 
-/* ---------- Account menu inside the collapsed (hamburger) navbar ----------
-   Right-aligning an absolutely positioned menu to a control that sits at the
-   left edge pushed it off-screen. Below the navbar breakpoint the menu flows
-   inline instead, which is the expected mobile pattern. */
+/* ---------- Collapsed (hamburger) navbar layout ----------
+   Lay the open panel out as rows so every page matches: the links take a
+   full row of their own, then the language switcher and the account pill
+   share the row beneath them. home.php wraps those two in its own flex
+   div while the other pages leave them as bare siblings, which is why
+   they used to stack on one page and sit inline on another. */
 @media (max-width: 1199.98px) {
-    /* The toggle stays its normal compact pill size (matching the language
-       switcher next to it) — only the container behind it spans full width,
-       so the dropdown list below has room to be comfortably wide. */
-    .tv-account {
+    #navbarCollapse.show,
+    #navbarCollapse.collapsing {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: .5rem;
+        /* the markup carries .justify-content-between for the desktop bar,
+           which would otherwise fling these two apart on their shared row */
+        justify-content: flex-start !important;
+    }
+
+    #navbarCollapse .navbar-nav {
         width: 100%;
+    }
+
+    /* home.php's wrapper carries .ms-auto, which would right-align that
+       one page's controls while every other page stays left-aligned. */
+    #navbarCollapse > .ms-auto {
+        margin-left: 0 !important;
+    }
+
+    .tv-account {
         margin-left: 0;
-        margin-top: .5rem;
+        margin-top: 0;
+    }
+
+    .tv-lang {
+        margin-top: 0;
     }
 
     .tv-account-name,
     .tv-account-email { max-width: 140px; }
 
+    /* Right-aligning the menu to a control that now sits near the left
+       edge pushed it off-screen, so anchor it to the toggle's left edge. */
     .tv-account-menu {
-        position: static;
-        width: 100%;
-        min-width: 0;
-        margin-top: .5rem;
-        transform: none;
-        box-shadow: none;
-        display: none;
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .tv-account.is-open .tv-account-menu {
-        display: block;
-        transform: none;
+        right: auto;
+        left: 0;
+        transform-origin: top left;
+        min-width: 260px;
     }
 }
 
@@ -1758,9 +1790,6 @@ img[src$="default.jpg"] {
     z-index: 1090;
 }
 
-@media (max-width: 1199.98px) {
-    .tv-lang { margin-top: .5rem; }
-}
 
 /* ---------- Collapsed (hamburger) nav links ----------
    Bare uppercase text on a wide dark panel read as a loose, disconnected

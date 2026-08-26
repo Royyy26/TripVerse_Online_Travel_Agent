@@ -792,6 +792,17 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../img/default-hotel.jpg
             box-shadow: var(--shadow);
         }
 
+        /* style.css decorates .section-title with dashes pinned 55px outside
+           the element, meant for centered marketing headings. Here it is a
+           plain left-aligned card heading, so they spilled past the card
+           edge. The footer keeps its own decoration. */
+        .payment-container .section-title::before,
+        .payment-container .section-title::after,
+        .summary-card .section-title::before,
+        .summary-card .section-title::after {
+            display: none;
+        }
+
         .progress-steps {
             display: flex;
             justify-content: space-between;
