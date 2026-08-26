@@ -1,2 +1,5 @@
 # Holds real database credentials (local + production) — never commit.
 TripVerse/php/db_config.php
+
+# Holds a real Gmail App Password for outgoing OTP email — never commit.
+TripVerse/php/mail_config.php

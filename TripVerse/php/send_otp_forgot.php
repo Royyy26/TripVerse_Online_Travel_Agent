@@ -1,31 +1,16 @@
 <?php
-require "fonnte_api.php";
+require_once __DIR__ . '/smtp_mailer.php';
 
-// Pastikan nomor diterima
-if (!isset($_POST['no_hp'])) {
-    echo "no_hp_missing";
+// Pastikan email diterima
+if (!isset($_POST['email'])) {
+    echo "email_missing";
     exit;
 }
 
-// Ambil nomor HP
-$rawPhone = $_POST['no_hp'];
+$email = trim($_POST['email']);
 
-// Bersihkan nomor: hilangkan spasi, +, simbol, ketik salah
-$phone = preg_replace("/[^0-9]/", "", $rawPhone);
-
-// Jika user kirim format 08xxxxx → ubah ke 628xxxxx
-if (strpos($phone, "08") === 0) {
-    $phone = "62" . substr($phone, 1);
-}
-
-// Jika user kirim +62xxxx → preg_replace sudah hilangkan + → jadi 62xxxx
-if (strpos($phone, "62") !== 0) {
-    $phone = "62" . $phone;
-}
-
-// Validasi nomor minimal panjang 10 digit
-if (strlen($phone) < 10) {
-    echo "invalid_number";
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo "invalid_email";
     exit;
 }
 
@@ -39,7 +24,7 @@ $jsonFile = "otp_storage_forgot.json";
 $data = file_exists($jsonFile) ? json_decode(file_get_contents($jsonFile), true) : [];
 
 // Simpan OTP
-$data[$phone] = [
+$data[$email] = [
     "otp" => $otp,
     "expires_at" => date("Y-m-d H:i:s", strtotime("+5 minutes"))
 ];
@@ -47,20 +32,20 @@ $data[$phone] = [
 // Save kembali
 file_put_contents($jsonFile, json_encode($data, JSON_PRETTY_PRINT));
 
-// Pesan untuk dikirim ke WA
-$message = "
-Kode OTP TripVerse Anda: *$otp*
+// Isi email
+$subject = "Kode OTP TripVerse Anda";
+$body = "Kode OTP TripVerse Anda: $otp\n\n"
+      . "Berlaku selama 5 menit.\n"
+      . "JANGAN berikan kode ini kepada siapapun.";
 
-Berlaku selama 5 menit.
-JANGAN berikan kode ini kepada siapapun.
-";
+// Kirim email
+$result = sendOtpEmail($email, '', $subject, $body);
 
-// Kirim melalui Fonnte
-$response = sendWhatsAppMessage($phone, $message);
+// Debug respon
+error_log("[OTP-EMAIL] SEND TO $email | OTP $otp | RESULT: " . (($result === true) ? 'ok' : $result));
 
-// Debug respon API
-error_log("[OTP] SEND TO $phone | OTP $otp | RESP: " . json_encode($response));
-
-// Output ke frontend
-echo "sent";
-?>
+if ($result === true) {
+    echo "sent";
+} else {
+    echo "send_failed";
+}

@@ -8,7 +8,7 @@
     <title><?= te('Lupa Password') ?> | TripVerse</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Poppins:wght@300;500;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     <link href="../css/login.css?v=2.0" rel="stylesheet">
     <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
@@ -263,11 +263,11 @@
 
         <div id="alertRequest" class="alert"></div>
 
-        <p><?= te('Masukkan nomor WhatsApp Anda') ?></p>
+        <p><?= te('Masukkan email Anda') ?></p>
 
         <div class="input-group">
-            <i class="fas fa-phone"></i>
-            <input type="text" id="phone" placeholder="+628123456789">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="nama@email.com">
         </div>
 
         <button class="btn" id="sendOtpBtn"><?= te('Minta OTP') ?></button>
@@ -291,8 +291,8 @@
 
         <div id="alertOtp" class="alert"></div>
 
-        <p><?= te('Masukkan 6 digit OTP yang dikirim ke WhatsApp') ?></p>
-        <p id="phoneDisplay" style="color: #666; margin-bottom: 15px;"></p>
+        <p><?= te('Masukkan 6 digit OTP yang dikirim ke email Anda') ?></p>
+        <p id="emailDisplay" style="color: #666; margin-bottom: 15px;"></p>
 
         <div class="otp-input-wrapper">
             <input type="text" maxlength="1" class="otp-field" data-index="1">
@@ -352,7 +352,7 @@
      JAVASCRIPT LOGIC
     ========================================= -->
     <script>
-        let currentPhone = "";
+        let currentEmail = "";
         let resendTimer = null;
         let canResend = false;
 
@@ -368,16 +368,6 @@
                 el.style.display = "none";
             }, 4000);
         }
-
-        /* -----------------------------------------
-           +62 AUTO FORMAT
-        ------------------------------------------ */
-        document.getElementById("phone").addEventListener("input", function() {
-            let v = this.value.replace(/\D/g, "");
-            if (v.startsWith("0")) v = "62" + v.slice(1);
-            if (!v.startsWith("62")) v = "62" + v;
-            this.value = "+62" + v.substring(2);
-        });
 
         /* -----------------------------------------
            OTP INPUT HANDLING
@@ -447,53 +437,40 @@
             STEP 1: REQUEST OTP
         ------------------------------------------ */
         document.getElementById("sendOtpBtn").addEventListener("click", function() {
-            let phone = document.getElementById("phone").value.replace(/\D/g, "");
+            let email = document.getElementById("email").value.trim();
 
-            if (!phone) {
-                showAlert("alertRequest", "<?= t('Silakan masukkan nomor telepon') ?>");
+            if (!email) {
+                showAlert("alertRequest", "<?= t('Silakan masukkan email') ?>");
                 return;
             }
 
-            currentPhone = phone;
+            currentEmail = email;
 
             // Tampilkan OTP UI langsung
             document.getElementById("boxRequest").style.display = "none";
             document.getElementById("boxOtp").style.display = "block";
+            document.getElementById("emailDisplay").textContent = email;
 
             document.querySelector(".otp-field").focus();
 
-            // Kirim OTP - DENGAN DEBUG
             fetch("send_otp_forgot.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: "no_hp=" + phone
+                    body: "email=" + encodeURIComponent(email)
                 })
-                .then(r => {
-                    console.log("Response status:", r.status);
-                    console.log("Response headers:", r.headers);
-                    return r.text();
-                })
+                .then(r => r.text())
                 .then(res => {
-                    console.log("RAW RESPONSE:", res);
-                    console.log("Response length:", res.length);
-                    console.log("Response char codes:", Array.from(res).map(c => c.charCodeAt(0)));
-
-                    // TRIM response untuk handle spasi/newline
                     const trimmedRes = res.trim();
-                    console.log("TRIMMED RESPONSE:", trimmedRes);
 
                     if (trimmedRes === "sent") {
-                        console.log("✓ OTP sent successfully!");
                         showAlert("alertOtp", "<?= t('OTP berhasil dikirim!') ?>", "success");
                     } else {
-                        console.log("✗ Expected 'sent' but got:", trimmedRes);
                         showAlert("alertOtp", "<?= t('Gagal mengirim OTP. Server merespons:') ?> " + trimmedRes, "danger");
                     }
                 })
                 .catch(error => {
-                    console.error("Fetch error:", error);
                     showAlert("alertOtp", "<?= t('Kesalahan jaringan:') ?> " + error.message, "danger");
                 });
         });
@@ -530,59 +507,44 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <?= t('Memverifikasi...') ?>';
             btn.disabled = true;
 
-            console.log("Verifying OTP for:", currentPhone, "OTP:", otp);
-
-            // PERBAIKAN: Gunakan verify_otp_forgot.php bukan verify_otp.php
             fetch("verify_otp_forgot.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: "no_hp=" + currentPhone + "&otp=" + otp
+                    body: "email=" + encodeURIComponent(currentEmail) + "&otp=" + otp
                 })
                 .then(r => r.text())
                 .then(res => {
                     btn.innerHTML = originalText;
                     btn.disabled = false;
 
-                    console.log("Server response:", res);
-
                     const trimmedRes = res.trim();
 
-                    // Handle semua kemungkinan response
                     if (trimmedRes === "success") {
-                        console.log("✓ OTP verification SUCCESS");
                         document.getElementById("boxOtp").style.display = "none";
                         document.getElementById("boxReset").style.display = "block";
-                        // Focus password field
                         setTimeout(() => {
                             document.getElementById("newPass").focus();
                         }, 100);
                         showAlert("alertReset", "✓ <?= t('OTP berhasil diverifikasi!') ?>", "success");
                     } else if (trimmedRes === "expired") {
-                        console.log("✗ OTP EXPIRED");
                         showAlert("alertOtp", "<?= t('OTP telah kedaluwarsa. Silakan minta yang baru.') ?>", "danger");
-                        // Clear OTP fields
                         document.querySelectorAll(".otp-field").forEach(f => f.value = '');
                         document.querySelector(".otp-field").focus();
                     } else if (trimmedRes === "failed" || trimmedRes === "wrong") {
-                        console.log("✗ WRONG OTP");
                         showAlert("alertOtp", "<?= t('OTP salah. Silakan coba lagi.') ?>", "danger");
-                        // Clear OTP fields
                         document.querySelectorAll(".otp-field").forEach(f => f.value = '');
                         document.querySelector(".otp-field").focus();
                     } else if (trimmedRes === "missing_data") {
-                        console.log("✗ MISSING DATA");
                         showAlert("alertOtp", "<?= t('Permintaan tidak valid. Silakan ulangi proses.') ?>", "danger");
                     } else {
-                        console.log("✗ UNKNOWN RESPONSE:", trimmedRes);
                         showAlert("alertOtp", "<?= t('Verifikasi gagal. Silakan coba lagi.') ?>", "danger");
                     }
                 })
                 .catch(error => {
                     btn.innerHTML = originalText;
                     btn.disabled = false;
-                    console.error("Fetch error:", error);
                     showAlert("alertOtp", "<?= t('Kesalahan jaringan. Silakan periksa koneksi Anda.') ?>", "danger");
                 });
         });
@@ -600,7 +562,7 @@
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: "phone=" + currentPhone + "&password=" + p1 + "&confirm_password=" + p2
+                    body: "password=" + encodeURIComponent(p1) + "&confirm_password=" + encodeURIComponent(p2)
                 })
                 .then(r => r.text())
                 .then(res => {
@@ -618,7 +580,7 @@
         /* -----------------------------------------
            ENTER KEY SUPPORT
         ------------------------------------------ */
-        document.getElementById("phone").addEventListener("keypress", function(e) {
+        document.getElementById("email").addEventListener("keypress", function(e) {
             if (e.key === "Enter") {
                 document.getElementById("sendOtpBtn").click();
             }
