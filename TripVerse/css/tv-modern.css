@@ -682,14 +682,22 @@ img { max-width: 100%; }
 }
 
 /* The room card's CTA sits in a .card-body that is also
-   .d-flex.justify-content-between, so the generous action-row padding
-   defined for the booking steps' Back/Continue buttons landed on it too
-   and pushed "Pesan Sekarang" wider than its own pill. This selector
-   outranks that one; wrapping keeps longer translations inside as well. */
+   .d-flex.justify-content-between, so the action-row styling written for
+   the booking steps' Back/Continue buttons lands on it too: roomy side
+   padding (which pushed "Pesan Sekarang" outside its pill) plus
+   padding-top/bottom:0 with min-height:44px, which relies on the button
+   being a centred flexbox. An older rule here forced display:block, so
+   the label sat pinned to the top of that 44px pill instead. Restore the
+   centring and give the text a little more room. */
 .room-card .card-body.justify-content-between > .btn,
 .room-card .col-md-3 .card-body > .btn {
-    padding-left: .6rem;
-    padding-right: .6rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 44px;
+    padding-left: .75rem !important;
+    padding-right: .75rem !important;
     font-size: .82rem;
     white-space: normal;
     line-height: 1.3;
