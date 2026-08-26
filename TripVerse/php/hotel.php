@@ -751,6 +751,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
                                 <a href="home.php" class="nav-item nav-link"><?= te("Beranda") ?></a>
                                 <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
                                 <a href="hotel.php" class="nav-item nav-link active"><?= te("Hotel") ?></a>
+                                <a href="flights.php" class="nav-item nav-link"><?= te("Pesawat") ?></a>
                                 <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
                                 <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
                                 <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>

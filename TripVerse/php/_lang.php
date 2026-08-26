@@ -48,6 +48,7 @@ $GLOBALS['TV_DICT'] = [
     'Beranda'                => 'Home',
     'Tentang Kami'           => 'About Us',
     'Hotel'                  => 'Hotels',
+    'Pesawat'                => 'Flights',
     'Fitur'                  => 'Features',
     'Tim Kami'               => 'Our Team',
     'Kontak'                 => 'Contact',
@@ -631,6 +632,11 @@ $GLOBALS['TV_DICT'] = [
     'Hotel tidak ditemukan' => 'Hotel not found',
     'Kamar tidak tersedia atau stok habis. Tersedia:' => 'The room is unavailable or out of stock. Available:',
     'Diskon tidak valid atau kuota habis' => 'The discount is invalid or its quota has been used up',
+
+    /* ---- flights.php: coming-soon placeholder ---- */
+    'Segera Hadir' => 'Coming Soon',
+    'Fitur pemesanan tiket pesawat sedang kami siapkan supaya perjalananmu makin lengkap, dari hotel sampai penerbangan dalam satu platform.'
+        => "We're putting the finishing touches on flight booking, so your whole trip \u{2014} hotel and flights \u{2014} will fit in one platform.",
 ];
 
 if (!function_exists('t')) {

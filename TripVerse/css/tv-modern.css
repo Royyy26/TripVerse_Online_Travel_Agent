@@ -1513,6 +1513,75 @@ img[src$="default.jpg"] {
     flex: 1 1 auto;
 }
 
+/* Coming-soon placeholder (flights.php): blurred background photo with a
+   dark/brand gradient overlay so the centered message stays readable. */
+.tv-coming-soon {
+    position: relative;
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+}
+
+.tv-coming-soon-bg {
+    position: absolute;
+    inset: -20px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px) brightness(.55);
+    transform: scale(1.08);
+}
+
+.tv-coming-soon-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(11, 17, 32, .8), rgba(254, 161, 22, .35));
+}
+
+.tv-coming-soon-content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    padding: 3rem 1.5rem;
+    max-width: 640px;
+}
+
+.tv-coming-soon-icon {
+    display: inline-block;
+    font-size: 3rem;
+    color: #FEA116;
+    margin-bottom: 1.25rem;
+    animation: tv-plane-float 3s ease-in-out infinite;
+}
+
+@keyframes tv-plane-float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-8deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(-8deg);
+    }
+}
+
+.tv-coming-soon-content h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.tv-coming-soon-content p {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, .85);
+    margin-bottom: 2rem;
+}
+
 /* ---------- settings shortcut list ---------- */
 .tv-settings-links {
     display: flex;

@@ -7,11 +7,11 @@ if (!isset($_SESSION['id_user'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
-    <title><?= te('Fitur') ?> - TripVerse</title>
+    <title><?= te('Pesawat') ?> - TripVerse</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -42,8 +42,6 @@ if (!isset($_SESSION['id_user'])) {
     <link href="../css/style.css?v=2.0" rel="stylesheet">
     <link href="../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="../css/service.css?v=2.0" rel="stylesheet">
 </head>
 
 <body>
@@ -58,9 +56,9 @@ if (!isset($_SESSION['id_user'])) {
         <!-- Spinner End -->
 
         <!-- Header Start -->
-        <div class="container-fluid bg-dark px-0">
+        <header class="container-fluid bg-dark px-0">
             <div class="row gx-0">
-                <!-- Logo & Brand -->
+                <!-- Logo -->
                 <div class="col-lg-3 bg-dark d-none d-lg-flex align-items-center justify-content-center">
                     <a href="home.php" class="d-flex align-items-center text-decoration-none">
                         <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 50px;">
@@ -68,7 +66,7 @@ if (!isset($_SESSION['id_user'])) {
                     </a>
                 </div>
 
-                <!-- Contact & Social Media -->
+                <!-- Contact -->
                 <div class="col-lg-9">
                     <div class="row gx-0 bg-white d-none d-lg-flex align-items-center py-2 px-5">
                         <div class="col-lg-7 text-start">
@@ -83,11 +81,11 @@ if (!isset($_SESSION['id_user'])) {
                         </div>
                         <div class="col-lg-5 text-end">
                             <div class="d-inline-flex align-items-center">
-                                <a class="me-3" href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
-                                <a class="me-3" href="https://twitter.com/"><i class="fab fa-twitter"></i></a>
-                                <a class="me-3" href="https://id.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
-                                <a class="me-3" href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
-                                <a class="" href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+                                <a class="me-3" href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a class="me-3" href="#"><i class="fab fa-twitter"></i></a>
+                                <a class="me-3" href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a class="me-3" href="#"><i class="fab fa-instagram"></i></a>
+                                <a class="" href="#"><i class="fab fa-youtube"></i></a>
                             </div>
                         </div>
                     </div>
@@ -107,8 +105,8 @@ if (!isset($_SESSION['id_user'])) {
                                 <a href="home.php" class="nav-item nav-link"><?= te("Beranda") ?></a>
                                 <a href="about.php" class="nav-item nav-link"><?= te("Tentang Kami") ?></a>
                                 <a href="hotel.php" class="nav-item nav-link"><?= te("Hotel") ?></a>
-                                <a href="flights.php" class="nav-item nav-link"><?= te("Pesawat") ?></a>
-                                <a href="service.php" class="nav-item nav-link active"><?= te("Fitur") ?></a>
+                                <a href="flights.php" class="nav-item nav-link active"><?= te("Pesawat") ?></a>
+                                <a href="service.php" class="nav-item nav-link"><?= te("Fitur") ?></a>
                                 <a href="team.php" class="nav-item nav-link"><?= te("Tim Kami") ?></a>
                                 <a href="contact.php" class="nav-item nav-link"><?= te("Kontak") ?></a>
                                 <a href="history.php" class="nav-item nav-link"><?= te("Riwayat") ?></a>
@@ -118,110 +116,21 @@ if (!isset($_SESSION['id_user'])) {
                     </nav>
                 </div>
             </div>
-        </div>
+        </header>
         <!-- Header End -->
 
-        <!-- Page Header Start -->
-        <div class="container-fluid page-header mb-5 p-0" style="background-image: url(../img/carousel-1.jpg);">
-            <div class="container-fluid page-header-inner py-5">
-                <div class="container text-center pb-5">
-                    <h1 class="display-3 text-white mb-3 animated slideInDown"><?= te('Fitur') ?></h1>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center text-uppercase">
-                            <li class="breadcrumb-item"><a href="#"><?= te('Beranda') ?></a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page"><?= te('Fitur') ?></li>
-                        </ol>
-                    </nav>
-                </div>
+        <!-- Coming Soon Start -->
+        <div class="tv-coming-soon">
+            <div class="tv-coming-soon-bg" style="background-image: url(../img/pesawat-1.jpg);"></div>
+            <div class="tv-coming-soon-overlay"></div>
+            <div class="tv-coming-soon-content">
+                <i class="fas fa-plane tv-coming-soon-icon"></i>
+                <h1><?= te('Segera Hadir') ?></h1>
+                <p><?= te('Fitur pemesanan tiket pesawat sedang kami siapkan supaya perjalananmu makin lengkap, dari hotel sampai penerbangan dalam satu platform.') ?></p>
+                <a href="home.php" class="btn btn-primary rounded py-2 px-4"><?= te('Kembali ke Beranda') ?></a>
             </div>
         </div>
-        <!-- Page Header End -->
-
-        <!-- Fitur Start -->
-        <div class="container-xxl py-5">
-            <div class="container">
-                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 class="section-title text-center text-primary text-uppercase"><?= te('Fitur') ?></h6>
-                    <h2 class="mb-5"><?php if (tv_lang() === 'en'): ?>Explore Our <span class="text-primary text-uppercase">Features</span><?php else: ?>Jelajahi <span class="text-primary text-uppercase">Fitur</span> Kami<?php endif; ?></h2>
-                </div>
-                <div class="row g-4">
-                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <a class="service-item rounded" href="">
-                            <div class="service-icon bg-transparent border rounded p-1">
-                                <div
-                                    class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-search fa-2x text-primary"></i>
-                                </div>
-                            </div>
-                            <h5 class="mb-3"><?= te('Pencarian & Pemesanan') ?></h5>
-                            <p class="text-body mb-0"><?= te('Cari hotel dengan mudah berdasarkan tanggal dan lokasi tujuan Anda.') ?></p>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
-                        <a class="service-item rounded" href="">
-                            <div class="service-icon bg-transparent border rounded p-1">
-                                <div
-                                    class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-tags fa-2x text-primary"></i>
-                                </div>
-                            </div>
-                            <h5 class="mb-3"><?= te('Informasi Harga Transparan') ?></h5>
-                            <p class="text-body mb-0"><?= te('Harga yang ditampilkan sudah termasuk pajak & biaya layanan tanpa tambahan tersembunyi.') ?></p>
-                        </a>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
-                        <a class="service-item rounded" href="">
-                            <div class="service-icon bg-transparent border rounded p-1">
-                                <div
-                                    class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-receipt fa-2x text-primary"></i>
-                                </div>
-                            </div>
-                            <h5 class="mb-3"><?= te('Manajemen Pemesanan') ?></h5>
-                            <p class="text-body mb-0"><?= te('Akses riwayat pemesanan, cetak tiket, dan lihat detail perjalanan dengan mudah.') ?></p>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                        <a class="service-item rounded" href="">
-                            <div class="service-icon bg-transparent border rounded p-1">
-                                <div
-                                    class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-gift fa-2x text-primary"></i>
-                                </div>
-                            </div>
-                            <h5 class="mb-3"><?= te('Poin & Reward') ?></h5>
-                            <p class="text-body mb-0"><?= te('Kumpulkan poin dari setiap pemesanan dan tukarkan dengan diskon eksklusif.') ?></p>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.9s">
-                        <a class="service-item rounded" href="">
-                            <div class="service-icon bg-transparent border rounded p-1">
-                                <div
-                                    class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-headset fa-2x text-primary"></i>
-                                </div>
-                            </div>
-                            <h5 class="mb-3">Customer Service</h5>
-                            <p class="text-body mb-0"><?= te('Dapatkan bantuan cepat melalui WhatsApp untuk segala kendala perjalanan.') ?></p>
-                        </a>
-                    </div>
-                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="1.0s">
-                        <a class="service-item rounded" href="">
-                            <div class="service-icon bg-transparent border rounded p-1">
-                                <div
-                                    class="w-100 h-100 border rounded d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-calendar-check fa-2x text-primary"></i>
-                                </div>
-                            </div>
-                            <h5 class="mb-3"><?= te('Pembatalan Fleksibel') ?></h5>
-                            <p class="text-body mb-0"><?= te('Ubah atau batalkan pemesanan hotel Anda dengan mudah sesuai kebijakan yang berlaku.') ?></p>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Fitur End -->
+        <!-- Coming Soon End -->
 
         <!-- Footer Start -->
         <div class="container-fluid bg-dark text-light footer wow fadeIn" data-wow-delay="0.1s">
@@ -266,8 +175,8 @@ if (!isset($_SESSION['id_user'])) {
                             <div class="col-md-6">
                                 <h6 class="section-title text-start text-primary text-uppercase mb-4">Company
                                 </h6>
-                                <a class="btn btn-link" href="#">About TripVerse</a>
-                                <a class="btn btn-link" href="#">Contact Us</a>
+                                <a class="btn btn-link" href="about.php">About TripVerse</a>
+                                <a class="btn btn-link" href="contact.php">Contact Us</a>
                                 <a class="btn btn-link" href="#">Privacy Policy</a>
                                 <a class="btn btn-link" href="#">Terms & Conditions</a>
                                 <a class="btn btn-link" href="#">Support</a>
@@ -275,10 +184,9 @@ if (!isset($_SESSION['id_user'])) {
                             <div class="col-md-6">
                                 <h6 class="section-title text-start text-primary text-uppercase mb-4">Services
                                 </h6>
-                                <a class="btn btn-link" href="#">Hotel Booking</a>
-                                <a class="btn btn-link" href="#">Event & Activities</a>
-                                <a class="btn btn-link" href="#">Spa & Wellness</a>
-                                <a class="btn btn-link" href="#">Travel Insurance</a>
+                                <a class="btn btn-link" href="hotel.php">Hotel Booking</a>
+                                <a class="btn btn-link" href="flights.php">Flights</a>
+                                <a class="btn btn-link" href="service.php">Features</a>
                             </div>
                         </div>
                     </div>
@@ -291,7 +199,7 @@ if (!isset($_SESSION['id_user'])) {
                     <div class="row">
                         <div class="col-md-12 text-end">
                             <div class="footer-menu">
-                                <a href="#">Home</a>
+                                <a href="home.php">Home</a>
                                 <a href="#">Cookies</a>
                                 <a href="#">Help</a>
                                 <a href="#">FAQs</a>
@@ -302,7 +210,6 @@ if (!isset($_SESSION['id_user'])) {
             </div>
         </div>
     </div>
-    <!-- Footer End -->
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
