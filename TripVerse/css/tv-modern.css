@@ -539,7 +539,7 @@ img { max-width: 100%; }
 
 /* the navbar must never be the reason the page scrolls sideways */
 .navbar-collapse { min-width: 0; }
-.navbar-nav { flex-wrap: wrap; }
+.navbar-nav { flex-wrap: nowrap; }
 
 /* ---------- Comfortable tap targets ---------- */
 .footer .btn-link,

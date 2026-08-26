@@ -633,6 +633,12 @@ $GLOBALS['TV_DICT'] = [
     'Kamar tidak tersedia atau stok habis. Tersedia:' => 'The room is unavailable or out of stock. Available:',
     'Diskon tidak valid atau kuota habis' => 'The discount is invalid or its quota has been used up',
 
+    /* ---- home.php: hero carousel ---- */
+    'Hotel Pilihan Untuk Setiap Perjalanan' => 'Hand-Picked Hotels For Every Trip',
+    'Kenyamanan yang Menyambut Anda' => 'Comfort That Welcomes You',
+    'Lebih dari Sekadar Hotel' => 'More Than Just Hotels',
+    'Petualangan di Udara, Segera Hadir' => 'Adventures in the Sky, Coming Soon',
+
     /* ---- flights.php: coming-soon placeholder ---- */
     'Segera Hadir' => 'Coming Soon',
     'Fitur pemesanan tiket pesawat sedang kami siapkan supaya perjalananmu makin lengkap, dari hotel sampai penerbangan dalam satu platform.'

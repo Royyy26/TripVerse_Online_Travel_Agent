@@ -532,8 +532,8 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                         </div>
                     </div>
 
-                    <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
-                        <a href="home.php" class="navbar-brand d-block d-lg-none">
+                    <nav class="navbar navbar-expand-xl bg-dark navbar-dark p-3 p-lg-0">
+                        <a href="home.php" class="navbar-brand d-block d-xl-none">
                             <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
                             <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                         </a>
@@ -590,6 +590,24 @@ if (!empty($foto) && file_exists('../uploads/' . $foto)) {
                             <div class="p-3" style="max-width: 700px;">
                                 <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown"><?= te('Jelajahi Dunia, Ciptakan Cerita Anda!') ?></h6>
                                 <h1 class="display-3 text-white mb-4 animated slideInDown"><?= te('Tetap Nyaman, Bepergian dengan Kenangan!') ?></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="w-100" src="../img/carousel-1.jpg" alt="Image">
+                        <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                            <div class="p-3" style="max-width: 700px;">
+                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown"><?= te('Hotel Pilihan Untuk Setiap Perjalanan') ?></h6>
+                                <h1 class="display-3 text-white mb-4 animated slideInDown"><?= te('Kenyamanan yang Menyambut Anda') ?></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img class="w-100" src="../img/carousel-4.jpg" alt="Image">
+                        <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                            <div class="p-3" style="max-width: 700px;">
+                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown"><?= te('Lebih dari Sekadar Hotel') ?></h6>
+                                <h1 class="display-3 text-white mb-4 animated slideInDown"><?= te('Petualangan di Udara, Segera Hadir') ?></h1>
                             </div>
                         </div>
                     </div>

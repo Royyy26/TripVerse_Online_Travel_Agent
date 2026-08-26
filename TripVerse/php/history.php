@@ -369,8 +369,8 @@ try {
                     </div>
 
                     <!-- Navbar -->
-                    <nav class="navbar navbar-expand-lg bg-dark navbar-dark p-3 p-lg-0">
-                        <a href="home.php" class="navbar-brand d-block d-lg-none">
+                    <nav class="navbar navbar-expand-xl bg-dark navbar-dark p-3 p-lg-0">
+                        <a href="home.php" class="navbar-brand d-block d-xl-none">
                             <img src="../img/logo.png" alt="TripVerse Logo" class="me-2" style="height: 40px;">
                             <span class="tv-wordmark tv-wordmark-header">TripVerse</span>
                         </a>
