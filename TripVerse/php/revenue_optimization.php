@@ -13,6 +13,7 @@ if ($_SESSION['role'] !== 'admin') {
 }
 
 require 'connect.php';
+require_once __DIR__ . '/_lang.php';
 $id_user = $_SESSION['id_user'];
 
 // Ambil Data Admin
@@ -1002,7 +1003,7 @@ $conn->close();
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0">
+    <link rel="stylesheet" href="../css/dashboard.css?v=2.0.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1657,23 +1658,9 @@ $conn->close();
             margin-top: 10px;
         }
 
-        .user-info {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .user-info:hover {
-            background: #E8672B;
-        }
+        /* .user-info intentionally has no override here: it falls back to
+           dashboard.css's shared translucent pill button, matching every
+           other admin page instead of this page's old solid-orange variant. */
 
         .dropdown-arrow {
             transition: transform 0.3s ease;
@@ -1893,6 +1880,18 @@ $conn->close();
 
 <body>
     <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="../img/logo.png" alt="TripVerse Logo" class="sidebar-brand-logo" />
+            <div class="sidebar-brand-text">
+                <span class="sidebar-brand-title">TripVerse</span>
+                <span class="sidebar-brand-subtitle"><?= te('Dasbor Admin') ?></span>
+            </div>
+        </div>
+
+        <div class="sidebar-brand-lang">
+            <?php include __DIR__ . '/_lang_switch_inner.php'; ?>
+        </div>
+
         <div class="profile-header">
             <div class="profile-photo-section">
                 <div class="profile-photo-container">
@@ -1917,7 +1916,7 @@ $conn->close();
 
                     <div class="user-dropdown">
                         <button class="user-info" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown(this)">
-                            <span class="dropdown-text">Manage Account</span>
+                            <span class="dropdown-text"><?= te('Kelola Akun') ?></span>
                             <span class="material-icons dropdown-arrow">expand_more</span>
                         </button>
 
@@ -1928,7 +1927,7 @@ $conn->close();
                             </a>
                             <a href="logout.php" class="dropdown-item">
                                 <span class="material-icons">logout</span>
-                                <span>Logout</span>
+                                <span><?= te('Keluar') ?></span>
                             </a>
                         </div>
                     </div>
@@ -1940,39 +1939,39 @@ $conn->close();
             <!-- EXECUTIVE OVERVIEW -->
             <a href="dashboard.php">
                 <span class="material-icons">dashboard</span>
-                <span>Executive Overview</span>
+                <span><?= te('Ringkasan Eksekutif') ?></span>
             </a>
 
             <!-- SUPPLIER APPROVAL -->
             <?php if ($_SESSION['role'] === 'admin'): ?>
                 <a href="supplier_approvals.php">
                     <span class="material-icons">approval</span>
-                    <span>Supplier Management</span>
+                    <span><?= te('Manajemen Supplier') ?></span>
                 </a>
             <?php endif; ?>
 
             <!-- PROMO MANAGEMENT -->
             <a href="promo_management.php">
                 <span class="material-icons">campaign</span>
-                <span>Promo Management</span>
+                <span><?= te('Manajemen Promo') ?></span>
             </a>
 
             <!-- ANALYTICS & INSIGHTS -->
             <div class="user-menu">
                 <a href="#" class="booking-toggle" data-target="analyticsDropdown">
                     <span class="material-icons">monitor</span>
-                    <span>Performance Monitoring</span>
+                    <span><?= te('Monitoring Performa') ?></span>
                     <span class="material-icons toggle-icon">expand_more</span>
                 </a>
 
                 <div class="booking-submenu hidden" id="analyticsDropdown">
                     <a href="performance_analytics.php">
                         <span class="material-icons">bar_chart</span>
-                        <span>Performance Statistics</span>
+                        <span><?= te('Statistik Performa') ?></span>
                     </a>
                     <a href="market_analysis.php">
                         <span class="material-icons">trending_up</span>
-                        <span>Booking Trends</span>
+                        <span><?= te('Tren Booking') ?></span>
                     </a>
                 </div>
             </div>
@@ -1981,22 +1980,22 @@ $conn->close();
             <div class="user-menu">
                 <a href="#" class="booking-toggle active" data-target="decisionDropdown">
                     <span class="material-icons">analytics</span>
-                    <span>Statistical Analysis</span>
+                    <span><?= te('Analisis Statistik') ?></span>
                     <span class="material-icons toggle-icon">expand_more</span>
                 </a>
 
                 <div class="booking-submenu show" id="decisionDropdown">
                     <a href="revenue_optimization.php" class="active">
                         <span class="material-icons">attach_money</span>
-                        <span>Revenue Statistics</span>
+                        <span><?= te('Statistik Pendapatan') ?></span>
                     </a>
                     <a href="occupancy_analysis.php">
                         <span class="material-icons">king_bed</span>
-                        <span>Occupancy Statistics</span>
+                        <span><?= te('Statistik Okupansi') ?></span>
                     </a>
                     <a href="alos_analysis.php">
                         <span class="material-icons">calendar_today</span>
-                        <span>ALOS Statistics</span>
+                        <span><?= te('Statistik ALOS') ?></span>
                     </a>
                 </div>
             </div>
@@ -2004,13 +2003,13 @@ $conn->close();
             <!-- CUSTOMER INTELLIGENCE -->
             <a href="customerdss.php">
                 <span class="material-icons">people</span>
-                <span>Customer Statistics</span>
+                <span><?= te('Statistik Pelanggan') ?></span>
             </a>
 
             <!-- LOGOUT -->
             <a href="logout.php">
                 <span class="material-icons">exit_to_app</span>
-                <span>Logout</span>
+                <span><?= te('Keluar') ?></span>
             </a>
         </nav>
     </div>

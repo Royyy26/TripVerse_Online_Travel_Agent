@@ -13,6 +13,7 @@ if ($_SESSION['role'] !== 'admin') {
 }
 
 require 'connect.php';
+require_once __DIR__ . '/_lang.php';
 
 $id_user = $_SESSION['id_user'];
 
@@ -841,7 +842,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=2.0.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1696,6 +1697,18 @@ $current_indonesian_month = get_indonesian_month($filter_month);
 
 <body>
     <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="../img/logo.png" alt="TripVerse Logo" class="sidebar-brand-logo" />
+            <div class="sidebar-brand-text">
+                <span class="sidebar-brand-title">TripVerse</span>
+                <span class="sidebar-brand-subtitle"><?= te('Dasbor Admin') ?></span>
+            </div>
+        </div>
+
+        <div class="sidebar-brand-lang">
+            <?php include __DIR__ . '/_lang_switch_inner.php'; ?>
+        </div>
+
         <div class="profile-header">
             <div class="profile-photo-section">
                 <div class="profile-photo-container">
@@ -1720,7 +1733,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
 
                     <div class="user-dropdown">
                         <button class="user-info" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown(this)">
-                            <span class="dropdown-text">Manage Account</span>
+                            <span class="dropdown-text"><?= te('Kelola Akun') ?></span>
                             <span class="material-icons dropdown-arrow">expand_more</span>
                         </button>
 
@@ -1731,7 +1744,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                             </a>
                             <a href="logout.php" class="dropdown-item">
                                 <span class="material-icons">logout</span>
-                                <span>Logout</span>
+                                <span><?= te('Keluar') ?></span>
                             </a>
                         </div>
                     </div>
@@ -1743,7 +1756,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
             <!-- EXECUTIVE OVERVIEW -->
             <a href="dashboard.php">
                 <span class="material-icons">dashboard</span>
-                <span>Executive Overview</span>
+                <span><?= te('Ringkasan Eksekutif') ?></span>
             </a>
 
             <!-- SUPPLIER APPROVAL -->
@@ -1754,7 +1767,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
             <!-- PROMO MANAGEMENT -->
             <a href="promo_management.php">
                 <span class="material-icons">local_offer</span>
-                <span>Promo Management</span>
+                <span><?= te('Manajemen Promo') ?></span>
             </a>
 
             <!-- ANALYTICS & INSIGHTS -->
@@ -1820,7 +1833,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
             <!-- LOGOUT -->
             <a href="logout.php">
                 <span class="material-icons">logout</span>
-                <span>Logout</span>
+                <span><?= te('Keluar') ?></span>
             </a>
         </nav>
     </div>

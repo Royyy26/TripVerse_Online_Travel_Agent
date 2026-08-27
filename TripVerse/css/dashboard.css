@@ -87,6 +87,89 @@ a {
     margin-left: 0;
 }
 
+/* Language switcher (ID/EN), shared look with the customer-facing site */
+.tv-lang {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .09);
+    border: 1px solid rgba(255, 255, 255, .16);
+    flex-shrink: 0;
+}
+
+.tv-lang-opt {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    padding: .26rem .55rem;
+    border-radius: 999px;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: rgba(255, 255, 255, .72);
+    text-decoration: none;
+    transition: background .25s ease, color .25s ease;
+}
+
+.tv-lang-opt:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .1);
+}
+
+.tv-lang-opt.is-active {
+    background: linear-gradient(135deg, #FEA116, #FF7A3D);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(254, 161, 22, .4);
+}
+
+.sidebar-brand-lang {
+    margin: 0 20px 16px;
+}
+
+/* Sidebar brand (logo + wordmark) */
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* Left padding clears the fixed #toggleSidebar button, which sits at
+       top:15/left:15 over this same corner at every viewport width. */
+    padding: 20px 20px 20px 70px;
+    min-height: 76px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-brand-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.sidebar-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    min-width: 0;
+}
+
+.sidebar-brand-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: white;
+    white-space: nowrap;
+}
+
+.sidebar-brand-subtitle {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #8b96a8;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
+}
+
 /* Profile Section */
 .profile-header {
     padding: 20px;

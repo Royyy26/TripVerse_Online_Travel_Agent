@@ -44,19 +44,83 @@ html, body {
     backdrop-filter: blur(10px);
 }
 
+/* Language switcher (ID/EN), shared look with the customer-facing site */
+.tv-lang {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .09);
+    border: 1px solid rgba(255, 255, 255, .16);
+    flex-shrink: 0;
+}
+
+.tv-lang-opt {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    padding: .26rem .55rem;
+    border-radius: 999px;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: rgba(255, 255, 255, .72);
+    text-decoration: none;
+    transition: background .25s ease, color .25s ease;
+}
+
+.tv-lang-opt:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .1);
+}
+
+.tv-lang-opt.is-active {
+    background: linear-gradient(135deg, #FEA116, #FF7A3D);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(254, 161, 22, .4);
+}
+
+.sidebar-brand-lang {
+    padding: 0 25px 20px;
+}
+
 .logo {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 1.6rem;
+}
+
+.logo-img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.logo-text-group {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    min-width: 0;
+}
+
+.logo-text {
+    font-size: 1.3rem;
     font-weight: 800;
     color: white;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
 }
 
-.logo .material-icons {
-    font-size: 2.2rem;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+.logo-subtitle {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
 }
 
 .sidebar-toggle {

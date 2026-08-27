@@ -12,6 +12,7 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'owner']
 }
 
 require 'connect.php';
+require_once __DIR__ . '/_lang.php';
 
 $id_user = $_SESSION['id_user'];
 $is_admin = $_SESSION['role'] === 'admin';
@@ -396,7 +397,7 @@ function getHotelFacilities($conn, $hotel_id)
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0">
+    <link rel="stylesheet" href="../css/dashboard.css?v=2.0.0">
     <link rel="stylesheet" href="../css/profile.css?v=1.2.3">
     <link rel="stylesheet" href="../css/formshotel.css?v=<?php echo time(); ?>">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -1036,6 +1037,18 @@ function getHotelFacilities($conn, $hotel_id)
 
 <body>
     <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="../img/logo.png" alt="TripVerse Logo" class="sidebar-brand-logo" />
+            <div class="sidebar-brand-text">
+                <span class="sidebar-brand-title">TripVerse</span>
+                <span class="sidebar-brand-subtitle"><?= te('Dasbor Admin') ?></span>
+            </div>
+        </div>
+
+        <div class="sidebar-brand-lang">
+            <?php include __DIR__ . '/_lang_switch_inner.php'; ?>
+        </div>
+
         <div class="profile-header">
             <div class="profile-photo-container" style="position:relative; cursor:pointer;">
                 <img src="../uploads/<?php echo htmlspecialchars($foto); ?>" alt="Profile Photo" class="profile-photo" id="profilePhoto">
@@ -1088,7 +1101,7 @@ function getHotelFacilities($conn, $hotel_id)
                 </div>
             </div>
 
-            <a href="logout.php"><span class="material-icons">logout</span><span>Logout</span></a>
+            <a href="logout.php"><span class="material-icons">logout</span><span><?= te('Keluar') ?></span></a>
         </nav>
     </div>
 

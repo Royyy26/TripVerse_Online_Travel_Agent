@@ -13,6 +13,7 @@ if ($_SESSION['role'] !== 'admin') {
 }
 
 require 'connect.php';
+require_once __DIR__ . '/_lang.php';
 
 $id_user = $_SESSION['id_user'];
 
@@ -404,7 +405,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=2.0.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -966,6 +967,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
 
 <body>
     <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="../img/logo.png" alt="TripVerse Logo" class="sidebar-brand-logo" />
+            <div class="sidebar-brand-text">
+                <span class="sidebar-brand-title">TripVerse</span>
+                <span class="sidebar-brand-subtitle"><?= te('Dasbor Admin') ?></span>
+            </div>
+        </div>
+
+        <div class="sidebar-brand-lang">
+            <?php include __DIR__ . '/_lang_switch_inner.php'; ?>
+        </div>
+
         <div class="profile-header">
             <div class="profile-photo-section">
                 <div class="profile-photo-container">
@@ -984,7 +997,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
 
                     <div class="user-dropdown">
                         <button class="user-info" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown(this)">
-                            <span class="dropdown-text">Manage Account</span>
+                            <span class="dropdown-text"><?= te('Kelola Akun') ?></span>
                             <span class="material-icons dropdown-arrow">expand_more</span>
                         </button>
                         <div class="dropdown-content" role="menu" aria-hidden="true">
@@ -994,7 +1007,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                             </a>
                             <a href="logout.php" class="dropdown-item">
                                 <span class="material-icons">logout</span>
-                                <span>Logout</span>
+                                <span><?= te('Keluar') ?></span>
                             </a>
                         </div>
                     </div>
@@ -1012,7 +1025,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </a>
                 <div class="booking-submenu hidden" id="performanceDropdown" role="menu" aria-hidden="true">
                     <a href="performance_snapshot.php"><span class="material-icons">speed</span><span>Performance Snapshot</span></a>
-                    <a href="booking_trends.php"><span class="material-icons">trending_up</span><span>Booking Trends</span></a>
+                    <a href="booking_trends.php"><span class="material-icons">trending_up</span><span><?= te('Tren Booking') ?></span></a>
                     <a href="alos_analysis.php"><span class="material-icons">hotel</span><span>ALOS Analysis</span></a>
                 </div>
             </div>
@@ -1069,10 +1082,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             <a href="hotel_management.php"><span class="material-icons">business</span><span>Hotel Management</span></a>
             <a href="customer_management.php"><span class="material-icons">people</span><span>Customer Management</span></a>
             <a href="room_management.php"><span class="material-icons">meeting_room</span><span>Room Management</span></a>
-            <a href="promo_management.php"><span class="material-icons">local_offer</span><span>Promo Management</span></a>
+            <a href="promo_management.php"><span class="material-icons">local_offer</span><span><?= te('Manajemen Promo') ?></span></a>
             <a href="report.php"><span class="material-icons">summarize</span><span>Reports</span></a>
             
-            <a href="logout.php"><span class="material-icons">logout</span><span>Logout</span></a>
+            <a href="logout.php"><span class="material-icons">logout</span><span><?= te('Keluar') ?></span></a>
         </nav>
     </div>
 

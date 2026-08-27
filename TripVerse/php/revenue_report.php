@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Booking Transactions | TripVerse Admin</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=2.0.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>

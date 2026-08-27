@@ -10,6 +10,7 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'owner']
 }
 
 require 'connect.php';
+require_once __DIR__ . '/_lang.php';
 require 'activity_log_helper.php';
 
 // Ensure hotel table has owner_id column
@@ -373,7 +374,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Management</title>
-    <link rel="stylesheet" href="../css/owner_dashboard.css?v=1.8.0">
+    <link rel="stylesheet" href="../css/owner_dashboard.css?v=2.0.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -1133,12 +1134,19 @@ $conn->close();
     <div class="owner-sidebar" id="owner-sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <span class="material-icons">hotel</span>
-                <span class="logo-text">TripVerse</span>
+                <img src="../img/logo.png" alt="TripVerse Logo" class="logo-img" />
+                <div class="logo-text-group">
+                    <span class="logo-text">TripVerse</span>
+                    <span class="logo-subtitle"><?= te('Dasbor Admin') ?></span>
+                </div>
             </div>
             <button id="toggleSidebar" class="sidebar-toggle" aria-label="Toggle sidebar">
                 <span class="material-icons">menu</span>
             </button>
+        </div>
+
+        <div class="sidebar-brand-lang">
+            <?php include __DIR__ . '/_lang_switch_inner.php'; ?>
         </div>
 
          <div class="profile-section">
@@ -1162,31 +1170,31 @@ $conn->close();
         <nav class="owner-nav">
             <a href="owner_dashboard.php" class="nav-item">
                 <span class="material-icons">dashboard</span>
-                <span>Dashboard</span>
+                <span><?= te('Dashboard') ?></span>
             </a>
             <a href="hotel_manage.php" class="nav-item active">
                 <span class="material-icons">hotel</span>
-                <span>Manage Hotels</span>
+                <span><?= te('Kelola Hotel') ?></span>
             </a>
             <a href="room_management.php" class="nav-item">
                 <span class="material-icons">bed</span>
-                <span>Manage Rooms</span>
+                <span><?= te('Kelola Kamar') ?></span>
             </a>
             <a href="extra_facilities_manage.php" class="nav-item">
                 <span class="material-icons">room_service</span>
-                <span>Extra Facilities</span>
+                <span><?= te('Fasilitas Tambahan') ?></span>
             </a>
             <a href="booking_management.php" class="nav-item">
                 <span class="material-icons">book_online</span>
-                <span>Bookings</span>
+                <span><?= te('Pemesanan') ?></span>
             </a>
             <a href="activity_log.php" class="nav-item">
                 <span class="material-icons">history</span>
-                <span>Activity Log</span>
+                <span><?= te('Log Aktivitas') ?></span>
             </a>
             <a href="logout.php" class="nav-item logout">
                 <span class="material-icons">logout</span>
-                <span>Logout</span>
+                <span><?= te('Keluar') ?></span>
             </a>
         </nav>
     </div>

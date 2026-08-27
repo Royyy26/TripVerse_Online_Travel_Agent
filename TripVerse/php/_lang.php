@@ -646,6 +646,29 @@ $GLOBALS['TV_DICT'] = [
     'Segera Hadir' => 'Coming Soon',
     'Fitur pemesanan tiket pesawat sedang kami siapkan supaya perjalananmu makin lengkap, dari hotel sampai penerbangan dalam satu platform.'
         => "We're putting the finishing touches on flight booking, so your whole trip \u{2014} hotel and flights \u{2014} will fit in one platform.",
+
+    /* ---- admin panel: shared sidebar chrome ---- */
+    'Dasbor Admin'            => 'Admin Dashboard',
+    'Kelola Akun'             => 'Manage Account',
+    'Keluar'                  => 'Logout',
+    'Ringkasan Eksekutif'     => 'Executive Overview',
+    'Manajemen Supplier'      => 'Supplier Management',
+    'Manajemen Promo'         => 'Promo Management',
+    'Monitoring Performa'     => 'Performance Monitoring',
+    'Statistik Performa'      => 'Performance Statistics',
+    'Tren Booking'            => 'Booking Trends',
+    'Analisis Statistik'      => 'Statistical Analysis',
+    'Statistik Pendapatan'    => 'Revenue Statistics',
+    'Statistik Okupansi'      => 'Occupancy Statistics',
+    'Statistik ALOS'          => 'ALOS Statistics',
+    'Statistik Pelanggan'     => 'Customer Statistics',
+
+    /* ---- admin panel: owner/supplier operational sidebar ---- */
+    'Kelola Hotel'            => 'Manage Hotels',
+    'Kelola Kamar'            => 'Manage Rooms',
+    'Fasilitas Tambahan'      => 'Extra Facilities',
+    'Log Aktivitas'           => 'Activity Log',
+    'Pemilik Hotel'           => 'Hotel Owner',
 ];
 
 if (!function_exists('t')) {
