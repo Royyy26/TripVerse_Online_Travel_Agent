@@ -11,6 +11,53 @@ require 'connect.php';
 
 $id_user = $_SESSION['id_user'];
 
+// Manually create an owner account (merged from the former standalone owner_manage.php,
+// which sat unreachable from any nav link — admins now do this from the "Manage Owners" tab).
+$ownerCreateMessage = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_owner'])) {
+    $newFirst = trim($_POST['first_name'] ?? '');
+    $newLast = trim($_POST['last_name'] ?? '');
+    $newUsername = trim($_POST['username'] ?? '');
+    $newEmail = trim($_POST['email'] ?? '');
+    $newPhone = trim($_POST['no_hp'] ?? '');
+    $newPassword = trim($_POST['password'] ?? '');
+
+    if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
+        $ownerCreateMessage = ['type' => 'error', 'text' => 'Format email tidak valid untuk owner. Gunakan format yang benar (contoh: owner@domain.com).'];
+    } elseif ($newFirst && $newUsername && $newEmail && $newPassword) {
+        $emailCheck = $conn->prepare("SELECT id_user FROM user WHERE email = ?");
+        $emailCheck->bind_param("s", $newEmail);
+        $emailCheck->execute();
+        $emailTaken = $emailCheck->get_result()->num_rows > 0;
+        $emailCheck->close();
+
+        if ($emailTaken) {
+            $ownerCreateMessage = ['type' => 'error', 'text' => 'Email sudah digunakan. Silakan gunakan email lain.'];
+        } else {
+            $lastIdRes = $conn->query("SELECT id_user FROM user WHERE id_user LIKE 'OWN%' ORDER BY id_user DESC LIMIT 1");
+            $newOwnerId = 'OWN001';
+            if ($lastIdRes && $lastRow = $lastIdRes->fetch_assoc()) {
+                $newOwnerId = 'OWN' . str_pad((int)substr($lastRow['id_user'], 3) + 1, 3, '0', STR_PAD_LEFT);
+            }
+
+            $createStmt = $conn->prepare("INSERT INTO user (id_user, first_name, last_name, username, no_hp, email, password, role, approved, approved_by, approved_at) VALUES (?,?,?,?,?,?,?, 'owner', 'approved', ?, NOW())");
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $createStmt->bind_param('ssssssss', $newOwnerId, $newFirst, $newLast, $newUsername, $newPhone, $newEmail, $hashedPassword, $id_user);
+            if ($createStmt->execute()) {
+                $ownerCreateMessage = ['type' => 'success', 'text' => 'Owner berhasil dibuat: ' . htmlspecialchars($newOwnerId) . ' | Email: ' . htmlspecialchars($newEmail)];
+            } else {
+                $ownerCreateMessage = ['type' => 'error', 'text' => 'Gagal membuat owner: ' . $createStmt->error];
+            }
+            $createStmt->close();
+        }
+    } else {
+        $ownerCreateMessage = ['type' => 'error', 'text' => 'Lengkapi data wajib (nama depan, username, email, password).'];
+    }
+}
+
+// All owner accounts, however they were approved, for the "Manage Owners" tab list
+$allOwnersRes = $conn->query("SELECT id_user, username, email, first_name, last_name FROM user WHERE role = 'owner' ORDER BY id_user DESC");
+
 // Get admin data
 $query = "SELECT username, email, first_name, last_name, profile_picture FROM user WHERE id_user = ?";
 $stmt = $conn->prepare($query);
@@ -73,21 +120,9 @@ $rejectedSql = "SELECT u.id_user, u.first_name, u.last_name, u.username, u.email
 $rejectedRes = $conn->query($rejectedSql);
 $rejectedCount = $rejectedRes ? $rejectedRes->num_rows : 0;
 
-// Debug: Check what's in the database
-$debugSql = "SELECT id_user, first_name, last_name, approved, approved_by, approved_at FROM user WHERE role = 'owner' ORDER BY id_user";
-$debugRes = $conn->query($debugSql);
-
-echo "<!-- DEBUG INFO -->\n";
-echo "<!-- \n";
-if ($debugRes) {
-    while ($row = $debugRes->fetch_assoc()) {
-        echo "Supplier: " . $row['id_user'] . " - " . $row['first_name'] . " " . $row['last_name'] .
-            " | Approved: " . ($row['approved'] === null ? 'NULL' : $row['approved']) .
-            " | By: " . ($row['approved_by'] ?: 'NULL') .
-            " | At: " . ($row['approved_at'] ?: 'NULL') . "\n";
-    }
-}
-echo "-->";
+// Notifikasi (sama seperti dashboard.php: jumlah booking berstatus Pending)
+$notifCountResult = $conn->query("SELECT COUNT(*) as notifications FROM booking_hotel WHERE status = 'Pending'");
+$notificationCount = $notifCountResult ? ($notifCountResult->fetch_assoc()['notifications'] ?? 0) : 0;
 
 // Get all time stats
 $totalSuppliers = $pendingCount + $approvedCount + $rejectedCount;
@@ -104,45 +139,48 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supplier Approvals - TripVerse Admin</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.3.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #3f51b5;
-            --primary-light: #757de8;
-            --primary-dark: #002984;
-            --primary-hover: #303f9f;
-            --secondary-color: #ff9800;
-            --secondary-light: #ffc947;
-            --secondary-dark: #c66900;
-            --secondary-hover: #f57c00;
-            --success-color: #4caf50;
-            --success-light: #80e27e;
-            --success-dark: #087f23;
-            --success-hover: #388e3c;
-            --warning-color: #ffc107;
-            --warning-light: #fff350;
-            --warning-dark: #c79100;
-            --warning-hover: #ffa000;
-            --danger-color: #f44336;
-            --danger-light: #ff7961;
-            --danger-dark: #ba000d;
-            --danger-hover: #d32f2f;
-            --info-color: #2196f3;
-            --info-light: #6ec6ff;
-            --info-dark: #0069c0;
-            --info-hover: #1976d2;
+            --primary-color: #FF7A3D;
+            --primary-light: #FFB37A;
+            --primary-dark: #C2530F;
+            --primary-hover: #FF7A3D;
+            --secondary-color: #0F172B;
+            --secondary-light: #2a3a56;
+            --secondary-dark: #060a14;
+            --secondary-hover: #1a2438;
+            --success-color: #1baf7a;
+            --success-light: #3fcf9c;
+            --success-dark: #128a5e;
+            --success-hover: #17996b;
+            --warning-color: #eda100;
+            --warning-light: #f4b73a;
+            --warning-dark: #b97e00;
+            --warning-hover: #d69200;
+            --danger-color: #e34948;
+            --danger-light: #ef6e6d;
+            --danger-dark: #b33130;
+            --danger-hover: #cf3c3b;
+            --info-color: #2a78d6;
+            --info-light: #6fa8e8;
+            --info-dark: #1c5aa3;
+            --info-hover: #2468bd;
             --light-bg: #f8f9fa;
-            --dark-bg: #1a237e;
+            --dark-bg: #0F172B;
             --border-color: #e0e0e0;
             --border-radius: 12px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --box-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --box-shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.15);
-            --text-dark: #212121;
-            --text-medium: #424242;
-            --text-light: #757575;
+            --box-shadow: 0 4px 12px rgba(15, 23, 43, 0.08);
+            --box-shadow-hover: 0 8px 24px rgba(15, 23, 43, 0.12);
+            --box-shadow-elevated: 0 12px 32px rgba(15, 23, 43, 0.15);
+            --text-dark: #1e2635;
+            --text-medium: #4b5566;
+            --text-light: #6b7280;
             --text-white: #ffffff;
             --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
@@ -413,7 +451,7 @@ $conn->close();
         }
 
         .tab-button:hover {
-            background: rgba(63, 81, 181, 0.05);
+            background: rgba(255, 122, 61, 0.05);
             color: var(--primary-color);
         }
 
@@ -545,7 +583,7 @@ $conn->close();
             font-size: 24px;
             font-weight: 700;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 122, 61, 0.3);
             border: 3px solid var(--text-white);
             transition: var(--transition);
         }
@@ -605,9 +643,9 @@ $conn->close();
         }
 
         .rejected-badge {
-            background: rgba(244, 67, 54, 0.1);
+            background: rgba(227, 73, 72, 0.1);
             color: var(--danger-dark);
-            border-color: rgba(244, 67, 54, 0.2);
+            border-color: rgba(227, 73, 72, 0.2);
         }
 
         .supplier-details {
@@ -784,7 +822,7 @@ $conn->close();
 
         .notification.error {
             border-left-color: var(--danger-color);
-            background: rgba(244, 67, 54, 0.05);
+            background: rgba(227, 73, 72, 0.05);
         }
 
         .notification .material-icons {
@@ -865,7 +903,7 @@ $conn->close();
         .close-modal:hover,
         .close-detail-modal:hover {
             color: var(--danger-color);
-            background: rgba(244, 67, 54, 0.1);
+            background: rgba(227, 73, 72, 0.1);
         }
 
         .modal-body {
@@ -977,9 +1015,9 @@ $conn->close();
         }
 
         .status-rejected {
-            background: rgba(244, 67, 54, 0.1);
+            background: rgba(227, 73, 72, 0.1);
             color: var(--danger-dark);
-            border-color: rgba(244, 67, 54, 0.2);
+            border-color: rgba(227, 73, 72, 0.2);
         }
 
         ::-webkit-scrollbar {
@@ -1000,7 +1038,7 @@ $conn->close();
         .tab-button:focus,
         .close-modal:focus,
         .close-detail-modal:focus {
-            outline: 2px solid rgba(63, 81, 181, 0.3);
+            outline: 2px solid rgba(255, 122, 61, 0.3);
             outline-offset: 2px;
         }
 
@@ -1198,6 +1236,123 @@ $conn->close();
                 background: none !important;
             }
         }
+
+        /* Manage Owners tab (merged from the former standalone owner_manage.php) */
+        .owner-manage-message {
+            padding: 14px 18px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .owner-manage-message.success {
+            background-color: #e8f7f1;
+            color: #128a5e;
+        }
+
+        .owner-manage-message.error {
+            background-color: #fbecec;
+            color: #b33130;
+        }
+
+        .owner-form-card,
+        .owner-table-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            border: 1px solid var(--border-color);
+        }
+
+        .owner-table-card {
+            margin-top: 24px;
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .owner-form-card h3,
+        .owner-table-card h3 {
+            margin: 0 0 20px;
+            padding: 0 0 0 0;
+            font-size: 16px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .owner-table-card h3 {
+            padding: 20px 25px 0;
+        }
+
+        .owner-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .owner-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .owner-form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-medium);
+        }
+
+        .owner-form-group input {
+            padding: 12px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .owner-form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.12);
+        }
+
+        .owner-manage-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .owner-manage-table thead th {
+            text-align: left;
+            padding: 16px 20px;
+            background: var(--light-bg);
+            color: var(--text-medium);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .owner-manage-table tbody td {
+            padding: 14px 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .owner-manage-table tbody tr:hover {
+            background: var(--light-bg);
+        }
+
+        .btn-create-owner {
+            flex: none;
+            width: auto;
+            background: var(--gradient-primary);
+            color: var(--text-white);
+            padding: 14px 28px;
+            text-transform: none;
+        }
     </style>
 </head>
 
@@ -1330,6 +1485,17 @@ $conn->close();
             <button id="toggleSidebar" class="menu-toggle" aria-label="Toggle sidebar">
                 <span class="material-icons">menu</span>
             </button>
+
+            <div class="header-actions">
+                <div class="notification-bell" id="notificationBell" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+                    <span class="material-icons bell-icon">notifications</span>
+                    <span class="notification-badge" id="notificationCount"><?= $notificationCount ?></span>
+                </div>
+
+                <div class="user-menu">
+                    <img src="../uploads/<?php echo htmlspecialchars($foto); ?>" alt="User Avatar" class="user-avatar" />
+                </div>
+            </div>
         </header>
 
         <div class="page-header">
@@ -1363,9 +1529,10 @@ $conn->close();
             </div>
         </div>
 
+        <?php $defaultTab = $ownerCreateMessage ? 'manageowners' : 'pending'; ?>
         <div class="tabs-container">
             <div class="tabs-header">
-                <button class="tab-button active" onclick="switchTab('pending')">
+                <button class="tab-button<?= $defaultTab === 'pending' ? ' active' : '' ?>" onclick="switchTab('pending')">
                     <i class="material-icons">hourglass_empty</i>
                     Pending (<?= $pendingCount ?>)
                 </button>
@@ -1377,10 +1544,14 @@ $conn->close();
                     <i class="material-icons">cancel</i>
                     Rejected (<?= $rejectedCount ?>)
                 </button>
+                <button class="tab-button<?= $defaultTab === 'manageowners' ? ' active' : '' ?>" onclick="switchTab('manageowners')">
+                    <i class="material-icons">group_add</i>
+                    Manage Owners
+                </button>
             </div>
 
             <!-- Pending Tab -->
-            <div class="tab-content active" id="pending-tab">
+            <div class="tab-content<?= $defaultTab === 'pending' ? ' active' : '' ?>" id="pending-tab">
                 <?php if ($pendingCount > 0): ?>
                     <div class="suppliers-grid">
                         <?php
@@ -1501,7 +1672,7 @@ $conn->close();
                         ?>
                                 <div class="supplier-card">
                                     <div class="supplier-header">
-                                        <div class="supplier-avatar" style="background: linear-gradient(135deg, #4caf50, #66bb6a);">
+                                        <div class="supplier-avatar" style="background: var(--gradient-success);">
                                             <?= $initial ?>
                                         </div>
                                         <div class="supplier-info">
@@ -1589,7 +1760,7 @@ $conn->close();
                         ?>
                                 <div class="supplier-card">
                                     <div class="supplier-header">
-                                        <div class="supplier-avatar" style="background: linear-gradient(135deg, #f44336, #ef5350);">
+                                        <div class="supplier-avatar" style="background: var(--gradient-danger);">
                                             <?= $initial ?>
                                         </div>
                                         <div class="supplier-info">
@@ -1640,6 +1811,77 @@ $conn->close();
                         <p>No suppliers have been rejected</p>
                     </div>
                 <?php endif; ?>
+            </div>
+
+            <!-- Manage Owners Tab -->
+            <div class="tab-content<?= $defaultTab === 'manageowners' ? ' active' : '' ?>" id="manageowners-tab">
+                <?php if ($ownerCreateMessage): ?>
+                    <div class="owner-manage-message <?= $ownerCreateMessage['type'] ?>"><?= $ownerCreateMessage['text'] ?></div>
+                <?php endif; ?>
+
+                <div class="owner-form-card">
+                    <h3><i class="material-icons">person_add</i> Buat Owner Baru</h3>
+                    <form method="post">
+                        <input type="hidden" name="create_owner" value="1">
+                        <div class="owner-form-grid">
+                            <div class="owner-form-group">
+                                <label>First Name*</label>
+                                <input type="text" name="first_name" required>
+                            </div>
+                            <div class="owner-form-group">
+                                <label>Last Name</label>
+                                <input type="text" name="last_name">
+                            </div>
+                            <div class="owner-form-group">
+                                <label>Username*</label>
+                                <input type="text" name="username" required>
+                            </div>
+                            <div class="owner-form-group">
+                                <label>Email*</label>
+                                <input type="email" name="email" required>
+                            </div>
+                            <div class="owner-form-group">
+                                <label>No HP</label>
+                                <input type="text" name="no_hp">
+                            </div>
+                            <div class="owner-form-group">
+                                <label>Password*</label>
+                                <input type="password" name="password" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-create-owner">Buat Owner</button>
+                    </form>
+                </div>
+
+                <div class="owner-table-card">
+                    <h3><i class="material-icons">list_alt</i> Semua Owner</h3>
+                    <table class="owner-manage-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if ($allOwnersRes && $allOwnersRes->num_rows > 0): ?>
+                                <?php while ($owner = $allOwnersRes->fetch_assoc()): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($owner['id_user']) ?></td>
+                                        <td><?= htmlspecialchars(trim($owner['first_name'] . ' ' . $owner['last_name'])) ?></td>
+                                        <td><?= htmlspecialchars($owner['username']) ?></td>
+                                        <td><?= htmlspecialchars($owner['email']) ?></td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="4">Belum ada owner</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 

@@ -804,36 +804,39 @@ if ($filter_hotel !== 'all') {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Analisis Tren Pemesanan Hotel | TripVerse Admin</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.4.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-color: #3f51b5;
-            --secondary-color: #ff9800;
-            --success-color: #4caf50;
-            --info-color: #2196f3;
-            --warning-color: #ffc107;
-            --danger-color: #f44336;
-            --light-color: #f5f5f5;
-            --dark-color: #212121;
-            --text-color: #333;
-            --text-light: #777;
+            --primary-color: #FF7A3D;
+            --secondary-color: #0F172B;
+            --success-color: #1baf7a;
+            --info-color: #2a78d6;
+            --warning-color: #eda100;
+            --danger-color: #e34948;
+            --light-color: #f5f6f8;
+            --dark-color: #0F172B;
+            --text-color: #1e2635;
+            --text-light: #6b7280;
             --border-radius: 12px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --box-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --box-shadow: 0 4px 12px rgba(15, 23, 43, 0.08);
+            --box-shadow-hover: 0 8px 24px rgba(15, 23, 43, 0.14);
             --transition: all 0.3s ease;
-            --gradient-primary: linear-gradient(135deg, #3f51b5, #5c6bc0);
-            --gradient-success: linear-gradient(135deg, #4caf50, #66bb6a);
-            --gradient-warning: linear-gradient(135deg, #ff9800, #ffa726);
-            --gradient-danger: linear-gradient(135deg, #f44336, #ef5350);
-            --gradient-info: linear-gradient(135deg, #2196f3, #42a5f5);
+            --gradient-primary: linear-gradient(135deg, #FEA116, #FF7A3D);
+            --gradient-success: linear-gradient(135deg, #1baf7a, #3fcf9c);
+            --gradient-warning: linear-gradient(135deg, #eda100, #f4b73a);
+            --gradient-danger: linear-gradient(135deg, #e34948, #ef6e6d);
+            --gradient-info: linear-gradient(135deg, #2a78d6, #4f92e3);
         }
 
         body {
             background-color: #f8fafc;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Heebo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             overflow-x: hidden;
         }
@@ -945,7 +948,7 @@ if ($filter_hotel !== 'all') {
 
         .filter-select:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.1);
             outline: none;
             transform: translateY(-1px);
         }
@@ -985,9 +988,9 @@ if ($filter_hotel !== 'all') {
         }
 
         .btn-primary:hover {
-            background: #303f9f;
+            background: #E8672B;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 122, 61, 0.3);
         }
 
         .btn-primary:disabled {
@@ -1122,6 +1125,7 @@ if ($filter_hotel !== 'all') {
             border: 1px solid #e9ecef;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             transition: var(--transition);
+            overflow-x: auto;
         }
 
         .performance-card:hover {
@@ -1151,7 +1155,7 @@ if ($filter_hotel !== 'all') {
         }
 
         .performance-table thead th {
-            background: linear-gradient(135deg, var(--primary-color), #5c6bc0);
+            background: linear-gradient(135deg, var(--primary-color), #FF7A3D);
             color: white;
             padding: 16px 15px;
             font-size: 14px;
@@ -1210,7 +1214,7 @@ if ($filter_hotel !== 'all') {
             border-radius: var(--border-radius);
             padding: 30px 25px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(63, 81, 181, 0.1);
+            border: 1px solid rgba(255, 122, 61, 0.1);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
@@ -1221,7 +1225,7 @@ if ($filter_hotel !== 'all') {
 
         .city-card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(63, 81, 181, 0.15);
+            box-shadow: 0 15px 35px rgba(255, 122, 61, 0.15);
         }
 
         .city-card h4 {
@@ -1260,7 +1264,7 @@ if ($filter_hotel !== 'all') {
             align-items: center;
             gap: 10px;
             padding: 8px 12px;
-            background: rgba(63, 81, 181, 0.05);
+            background: rgba(255, 122, 61, 0.05);
             border-radius: 8px;
             border-left: 3px solid var(--primary-color);
         }
@@ -1393,12 +1397,12 @@ if ($filter_hotel !== 'all') {
         }
 
         .notification-message.success {
-            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            background: linear-gradient(135deg, #1baf7a, #3fcf9c);
             color: white;
         }
 
         .notification-message.error {
-            background: linear-gradient(135deg, #f44336, #ef5350);
+            background: linear-gradient(135deg, #e34948, #ef6e6d);
             color: white;
         }
 
@@ -1532,7 +1536,7 @@ if ($filter_hotel !== 'all') {
 
         .highlight-hotel {
             background: linear-gradient(135deg, #e3f2fd, #e8eaf6) !important;
-            border-left: 5px solid #3f51b5;
+            border-left: 5px solid #FF7A3D;
         }
 
         .highlight-badge {
@@ -1541,7 +1545,7 @@ if ($filter_hotel !== 'all') {
             font-size: 11px;
             font-weight: 700;
             color: white;
-            background: #3f51b5;
+            background: #FF7A3D;
             border-radius: 12px;
             margin-left: 6px;
         }
@@ -1771,7 +1775,7 @@ if ($filter_hotel !== 'all') {
                     <span>• <i class="material-icons">hotel</i> Hotel: <strong><?= htmlspecialchars($available_hotels[$filter_hotel]) ?></strong></span>
                 <?php endif; ?>
                 <?php if (isset($_GET['apply_filter']) && $_GET['apply_filter'] == '1'): ?>
-                    <span style="color: #4caf50; margin-left: 10px;">
+                    <span style="color: #1baf7a; margin-left: 10px;">
                         <i class="material-icons">check_circle</i> Filter diterapkan
                     </span>
                 <?php endif; ?>
@@ -1962,23 +1966,23 @@ if ($filter_hotel !== 'all') {
                             <div class="city-stats">
                                 <div class="city-stat-item">
                                     <div class="city-stat-value">
-                                        <i class="material-icons" style="color: #4caf50;">attach_money</i>
+                                        <i class="material-icons" style="color: #1baf7a;">attach_money</i>
                                         <?= formatRupiah($city['total_revenue']) ?>
                                     </div>
                                     <div class="city-stat-label">Total Pendapatan</div>
                                 </div>
                                 <div class="city-stat-item">
                                     <div class="city-stat-value">
-                                        <i class="material-icons" style="color: #2196f3;">receipt</i>
+                                        <i class="material-icons" style="color: #2a78d6;">receipt</i>
                                         <?= number_format($city['total_bookings']) ?>
                                     </div>
                                     <div class="city-stat-label">Total Pemesanan</div>
                                 </div>
                                 <div class="city-stat-item">
                                     <div class="city-stat-value">
-                                        <i class="material-icons" style="color: #4caf50;">check_circle</i>
+                                        <i class="material-icons" style="color: #1baf7a;">check_circle</i>
                                         <?= number_format($city['completed_bookings']) ?>
-                                        <span style="font-size: 12px; color: #4caf50;">
+                                        <span style="font-size: 12px; color: #1baf7a;">
                                             (<?= $city['total_bookings'] > 0 ? round(($city['completed_bookings'] / $city['total_bookings']) * 100, 1) : 0 ?>%)
                                         </span>
                                     </div>
@@ -1986,14 +1990,14 @@ if ($filter_hotel !== 'all') {
                                 </div>
                                 <div class="city-stat-item">
                                     <div class="city-stat-value">
-                                        <i class="material-icons" style="color: #ff9800;">schedule</i>
+                                        <i class="material-icons" style="color: #eda100;">schedule</i>
                                         <?= round($city['avg_stay_duration'] ?? 0, 1) ?> hari
                                     </div>
                                     <div class="city-stat-label">Rata-rata Lama Inap</div>
                                 </div>
                             </div>
                             <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #eee; font-size: 13px; color: #666;">
-                                <i class="material-icons" style="font-size: 14px; vertical-align: middle; color: #3f51b5;">insights</i>
+                                <i class="material-icons" style="font-size: 14px; vertical-align: middle; color: #FF7A3D;">insights</i>
                                 <?php
                                 $revenue_per_hotel = $city['total_hotels'] > 0 ? $city['total_revenue'] / $city['total_hotels'] : 0;
                                 ?>
@@ -2172,13 +2176,13 @@ if ($filter_hotel !== 'all') {
             });
 
             // Define colors based on the blue palette
-            const primaryColor = '#3f51b5';
-            const secondaryColor = '#ff9800';
+            const primaryColor = '#FF7A3D';
+            const secondaryColor = '#eda100';
             const accentColor = '#4fc3f7';
-            const successColor = '#4caf50';
-            const warningColor = '#ffc107';
-            const dangerColor = '#f44336';
-            const infoColor = '#2196f3';
+            const successColor = '#1baf7a';
+            const warningColor = '#eda100';
+            const dangerColor = '#e34948';
+            const infoColor = '#2a78d6';
 
             // Color palette for charts
             const chartColors = [

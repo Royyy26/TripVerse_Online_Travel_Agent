@@ -774,31 +774,34 @@ function get_overall_price_recommendation($score)
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Price Analysis Dashboard | TripVerse Admin</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.4.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-color: #3f51b5;
-            --secondary-color: #ff9800;
-            --success-color: #4caf50;
-            --info-color: #2196f3;
-            --warning-color: #ffc107;
-            --danger-color: #f44336;
-            --light-color: #f5f5f5;
-            --dark-color: #212121;
-            --text-color: #333;
-            --text-light: #777;
+            --primary-color: #FF7A3D;
+            --secondary-color: #0F172B;
+            --success-color: #1baf7a;
+            --info-color: #2a78d6;
+            --warning-color: #eda100;
+            --danger-color: #e34948;
+            --light-color: #f5f6f8;
+            --dark-color: #0F172B;
+            --text-color: #1e2635;
+            --text-light: #6b7280;
             --border-radius: 12px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --box-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --box-shadow: 0 4px 12px rgba(15, 23, 43, 0.08);
+            --box-shadow-hover: 0 8px 24px rgba(15, 23, 43, 0.14);
             --transition: all 0.3s ease;
-            --gradient-primary: linear-gradient(135deg, #3f51b5, #5c6bc0);
-            --gradient-success: linear-gradient(135deg, #4caf50, #66bb6a);
-            --gradient-warning: linear-gradient(135deg, #ff9800, #ffa726);
-            --gradient-danger: linear-gradient(135deg, #f44336, #ef5350);
-            --gradient-info: linear-gradient(135deg, #2196f3, #42a5f5);
+            --gradient-primary: linear-gradient(135deg, #FEA116, #FF7A3D);
+            --gradient-success: linear-gradient(135deg, #1baf7a, #3fcf9c);
+            --gradient-warning: linear-gradient(135deg, #eda100, #f4b73a);
+            --gradient-danger: linear-gradient(135deg, #e34948, #ef6e6d);
+            --gradient-info: linear-gradient(135deg, #2a78d6, #4f92e3);
         }
 
         .user-avatar img {
@@ -987,7 +990,7 @@ function get_overall_price_recommendation($score)
         }
 
         .kpi-card.success::before {
-            background: linear-gradient(135deg, var(--success-color), #66bb6a);
+            background: linear-gradient(135deg, var(--success-color), #3fcf9c);
         }
 
         .kpi-card.warning::before {
@@ -995,7 +998,7 @@ function get_overall_price_recommendation($score)
         }
 
         .kpi-card.danger::before {
-            background: linear-gradient(135deg, var(--danger-color), #ef5350);
+            background: linear-gradient(135deg, var(--danger-color), #ef6e6d);
         }
 
         .kpi-card.info::before {
@@ -1024,7 +1027,7 @@ function get_overall_price_recommendation($score)
         }
 
         .kpi-card.success .kpi-icon {
-            background: linear-gradient(135deg, var(--success-color), #66bb6a);
+            background: linear-gradient(135deg, var(--success-color), #3fcf9c);
         }
 
         .kpi-card.warning .kpi-icon {
@@ -1032,7 +1035,7 @@ function get_overall_price_recommendation($score)
         }
 
         .kpi-card.danger .kpi-icon {
-            background: linear-gradient(135deg, var(--danger-color), #ef5350);
+            background: linear-gradient(135deg, var(--danger-color), #ef6e6d);
         }
 
         .kpi-card.info .kpi-icon {
@@ -1129,25 +1132,25 @@ function get_overall_price_recommendation($score)
         .badge-success {
             background: #e8f5e8;
             color: var(--success-color);
-            border: 1px solid #4caf50;
+            border: 1px solid #1baf7a;
         }
 
         .badge-warning {
             background: #fff3e0;
             color: var(--warning-color);
-            border: 1px solid #ffc107;
+            border: 1px solid #eda100;
         }
 
         .badge-danger {
             background: #ffebee;
             color: var(--danger-color);
-            border: 1px solid #f44336;
+            border: 1px solid #e34948;
         }
 
         .badge-info {
             background: #e3f2fd;
             color: var(--info-color);
-            border: 1px solid #2196f3;
+            border: 1px solid #2a78d6;
         }
 
         .badge-primary {
@@ -1169,7 +1172,7 @@ function get_overall_price_recommendation($score)
         }
 
         .badge-budget {
-            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            background: linear-gradient(135deg, #1baf7a, #3fcf9c);
             color: white;
             border: none;
         }
@@ -1240,19 +1243,19 @@ function get_overall_price_recommendation($score)
         }
 
         .progress-optimal {
-            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            background: linear-gradient(135deg, #1baf7a, #3fcf9c);
         }
 
         .progress-good {
-            background: linear-gradient(135deg, #2196f3, #64b5f6);
+            background: linear-gradient(135deg, #2a78d6, #64b5f6);
         }
 
         .progress-fair {
-            background: linear-gradient(135deg, #ff9800, #ffb74d);
+            background: linear-gradient(135deg, #eda100, #ffb74d);
         }
 
         .progress-poor {
-            background: linear-gradient(135deg, #f44336, #ef5350);
+            background: linear-gradient(135deg, #e34948, #ef6e6d);
         }
 
         /* Price Score Circle */
@@ -1260,7 +1263,7 @@ function get_overall_price_recommendation($score)
             width: 140px;
             height: 140px;
             border-radius: 50%;
-            background: conic-gradient(#4caf50 0deg <?php echo $overall_price_score * 3.6; ?>deg,
+            background: conic-gradient(#1baf7a 0deg <?php echo $overall_price_score * 3.6; ?>deg,
                     rgba(255, 255, 255, 0.2) <?php echo $overall_price_score * 3.6; ?>deg 360deg);
             display: flex;
             align-items: center;
@@ -1371,17 +1374,17 @@ function get_overall_price_recommendation($score)
 
         .status-high {
             background: #e3f2fd;
-            color: #2196f3;
+            color: #2a78d6;
         }
 
         .status-mid {
             background: #e8f5e8;
-            color: #4caf50;
+            color: #1baf7a;
         }
 
         .status-low {
             background: #fff3e0;
-            color: #ff9800;
+            color: #eda100;
         }
 
         .status-budget {
@@ -1396,37 +1399,37 @@ function get_overall_price_recommendation($score)
         }
 
         .segment-premium {
-            color: #2196f3;
+            color: #2a78d6;
             font-weight: 600;
         }
 
         .segment-midrange {
-            color: #4caf50;
+            color: #1baf7a;
             font-weight: 600;
         }
 
         .segment-budget {
-            color: #ff9800;
+            color: #eda100;
             font-weight: 600;
         }
 
         /* Trend Arrows */
         .trend-up {
-            color: #4caf50;
+            color: #1baf7a;
             display: inline-flex;
             align-items: center;
             gap: 3px;
         }
 
         .trend-down {
-            color: #f44336;
+            color: #e34948;
             display: inline-flex;
             align-items: center;
             gap: 3px;
         }
 
         .trend-stable {
-            color: #ff9800;
+            color: #eda100;
             display: inline-flex;
             align-items: center;
             gap: 3px;
@@ -1851,7 +1854,7 @@ function get_overall_price_recommendation($score)
                                 <td><strong><?= formatRupiah($pos['rack_rate']) ?></strong></td>
                                 <td><?= formatRupiah($pos['avg_achieved_rate']) ?></td>
                                 <td>
-                                    <span style="color: <?= $pos['pricing_efficiency'] >= 90 ? '#4caf50' : ($pos['pricing_efficiency'] >= 80 ? '#ff9800' : '#f44336') ?>; font-weight: 600;">
+                                    <span style="color: <?= $pos['pricing_efficiency'] >= 90 ? '#1baf7a' : ($pos['pricing_efficiency'] >= 80 ? '#eda100' : '#e34948') ?>; font-weight: 600;">
                                         <?= $pos['pricing_efficiency'] ?>%
                                     </span>
                                     <div class="price-progress">
@@ -1996,12 +1999,12 @@ function get_overall_price_recommendation($score)
                                     </span>
                                 </td>
                                 <td>
-                                    <span style="color: <?= $elastic['cancellation_rate'] < 10 ? '#4caf50' : ($elastic['cancellation_rate'] < 20 ? '#ff9800' : '#f44336') ?>; font-weight: 600;">
+                                    <span style="color: <?= $elastic['cancellation_rate'] < 10 ? '#1baf7a' : ($elastic['cancellation_rate'] < 20 ? '#eda100' : '#e34948') ?>; font-weight: 600;">
                                         <?= $elastic['cancellation_rate'] ?>%
                                     </span>
                                 </td>
                                 <td>
-                                    <span style="color: <?= $elastic['price_gap_percentage'] < 5 ? '#4caf50' : ($elastic['price_gap_percentage'] < 15 ? '#ff9800' : '#f44336') ?>; font-weight: 600;">
+                                    <span style="color: <?= $elastic['price_gap_percentage'] < 5 ? '#1baf7a' : ($elastic['price_gap_percentage'] < 15 ? '#eda100' : '#e34948') ?>; font-weight: 600;">
                                         <?= $elastic['price_gap_percentage'] ?>%
                                     </span>
                                 </td>
@@ -2067,7 +2070,7 @@ function get_overall_price_recommendation($score)
                                 <td><?= formatRupiah($season['avg_achieved_rate_monthly']) ?></td>
                                 <td><?= $season['completed_bookings_monthly'] ?></td>
                                 <td>
-                                    <span style="color: <?= $season['booking_conversion_monthly'] >= 80 ? '#4caf50' : ($season['booking_conversion_monthly'] >= 60 ? '#ff9800' : '#f44336') ?>; font-weight: 600;">
+                                    <span style="color: <?= $season['booking_conversion_monthly'] >= 80 ? '#1baf7a' : ($season['booking_conversion_monthly'] >= 60 ? '#eda100' : '#e34948') ?>; font-weight: 600;">
                                         <?= $season['booking_conversion_monthly'] ?>%
                                     </span>
                                 </td>
@@ -2148,7 +2151,7 @@ function get_overall_price_recommendation($score)
                                 label: 'Achieved Rate',
                                 data: achieved.map(a => a / 1000000),
                                 backgroundColor: 'rgba(76, 175, 80, 0.8)',
-                                borderColor: '#4caf50',
+                                borderColor: '#1baf7a',
                                 borderWidth: 1,
                                 borderRadius: 6,
                                 borderSkipped: false,
@@ -2156,7 +2159,7 @@ function get_overall_price_recommendation($score)
                                 label: 'Market Avg',
                                 data: marketAvg.map(m => m / 1000000),
                                 backgroundColor: 'rgba(33, 150, 243, 0.6)',
-                                borderColor: '#2196f3',
+                                borderColor: '#2a78d6',
                                 borderWidth: 1,
                                 borderRadius: 6,
                                 borderSkipped: false,

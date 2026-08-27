@@ -136,7 +136,7 @@ if ($stmt) {
 }
 
 // Generate fallback avatar SVG
-$avatar_colors = ['#1a237e', '#0277bd', '#00838f', '#00897b', '#283593', '#3949ab'];
+$avatar_colors = ['#eb6834', '#2a78d6', '#1baf7a', '#eda100', '#e87ba4', '#4a3aa7'];
 $color_index = abs(crc32($user_initials ?? 'U')) % count($avatar_colors);
 $fallback_color = $avatar_colors[$color_index];
 $fallback_avatar = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22' . urlencode($fallback_color) . '%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2280%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22Arial, sans-serif%22%3E' . urlencode($user_initials) . '%3C/text%3E%3C/svg%3E';
@@ -218,7 +218,7 @@ $action_icons = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity Log - TripVerse</title>
-    <link rel="stylesheet" href="../css/owner_dashboard.css?v=3.0.0">
+    <link rel="stylesheet" href="../css/owner_dashboard.css?v=1.8.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -246,7 +246,7 @@ $action_icons = [
 
         .filter-group label {
             font-weight: 600;
-            color: #1a237e;
+            color: #FF7A3D;
             margin-bottom: 8px;
             font-size: 0.9rem;
         }
@@ -254,7 +254,7 @@ $action_icons = [
         .filter-group select,
         .filter-group input {
             padding: 10px 12px;
-            border: 2px solid rgba(26, 35, 126, 0.2);
+            border: 2px solid rgba(15, 23, 43, 0.2);
             border-radius: 8px;
             font-size: 0.9rem;
             transition: all 0.3s ease;
@@ -263,8 +263,8 @@ $action_icons = [
         .filter-group select:focus,
         .filter-group input:focus {
             outline: none;
-            border-color: #1a237e;
-            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+            border-color: #FF7A3D;
+            box-shadow: 0 0 0 3px rgba(15, 23, 43, 0.1);
         }
 
         .filter-actions {
@@ -274,7 +274,7 @@ $action_icons = [
 
         .filter-btn {
             padding: 10px 20px;
-            background: linear-gradient(135deg, #ffa726 0%, #ffb74d 100%);
+            background: linear-gradient(135deg, #ffa726 0%, #FF7A3D 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -293,9 +293,9 @@ $action_icons = [
 
         .clear-btn {
             padding: 10px 20px;
-            background: rgba(26, 35, 126, 0.1);
-            color: #1a237e;
-            border: 2px solid rgba(26, 35, 126, 0.2);
+            background: rgba(15, 23, 43, 0.1);
+            color: #FF7A3D;
+            border: 2px solid rgba(15, 23, 43, 0.2);
             border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
@@ -306,7 +306,7 @@ $action_icons = [
         }
 
         .clear-btn:hover {
-            background: rgba(26, 35, 126, 0.2);
+            background: rgba(15, 23, 43, 0.2);
         }
 
         .activity-logs-section {
@@ -327,7 +327,7 @@ $action_icons = [
         }
 
         .activity-log-item:hover {
-            background: rgba(26, 35, 126, 0.02);
+            background: rgba(15, 23, 43, 0.02);
         }
 
         .activity-log-item:last-child {
@@ -341,8 +341,8 @@ $action_icons = [
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(26, 35, 126, 0.1);
-            color: #1a237e;
+            background: rgba(15, 23, 43, 0.1);
+            color: #FF7A3D;
             flex-shrink: 0;
         }
 
@@ -359,7 +359,7 @@ $action_icons = [
 
         .activity-title {
             font-weight: 600;
-            color: #1a237e;
+            color: #FF7A3D;
             font-size: 1rem;
         }
 
@@ -418,7 +418,7 @@ $action_icons = [
         .stat-value {
             font-size: 1.8rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            background: linear-gradient(135deg, #FF7A3D 0%, #E8672B 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;

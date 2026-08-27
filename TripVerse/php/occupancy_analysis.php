@@ -667,31 +667,34 @@ function getWeekRange($year, $week)
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Occupancy Statistics | Dashboard Admin TripVerse</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.5.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-color: #3f51b5;
-            --secondary-color: #ff9800;
-            --success-color: #4caf50;
-            --info-color: #2196f3;
-            --warning-color: #ffc107;
-            --danger-color: #f44336;
-            --light-color: #f5f5f5;
-            --dark-color: #212121;
-            --text-color: #333;
-            --text-light: #777;
+            --primary-color: #FF7A3D;
+            --secondary-color: #0F172B;
+            --success-color: #1baf7a;
+            --info-color: #2a78d6;
+            --warning-color: #eda100;
+            --danger-color: #e34948;
+            --light-color: #f5f6f8;
+            --dark-color: #0F172B;
+            --text-color: #1e2635;
+            --text-light: #6b7280;
             --border-radius: 12px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --box-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --box-shadow: 0 4px 12px rgba(15, 23, 43, 0.08);
+            --box-shadow-hover: 0 8px 24px rgba(15, 23, 43, 0.14);
             --transition: all 0.3s ease;
-            --gradient-primary: linear-gradient(135deg, #3f51b5, #5c6bc0);
-            --gradient-success: linear-gradient(135deg, #4caf50, #66bb6a);
-            --gradient-warning: linear-gradient(135deg, #ff9800, #ffa726);
-            --gradient-danger: linear-gradient(135deg, #f44336, #ef5350);
-            --gradient-info: linear-gradient(135deg, #2196f3, #42a5f5);
+            --gradient-primary: linear-gradient(135deg, #FEA116, #FF7A3D);
+            --gradient-success: linear-gradient(135deg, #1baf7a, #3fcf9c);
+            --gradient-warning: linear-gradient(135deg, #eda100, #f4b73a);
+            --gradient-danger: linear-gradient(135deg, #e34948, #ef6e6d);
+            --gradient-info: linear-gradient(135deg, #2a78d6, #4f92e3);
         }
 
         /* Animation for loading */
@@ -840,7 +843,7 @@ function getWeekRange($year, $week)
 
         .filter-select:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.1);
             outline: none;
         }
 
@@ -870,9 +873,9 @@ function getWeekRange($year, $week)
         }
 
         .filter-actions button:hover {
-            background: #303f9f;
+            background: #E8672B;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px #3f51b54d;
+            box-shadow: 0 4px 12px #FF7A3D4d;
         }
 
         .filter-actions .reset-btn {
@@ -894,7 +897,7 @@ function getWeekRange($year, $week)
             color: var(--primary-color);
             font-weight: 500;
             padding: 15px 20px;
-            background: rgba(63, 81, 181, 0.05);
+            background: rgba(255, 122, 61, 0.05);
             border-radius: var(--border-radius);
             border-left: 4px solid var(--primary-color);
         }
@@ -913,6 +916,7 @@ function getWeekRange($year, $week)
             border: 1px solid #e9ecef;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             transition: var(--transition);
+            overflow-x: auto;
         }
 
         .performance-card:hover {
@@ -1046,15 +1050,15 @@ function getWeekRange($year, $week)
 
         /* Warna untuk ikon KPI Cards */
         .kpi-card:nth-child(1) .kpi-icon {
-            background: linear-gradient(135deg, #4caf50, #66bb6a) !important;
+            background: linear-gradient(135deg, #1baf7a, #3fcf9c) !important;
         }
 
         .kpi-card:nth-child(2) .kpi-icon {
-            background: linear-gradient(135deg, #2196f3, #42a5f5) !important;
+            background: linear-gradient(135deg, #2a78d6, #42a5f5) !important;
         }
 
         .kpi-card:nth-child(3) .kpi-icon {
-            background: linear-gradient(135deg, #ff9800, #ffa726) !important;
+            background: linear-gradient(135deg, #eda100, #ffa726) !important;
         }
 
         .kpi-card:nth-child(4) .kpi-icon {
@@ -1063,8 +1067,8 @@ function getWeekRange($year, $week)
 
         /* Warna untuk ikon filter */
         .filter-group label .material-icons {
-            color: #3f51b5;
-            background: rgba(63, 81, 181, 0.1);
+            color: #FF7A3D;
+            background: rgba(255, 122, 61, 0.1);
             padding: 6px;
             border-radius: 6px;
             margin-right: 8px;
@@ -1072,7 +1076,7 @@ function getWeekRange($year, $week)
 
         /* Warna untuk header sections */
         .stats-section h2 .material-icons {
-            background: linear-gradient(135deg, var(--primary-color), #5c6bc0);
+            background: linear-gradient(135deg, var(--primary-color), #FF7A3D);
             color: white;
             padding: 8px;
             border-radius: 8px;
@@ -2035,7 +2039,7 @@ function getWeekRange($year, $week)
                         <?= count(array_filter($hotel_occupancy, fn($h) => $h['occupancy_rate'] >= 40 && $h['occupancy_rate'] < 60)) ?>,
                         <?= count(array_filter($hotel_occupancy, fn($h) => $h['occupancy_rate'] < 40)) ?>
                     ],
-                    backgroundColor: ['#4caf50', '#2196f3', '#ff9800', '#f44336'],
+                    backgroundColor: ['#1baf7a', '#2a78d6', '#eda100', '#e34948'],
                     borderWidth: 2,
                     borderColor: '#fff'
                 }]
@@ -2047,8 +2051,8 @@ function getWeekRange($year, $week)
                 datasets: [{
                     label: 'Daily Bookings',
                     data: <?= json_encode(array_column($daily_trends, 'daily_bookings')) ?>,
-                    backgroundColor: '#3f51b5',
-                    borderColor: '#3f51b5',
+                    backgroundColor: '#FF7A3D',
+                    borderColor: '#FF7A3D',
                     borderWidth: 2,
                     fill: true,
                     tension: 0.4
@@ -2070,8 +2074,8 @@ function getWeekRange($year, $week)
                 datasets: [{
                     label: 'Bookings',
                     data: <?= json_encode(array_column($period_trends, 'period_bookings')) ?>,
-                    backgroundColor: '#4caf50',
-                    borderColor: '#4caf50',
+                    backgroundColor: '#1baf7a',
+                    borderColor: '#1baf7a',
                     borderWidth: 2,
                     fill: true
                 }, {
@@ -2079,8 +2083,8 @@ function getWeekRange($year, $week)
                     data: <?= json_encode(array_map(function ($period) {
                                 return ($period['period_revenue'] ?? 0) / 1000000;
                             }, $period_trends)) ?>,
-                    backgroundColor: '#ff9800',
-                    borderColor: '#ff9800',
+                    backgroundColor: '#eda100',
+                    borderColor: '#eda100',
                     borderWidth: 2,
                     fill: false,
                     yAxisID: 'y1'

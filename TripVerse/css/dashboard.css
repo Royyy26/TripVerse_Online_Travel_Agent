@@ -8,7 +8,7 @@
 html,
 body {
     height: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Heebo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f6f8;
     color: #333;
 }
@@ -16,6 +16,26 @@ body {
 a {
     text-decoration: none;
     color: inherit;
+}
+
+/* Slimmer, on-brand scrollbar (matches the customer-facing site) */
+::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f3f7;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c7ced9;
+    border-radius: 999px;
+    border: 3px solid #f1f3f7;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #FF7A3D;
 }
 
 /* Sidebar */
@@ -29,7 +49,9 @@ a {
     bottom: 0;
     overflow-y: auto;
     transition: all 0.3s ease;
-    z-index: 100;
+    /* Above .main-header (1000) so an open sidebar fully covers it instead
+       of the header's own height cutting a hole through the sidebar. */
+    z-index: 1050;
     transform: translateX(0);
 }
 
@@ -43,7 +65,7 @@ a {
     position: fixed;
     top: 15px;
     left: 15px;
-    z-index: 110;
+    z-index: 1060;
     background-color: #1e2a38;
     color: white;
     border: none;
@@ -186,31 +208,25 @@ a {
 }
 
 .dropdown-content a:hover {
-    background-color: var(--primary);
+    background: linear-gradient(135deg, #FEA116, #FF7A3D);
 }
 
 .dropdown-content.show {
     display: block;
 }
 
-/* Responsive */
+/* Responsive: below 768px the sidebar becomes an off-canvas overlay.
+   .collapsed keeps its desktop meaning (sidebar hidden) so the same
+   toggle class/JS works at every width; content never reserves margin
+   for it here since it floats on top instead of pushing content over. */
 @media (max-width: 768px) {
-    .sidebar {
-        transform: translateX(-250px);
-        width: 0;
-    }
-
-    .sidebar.collapsed {
-        transform: translateX(0);
-        width: 250px;
-    }
-
-    .main-content {
+    .main-content,
+    .main-content.expanded {
         margin-left: 0;
     }
 
-    .main-content.expanded {
-        margin-left: 250px;
+    .menu-toggle {
+        display: block;
     }
 }
 
@@ -220,11 +236,11 @@ nav {
     display: flex;
     flex-direction: column;
     padding: 10px 0;
-    background-color: #2c2f36;
+    background-color: transparent;
 }
 
 nav a {
-    color: white;
+    color: #cbd3e1;
     padding: 15px 30px;
     font-size: 1rem;
     display: flex;
@@ -237,9 +253,9 @@ nav a {
 
 nav a.active,
 nav a:hover {
-    background-color: #3a3f47;
-    border-left: 4px solid #2980b9;
-    color: #77c2f4;
+    background-color: rgba(255, 122, 61, 0.12);
+    border-left: 4px solid #FF7A3D;
+    color: #FFB37A;
 }
 
 nav a span.material-icons {
@@ -253,8 +269,9 @@ nav a span.material-icons {
     justify-content: space-between;
     padding: 10px 20px;
     background-color: #f9f9f9;
-    position: relative;
-    z-index: 1000;
+    /* No position/z-index here: .notification-bell and .user-menu already
+       position their own dropdowns, and giving this a stacking context
+       would trap the fixed #toggleSidebar button inside it, below .sidebar. */
 }
 
 .header-actions {
@@ -361,7 +378,7 @@ nav a span.material-icons {
 .booking-submenu a {
     padding: 10px 20px;
     font-size: 0.9rem;
-    color: #2980b9;
+    color: #FDBA74;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -433,7 +450,7 @@ nav a span.material-icons {
 
 .card {
     background: #fff;
-    border-left: 5px solid #2196f3;
+    border-left: 5px solid #2a78d6;
     border-radius: 10px;
     padding: 16px 24px;
     display: flex;
@@ -450,7 +467,7 @@ nav a span.material-icons {
 
 .card-icon {
     font-size: 3rem;
-    color: #2196f3;
+    color: #2a78d6;
 }
 
 .card-content h3 {
@@ -509,7 +526,7 @@ nav a span.material-icons {
 
 .activity-icon {
     font-size: 2rem;
-    color: #2196f3;
+    color: #2a78d6;
 }
 
 .activity-content p {
@@ -524,27 +541,4 @@ nav a span.material-icons {
     color: #888;
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-    .sidebar {
-        transform: translateX(-250px);
-        width: 0;
-        transition: transform 0.3s ease;
-    }
-
-    .sidebar.collapsed {
-        transform: translateX(0);
-        width: 250px;
-    }
-
-    .main-content,
-    .main-content.expanded {
-        margin-left: 0;
-        transition: margin 0.3s ease;
-    }
-
-    .menu-toggle {
-        display: block;
-    }
-}
 

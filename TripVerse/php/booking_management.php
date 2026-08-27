@@ -231,7 +231,7 @@ if ($stmt) {
 }
 
 // Generate fallback avatar SVG
-$avatar_colors = ['#1a237e', '#0277bd', '#00838f', '#00897b', '#283593', '#3949ab'];
+$avatar_colors = ['#eb6834', '#2a78d6', '#1baf7a', '#eda100', '#e87ba4', '#4a3aa7'];
 $color_index = abs(crc32($user_initials ?? 'U')) % count($avatar_colors);
 $fallback_color = $avatar_colors[$color_index];
 $fallback_avatar = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22' . urlencode($fallback_color) . '%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2280%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22Arial, sans-serif%22%3E' . urlencode($user_initials) . '%3C/text%3E%3C/svg%3E';
@@ -319,7 +319,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Management - TripVerse</title>
-    <link rel="stylesheet" href="../css/owner_dashboard.css?v=3.0.0">
+    <link rel="stylesheet" href="../css/owner_dashboard.css?v=1.8.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -353,7 +353,7 @@ $conn->close();
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, #1a237e, #283593);
+            background: linear-gradient(90deg, #FF7A3D, #E8672B);
         }
         
         .revenue-card:hover {

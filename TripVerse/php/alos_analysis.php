@@ -554,32 +554,35 @@ function highlightSearchTerm($text, $searchTerm)
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ALOS Analysis - Analisis Rata-rata Lama Menginap | TripVerse Admin</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.4.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
         :root {
-            --primary-color: #3f51b5;
-            --secondary-color: #ff9800;
-            --success-color: #4caf50;
-            --info-color: #2196f3;
-            --warning-color: #ffc107;
-            --danger-color: #f44336;
-            --light-color: #f5f5f5;
-            --dark-color: #212121;
-            --text-color: #333;
-            --text-light: #777;
+            --primary-color: #FF7A3D;
+            --secondary-color: #0F172B;
+            --success-color: #1baf7a;
+            --info-color: #2a78d6;
+            --warning-color: #eda100;
+            --danger-color: #e34948;
+            --light-color: #f5f6f8;
+            --dark-color: #0F172B;
+            --text-color: #1e2635;
+            --text-light: #6b7280;
             --border-radius: 12px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --box-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --box-shadow: 0 4px 12px rgba(15, 23, 43, 0.08);
+            --box-shadow-hover: 0 8px 24px rgba(15, 23, 43, 0.14);
             --transition: all 0.3s ease;
-            --gradient-primary: linear-gradient(135deg, #3f51b5, #5c6bc0);
-            --gradient-success: linear-gradient(135deg, #4caf50, #66bb6a);
-            --gradient-warning: linear-gradient(135deg, #ff9800, #ffa726);
-            --gradient-danger: linear-gradient(135deg, #f44336, #ef5350);
-            --gradient-info: linear-gradient(135deg, #2196f3, #42a5f5);
+            --gradient-primary: linear-gradient(135deg, #FEA116, #FF7A3D);
+            --gradient-success: linear-gradient(135deg, #1baf7a, #3fcf9c);
+            --gradient-warning: linear-gradient(135deg, #eda100, #f4b73a);
+            --gradient-danger: linear-gradient(135deg, #e34948, #ef6e6d);
+            --gradient-info: linear-gradient(135deg, #2a78d6, #4f92e3);
         }
 
         /* Animation for loading */
@@ -812,7 +815,7 @@ function highlightSearchTerm($text, $searchTerm)
 
         .filter-select:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15);
+            box-shadow: 0 0 0 2px rgba(255, 122, 61, 0.15);
             outline: none;
         }
 
@@ -847,8 +850,8 @@ function highlightSearchTerm($text, $searchTerm)
         }
 
         .filter-actions button:hover {
-            background: #303f9f;
-            box-shadow: 0 3px 10px rgba(63, 81, 181, 0.25);
+            background: #E8672B;
+            box-shadow: 0 3px 10px rgba(255, 122, 61, 0.25);
         }
 
         /* Reset */
@@ -872,7 +875,7 @@ function highlightSearchTerm($text, $searchTerm)
             color: var(--primary-color);
             font-weight: 500;
             padding: 15px 20px;
-            background: rgba(63, 81, 181, 0.05);
+            background: rgba(255, 122, 61, 0.05);
             border-radius: var(--border-radius);
             border-left: 4px solid var(--primary-color);
         }
@@ -896,7 +899,7 @@ function highlightSearchTerm($text, $searchTerm)
 
         .hotel-search:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.1);
             outline: none;
         }
 
@@ -943,7 +946,7 @@ function highlightSearchTerm($text, $searchTerm)
 
         .hotel-row.highlighted {
             background-color: #E8F5E9 !important;
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid #1baf7a;
             animation: pulseHighlight 1.5s ease-in-out;
         }
 
@@ -989,6 +992,7 @@ function highlightSearchTerm($text, $searchTerm)
             border: 1px solid #e9ecef;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             transition: var(--transition);
+            overflow-x: auto;
         }
 
         .performance-card:hover {
@@ -1656,7 +1660,7 @@ function highlightSearchTerm($text, $searchTerm)
                                 <?php if (!empty($hotel_search) && $highlight_count > 0): ?>
                                     <tr class="highlight-summary">
                                         <td colspan="7" style="text-align: center; padding: 10px; background-color: #E8F5E9; font-weight: bold;">
-                                            <i class="material-icons" style="vertical-align: middle; color: #4CAF50;">check_circle</i>
+                                            <i class="material-icons" style="vertical-align: middle; color: #1baf7a;">check_circle</i>
                                             <?php echo $highlight_count; ?> hotel ditemukan dengan kata kunci "<?php echo htmlspecialchars($hotel_search); ?>"
                                         </td>
                                     </tr>
@@ -1982,12 +1986,12 @@ function highlightSearchTerm($text, $searchTerm)
                     datasets: [{
                         label: 'Rata-rata ALOS (Hari)',
                         data: <?php echo json_encode($monthly_alos_data['avg_alos']); ?>,
-                        borderColor: '#3498db',
-                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderColor: '#2a78d6',
+                        backgroundColor: 'rgba(42, 120, 214, 0.1)',
                         borderWidth: 3,
                         tension: 0.3,
                         fill: true,
-                        pointBackgroundColor: '#3498db',
+                        pointBackgroundColor: '#2a78d6',
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: 5,
@@ -2059,13 +2063,13 @@ function highlightSearchTerm($text, $searchTerm)
                     datasets: [{
                         label: 'Avg ALOS (Hari)',
                         data: <?php echo json_encode($monthly_alos_data['avg_alos']); ?>,
-                        borderColor: '#3498db',
-                        backgroundColor: 'rgba(52, 152, 219, 0.6)',
+                        borderColor: '#2a78d6',
+                        backgroundColor: 'rgba(42, 120, 214, 0.6)',
                         type: 'line',
                         yAxisID: 'y',
                         order: 2,
                         borderWidth: 3,
-                        pointBackgroundColor: '#3498db',
+                        pointBackgroundColor: '#2a78d6',
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: 5
@@ -2073,7 +2077,7 @@ function highlightSearchTerm($text, $searchTerm)
                         label: 'Revenue (Juta Rp)',
                         data: revenueInMillions,
                         backgroundColor: 'rgba(46, 204, 113, 0.7)',
-                        borderColor: '#27ae60',
+                        borderColor: '#17996b',
                         borderWidth: 1,
                         yAxisID: 'y1',
                         order: 1
@@ -2220,13 +2224,13 @@ function highlightSearchTerm($text, $searchTerm)
                             'rgba(243, 156, 18, 0.8)',
                             'rgba(241, 196, 15, 0.8)',
                             'rgba(46, 204, 113, 0.8)',
-                            'rgba(52, 152, 219, 0.8)'
+                            'rgba(42, 120, 214, 0.8)'
                         ],
                         borderColor: [
-                            '#c0392b',
+                            '#b33130',
                             '#d35400',
-                            '#f39c12',
-                            '#27ae60',
+                            '#eda100',
+                            '#17996b',
                             '#2980b9'
                         ],
                         borderWidth: 2
@@ -2287,8 +2291,8 @@ function highlightSearchTerm($text, $searchTerm)
                     datasets: [{
                         label: 'ALOS vs Revenue',
                         data: scatterData,
-                        backgroundColor: 'rgba(52, 152, 219, 0.6)',
-                        borderColor: 'rgba(52, 152, 219, 1)',
+                        backgroundColor: 'rgba(42, 120, 214, 0.6)',
+                        borderColor: 'rgba(42, 120, 214, 1)',
                         borderWidth: 1,
                         pointRadius: 6,
                         pointHoverRadius: 8

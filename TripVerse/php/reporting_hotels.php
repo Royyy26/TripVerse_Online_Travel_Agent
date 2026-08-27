@@ -393,7 +393,10 @@ function getHotelFacilities($conn, $hotel_id)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Reporting</title>
     <link rel="stylesheet" href="../css/booking.css?v=1.2.3">
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.2.3">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0">
     <link rel="stylesheet" href="../css/profile.css?v=1.2.3">
     <link rel="stylesheet" href="../css/formshotel.css?v=<?php echo time(); ?>">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -401,19 +404,19 @@ function getHotelFacilities($conn, $hotel_id)
     <style>
         /* Global Styles */
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2980b9;
-            --success-color: #2ecc71;
-            --danger-color: #e74c3c;
-            --warning-color: #f39c12;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
+            --primary-color: #2a78d6;
+            --secondary-color: #FF7A3D;
+            --success-color: #1baf7a;
+            --danger-color: #e34948;
+            --warning-color: #eda100;
+            --light-color: #f5f6f8;
+            --dark-color: #0F172B;
             --white: #ffffff;
-            --gray: #95a5a6;
+            --gray: #6b7280;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Heebo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f7fa;
             margin: 0;
             padding: 0;
@@ -441,13 +444,9 @@ function getHotelFacilities($conn, $hotel_id)
             border-bottom: 1px solid #e0e0e0;
         }
 
-        .menu-toggle {
-            background: none;
-            border: none;
-            color: var(--dark-color);
-            font-size: 24px;
-            cursor: pointer;
-        }
+        /* .menu-toggle intentionally has no override here: it falls back to
+           dashboard.css's shared dark-navy-square button, matching every
+           other admin page instead of a bespoke plain-text icon. */
 
         /* Table Styles */
         .table-container {
@@ -480,7 +479,7 @@ function getHotelFacilities($conn, $hotel_id)
         }
 
         tr:hover {
-            background-color: rgba(52, 152, 219, 0.05);
+            background-color: rgba(42, 120, 214, 0.05);
         }
 
         /* Button Styles */
@@ -511,7 +510,7 @@ function getHotelFacilities($conn, $hotel_id)
         }
 
         .delete-btn:hover {
-            background-color: #c0392b;
+            background-color: #b33130;
         }
 
         .btn-add {
@@ -522,7 +521,7 @@ function getHotelFacilities($conn, $hotel_id)
         }
 
         .btn-add:hover {
-            background-color: #27ae60;
+            background-color: #17996b;
         }
 
         /* Search and Filter */
@@ -727,7 +726,7 @@ function getHotelFacilities($conn, $hotel_id)
         }
 
         .btn-save:hover {
-            background-color: #27ae60;
+            background-color: #17996b;
         }
 
         .btn-cancel {
@@ -736,7 +735,7 @@ function getHotelFacilities($conn, $hotel_id)
         }
 
         .btn-cancel:hover {
-            background-color: #c0392b;
+            background-color: #b33130;
         }
 
         /* Responsive */
@@ -782,7 +781,7 @@ function getHotelFacilities($conn, $hotel_id)
 
         .status-pending {
             background-color: #fef9e7;
-            color: #f39c12;
+            color: #eda100;
         }
 
         .status-confirmed {
@@ -792,12 +791,12 @@ function getHotelFacilities($conn, $hotel_id)
 
         .status-cancelled {
             background-color: #fdedec;
-            color: #e74c3c;
+            color: #e34948;
         }
 
         .status-completed {
             background-color: #eaf2f8;
-            color: #3498db;
+            color: #2a78d6;
         }
 
         /* Hotel Image Thumbnail */
@@ -912,17 +911,17 @@ function getHotelFacilities($conn, $hotel_id)
         }
 
         .btn-edit {
-            background-color: #4CAF50;
+            background-color: #1baf7a;
             color: white;
         }
 
         .delete-btn {
-            background-color: #f44336;
+            background-color: #e34948;
             color: white;
         }
 
         .btn-add {
-            background-color: #2196F3;
+            background-color: #2a78d6;
             color: white;
             margin-top: 10px;
             padding: 8px 15px;
@@ -973,7 +972,7 @@ function getHotelFacilities($conn, $hotel_id)
         }
 
         .btn-save {
-            background-color: #4CAF50;
+            background-color: #1baf7a;
             color: white;
             padding: 10px 15px;
             border: none;

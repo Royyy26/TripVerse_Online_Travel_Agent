@@ -2144,37 +2144,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><?= $page_title ?> | TripVerse Admin</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.4.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
         :root {
-            --primary-color: #3f51b5;
-            --secondary-color: #ff9800;
-            --success-color: #4caf50;
-            --info-color: #2196f3;
-            --warning-color: #ffc107;
-            --danger-color: #f44336;
-            --light-color: #f5f5f5;
-            --dark-color: #212121;
-            --text-color: #333;
-            --text-light: #777;
+            --primary-color: #FF7A3D;
+            --secondary-color: #0F172B;
+            --success-color: #1baf7a;
+            --info-color: #2a78d6;
+            --warning-color: #eda100;
+            --danger-color: #e34948;
+            --light-color: #f5f6f8;
+            --dark-color: #0F172B;
+            --text-color: #1e2635;
+            --text-light: #6b7280;
             --border-radius: 12px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --box-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --box-shadow: 0 4px 12px rgba(15, 23, 43, 0.08);
+            --box-shadow-hover: 0 8px 24px rgba(15, 23, 43, 0.14);
             --transition: all 0.3s ease;
-            --gradient-primary: linear-gradient(135deg, #3f51b5, #5c6bc0);
-            --gradient-success: linear-gradient(135deg, #4caf50, #66bb6a);
-            --gradient-warning: linear-gradient(135deg, #ff9800, #ffa726);
-            --gradient-danger: linear-gradient(135deg, #f44336, #ef5350);
-            --gradient-info: linear-gradient(135deg, #2196f3, #42a5f5);
+            --gradient-primary: linear-gradient(135deg, #FEA116, #FF7A3D);
+            --gradient-success: linear-gradient(135deg, #1baf7a, #3fcf9c);
+            --gradient-warning: linear-gradient(135deg, #eda100, #f4b73a);
+            --gradient-danger: linear-gradient(135deg, #e34948, #ef6e6d);
+            --gradient-info: linear-gradient(135deg, #2a78d6, #4f92e3);
         }
 
         body {
             background-color: #f8fafc;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Heebo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
         }
 
@@ -2211,6 +2214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            overflow-x: auto;
         }
 
         .performance-section::before {
@@ -2301,7 +2305,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
 
         .filter-select:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.1);
             outline: none;
             transform: translateY(-1px);
         }
@@ -2325,13 +2329,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             height: fit-content;
             text-decoration: none;
             min-height: 48px;
-            box-shadow: 0 3px 10px rgba(63, 81, 181, 0.2);
+            box-shadow: 0 3px 10px rgba(255, 122, 61, 0.2);
         }
 
         .filter-controls button:hover {
-            background: #303f9f;
+            background: #E8672B;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(63, 81, 181, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 122, 61, 0.3);
         }
 
         .filter-controls .reset-btn {
@@ -2547,7 +2551,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         .performance-table thead th {
-            background: linear-gradient(135deg, var(--primary-color), #5c6bc0);
+            background: linear-gradient(135deg, var(--primary-color), #FF7A3D);
             color: white;
             padding: 16px 15px;
             font-size: 14px;
@@ -4114,13 +4118,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             });
 
             // Define colors for charts
-            const primaryColor = '#3f51b5';
-            const secondaryColor = '#ff9800';
+            const primaryColor = '#FF7A3D';
+            const secondaryColor = '#eda100';
             const accentColor = '#4fc3f7';
-            const successColor = '#4caf50';
-            const warningColor = '#ffc107';
-            const dangerColor = '#f44336';
-            const infoColor = '#2196f3';
+            const successColor = '#1baf7a';
+            const warningColor = '#eda100';
+            const dangerColor = '#e34948';
+            const infoColor = '#2a78d6';
 
             <?php if ($filter_type === 'overview' && isset($analytics_data['monthly_trends'])): ?>
                 // Monthly Trend Chart for Overview
@@ -4147,7 +4151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                                     label: 'Tahun ' + prevYear,
                                     data: prevYearData,
                                     borderColor: primaryColor,
-                                    backgroundColor: 'rgba(63, 81, 181, 0.1)',
+                                    backgroundColor: 'rgba(255, 122, 61, 0.1)',
                                     borderWidth: 2,
                                     tension: 0.4,
                                     fill: true
@@ -4252,7 +4256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                                 label: 'Occupancy Rate (%)',
                                 data: data,
                                 backgroundColor: primaryColor,
-                                borderColor: '#3f51b5',
+                                borderColor: '#FF7A3D',
                                 borderWidth: 1
                             }]
                         },
@@ -4336,7 +4340,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                                 label: 'Pendapatan (IDR)',
                                 data: data,
                                 borderColor: primaryColor,
-                                backgroundColor: 'rgba(63, 81, 181, 0.1)',
+                                backgroundColor: 'rgba(255, 122, 61, 0.1)',
                                 borderWidth: 3,
                                 fill: true,
                                 tension: 0.4

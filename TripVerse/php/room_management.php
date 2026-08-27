@@ -563,7 +563,7 @@ if ($stmt) {
 }
 
 // Generate fallback avatar SVG
-$avatar_colors = ['#1a237e', '#0277bd', '#00838f', '#00897b', '#283593', '#3949ab'];
+$avatar_colors = ['#eb6834', '#2a78d6', '#1baf7a', '#eda100', '#e87ba4', '#4a3aa7'];
 $color_index = abs(crc32($user_initials ?? 'U')) % count($avatar_colors);
 $fallback_color = $avatar_colors[$color_index];
 $fallback_avatar = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22' . urlencode($fallback_color) . '%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2280%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22Arial, sans-serif%22%3E' . urlencode($user_initials) . '%3C/text%3E%3C/svg%3E';
@@ -576,7 +576,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Management - TripVerse</title>
-    <link rel="stylesheet" href="../css/owner_dashboard.css?v=3.0.0">
+    <link rel="stylesheet" href="../css/owner_dashboard.css?v=1.8.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -586,8 +586,8 @@ $conn->close();
             gap: 10px;
             margin-top: 10px;
             padding: 15px;
-            background: rgba(26, 35, 126, 0.02);
-            border: 2px solid rgba(26, 35, 126, 0.1);
+            background: rgba(15, 23, 43, 0.02);
+            border: 2px solid rgba(15, 23, 43, 0.1);
             border-radius: 10px;
             max-height: 200px;
             overflow-y: auto;
@@ -599,27 +599,27 @@ $conn->close();
             gap: 8px;
             padding: 8px 12px;
             background: white;
-            border: 2px solid rgba(26, 35, 126, 0.1);
+            border: 2px solid rgba(15, 23, 43, 0.1);
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .facility-checkbox-item:hover {
-            border-color: #1a237e;
-            background: rgba(26, 35, 126, 0.02);
+            border-color: #FF7A3D;
+            background: rgba(15, 23, 43, 0.02);
         }
 
         .facility-checkbox-item input[type="checkbox"] {
             cursor: pointer;
             width: 18px;
             height: 18px;
-            accent-color: #1a237e;
+            accent-color: #FF7A3D;
         }
 
         .facility-checkbox-item .material-icons {
             font-size: 18px;
-            color: #1a237e;
+            color: #FF7A3D;
         }
 
         .facility-checkbox-item label {
@@ -661,11 +661,11 @@ $conn->close();
             align-items: center;
             gap: 4px;
             padding: 4px 10px;
-            background: rgba(26, 35, 126, 0.08);
-            border: 1px solid rgba(26, 35, 126, 0.15);
+            background: rgba(15, 23, 43, 0.08);
+            border: 1px solid rgba(15, 23, 43, 0.15);
             border-radius: 15px;
             font-size: 0.85rem;
-            color: #1a237e;
+            color: #FF7A3D;
         }
 
         .facility-tag .material-icons {
@@ -678,7 +678,7 @@ $conn->close();
 
         .facilities-label-main {
             font-weight: 600;
-            color: #1a237e;
+            color: #FF7A3D;
             margin-bottom: 5px;
             display: block;
         }

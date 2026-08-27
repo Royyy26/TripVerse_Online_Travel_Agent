@@ -401,24 +401,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Revenue Dashboard - TripVerse Admin</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.3.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-color: #3f51b5;
-            --secondary-color: #ff9800;
-            --success-color: #4caf50;
-            --info-color: #2196f3;
-            --warning-color: #ffc107;
-            --danger-color: #f44336;
-            --light-color: #f5f5f5;
-            --dark-color: #212121;
-            --text-color: #333;
-            --text-light: #777;
+            --primary-color: #FF7A3D;
+            --secondary-color: #0F172B;
+            --success-color: #1baf7a;
+            --info-color: #2a78d6;
+            --warning-color: #eda100;
+            --danger-color: #e34948;
+            --light-color: #f5f6f8;
+            --dark-color: #0F172B;
+            --text-color: #1e2635;
+            --text-light: #6b7280;
             --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --box-shadow: 0 4px 6px rgba(15, 23, 43, 0.1);
             --transition: all 0.3s ease;
         }
 
@@ -523,7 +526,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         .filter-btn:hover {
-            background: #303f9f;
+            background: #E8672B;
         }
 
         .export-btn {
@@ -542,7 +545,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         .export-btn:hover {
-            background: #388e3c;
+            background: #17996b;
         }
 
         /* Revenue Table */
@@ -687,7 +690,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         .growth-negative {
-            background: rgba(244, 67, 54, 0.1);
+            background: rgba(227, 73, 72, 0.1);
             color: var(--danger-color);
         }
 
@@ -1081,15 +1084,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             <h1>Revenue Dashboard</h1>
 
             <div class="header-actions">
-                <div class="notifications">
-                    <button class="notification-btn" id="notificationBell">
-                        <span class="material-icons bell-icon">notifications</span>
-                        <?php if ($notificationCount > 0): ?>
-                            <span class="notification-badge" id="notificationCount"><?php echo $notificationCount; ?></span>
-                        <?php endif; ?>
-                    </button>
+                <div class="notification-bell" id="notificationBell" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+                    <span class="material-icons bell-icon">notifications</span>
+                    <span class="notification-badge" id="notificationCount"><?php echo $notificationCount; ?></span>
                 </div>
-                <div class="user-profile">
+
+                <div class="user-menu">
                     <img src="../uploads/<?php echo htmlspecialchars($foto); ?>" alt="Profile" class="user-avatar" onerror="this.src='../images/default.jpg'">
                 </div>
             </div>
@@ -1587,8 +1587,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             const customerRevenue = <?php echo json_encode($customerRevenue); ?>;
             
             const colors = [
-                '#3f51b5', '#ff9800', '#4caf50', '#f44336', '#2196f3',
-                '#ffc107', '#9c27b0', '#607d8b', '#795548', '#009688'
+                '#FF7A3D', '#eda100', '#1baf7a', '#e34948', '#2a78d6',
+                '#eda100', '#9c27b0', '#607d8b', '#795548', '#009688'
             ];
 
             // Revenue Trends Chart
@@ -1602,7 +1602,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                             label: 'Revenue (in Millions IDR)',
                             data: revenueTrendsData.revenue,
                             borderColor: colors[0],
-                            backgroundColor: 'rgba(63, 81, 181, 0.1)',
+                            backgroundColor: 'rgba(255, 122, 61, 0.1)',
                             borderWidth: 2,
                             fill: true,
                             tension: 0.4

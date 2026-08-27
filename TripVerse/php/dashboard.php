@@ -419,31 +419,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TripVerse Admin - Decision Support System</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.3.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-color: #3f51b5;
-            --secondary-color: #ff9800;
-            --success-color: #4caf50;
-            --info-color: #2196f3;
-            --warning-color: #ffc107;
-            --danger-color: #f44336;
-            --light-color: #f5f5f5;
-            --dark-color: #212121;
-            --text-color: #333;
-            --text-light: #777;
+            --primary-color: #FF7A3D;
+            --secondary-color: #0F172B;
+            --success-color: #1baf7a;
+            --info-color: #2a78d6;
+            --warning-color: #eda100;
+            --danger-color: #e34948;
+            --light-color: #f5f6f8;
+            --dark-color: #0F172B;
+            --text-color: #1e2635;
+            --text-light: #6b7280;
             --border-radius: 12px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --box-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --box-shadow: 0 4px 12px rgba(15, 23, 43, 0.08);
+            --box-shadow-hover: 0 8px 24px rgba(15, 23, 43, 0.14);
             --transition: all 0.3s ease;
-            --gradient-primary: linear-gradient(135deg, #3f51b5, #5c6bc0);
-            --gradient-success: linear-gradient(135deg, #4caf50, #66bb6a);
-            --gradient-warning: linear-gradient(135deg, #ff9800, #ffa726);
-            --gradient-danger: linear-gradient(135deg, #f44336, #ef5350);
-            --gradient-info: linear-gradient(135deg, #2196f3, #42a5f5);
+            --gradient-primary: linear-gradient(135deg, #FEA116, #FF7A3D);
+            --gradient-success: linear-gradient(135deg, #1baf7a, #3fcf9c);
+            --gradient-warning: linear-gradient(135deg, #eda100, #f4b73a);
+            --gradient-danger: linear-gradient(135deg, #e34948, #ef6e6d);
+            --gradient-info: linear-gradient(135deg, #2a78d6, #4f92e3);
         }
 
         /* Modern Card Design */
@@ -457,6 +460,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            overflow-x: auto;
         }
 
         .dss-section::before {
@@ -720,7 +724,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         .search-filter-section input:focus,
         .search-filter-section select:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.1);
             outline: none;
             transform: translateY(-1px);
         }
@@ -728,7 +732,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         .search-filter-section input:not(:placeholder-shown),
         .search-filter-section select:not([value=""]) {
             border-color: var(--primary-color);
-            background: rgba(63, 81, 181, 0.03);
+            background: rgba(255, 122, 61, 0.03);
         }
 
         .apply-filters-btn {
@@ -749,9 +753,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         .apply-filters-btn:hover {
-            background: #303f9f;
+            background: #E8672B;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 122, 61, 0.3);
         }
 
         .clear-all-btn {
@@ -792,7 +796,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         .filter-indicator {
-            background: linear-gradient(135deg, var(--primary-color), #5c6bc0);
+            background: linear-gradient(135deg, var(--primary-color), #FFB37A);
             color: white;
             padding: 8px 15px;
             border-radius: 20px;
@@ -801,7 +805,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             align-items: center;
             gap: 8px;
             font-weight: 500;
-            box-shadow: 0 2px 8px rgba(63, 81, 181, 0.3);
+            box-shadow: 0 2px 8px rgba(255, 122, 61, 0.3);
         }
 
         .clear-filter {
@@ -861,7 +865,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(63, 81, 181, 0.03) 0%, rgba(63, 81, 181, 0.01) 100%);
+            background: linear-gradient(135deg, rgba(255, 122, 61, 0.03) 0%, rgba(255, 122, 61, 0.01) 100%);
             transform: translate(40px, -40px);
         }
 
@@ -908,7 +912,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         .booking-nights {
             font-size: 11px;
             color: var(--primary-color);
-            background: rgba(63, 81, 181, 0.1);
+            background: rgba(255, 122, 61, 0.1);
             padding: 2px 8px;
             border-radius: 10px;
             font-weight: 500;
@@ -949,9 +953,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         .status-cancelled {
-            background: rgba(244, 67, 54, 0.1);
+            background: rgba(227, 73, 72, 0.1);
             color: var(--danger-color);
-            border: 1px solid rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(227, 73, 72, 0.2);
         }
 
         .booking-customer,
@@ -992,9 +996,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             gap: 10px;
             margin: 15px 0;
             padding: 15px;
-            background: rgba(63, 81, 181, 0.03);
+            background: rgba(255, 122, 61, 0.03);
             border-radius: 8px;
-            border: 1px solid rgba(63, 81, 181, 0.1);
+            border: 1px solid rgba(255, 122, 61, 0.1);
         }
 
         .date-item {
@@ -1007,7 +1011,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: rgba(63, 81, 181, 0.1);
+            background: rgba(255, 122, 61, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1093,7 +1097,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             font-weight: 700;
             font-size: 16px;
             color: var(--dark-color);
-            background: linear-gradient(135deg, var(--primary-color), #5c6bc0);
+            background: linear-gradient(135deg, var(--primary-color), #FFB37A);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -1139,7 +1143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             background: var(--primary-color);
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 122, 61, 0.3);
             border-color: var(--primary-color);
         }
 
@@ -1216,7 +1220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             justify-content: space-between;
             align-items: center;
             padding: 25px 30px;
-            background: linear-gradient(135deg, var(--primary-color), #5c6bc0);
+            background: linear-gradient(135deg, var(--primary-color), #FFB37A);
             color: white;
             position: relative;
         }
@@ -1359,7 +1363,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
 
         .detail-value.status-cancelled {
             color: var(--danger-color);
-            background: rgba(244, 67, 54, 0.1);
+            background: rgba(227, 73, 72, 0.1);
             padding: 4px 8px;
             border-radius: 6px;
             display: inline-block;
@@ -1390,7 +1394,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
 
         .form-control:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.1);
             outline: none;
             transform: translateY(-1px);
         }
@@ -1518,9 +1522,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         .btn-primary:hover {
-            background: #303f9f;
+            background: #E8672B;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 122, 61, 0.3);
         }
 
         .btn-secondary {
@@ -1549,9 +1553,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         .view-all-btn:hover {
-            background: #303f9f;
+            background: #E8672B;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 122, 61, 0.3);
         }
 
         /* Additional Styles for other sections */
@@ -1622,9 +1626,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         .notification-message.error {
-            background: rgba(244, 67, 54, 0.1);
+            background: rgba(227, 73, 72, 0.1);
             color: var(--danger-color);
-            border: 1px solid rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(227, 73, 72, 0.2);
         }
 
         /* Profile styles */
@@ -2651,7 +2655,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
 
                 // Add color coding based on results
                 if (visible === 0) {
-                    counter.style.background = 'rgba(244, 67, 54, 0.1)';
+                    counter.style.background = 'rgba(227, 73, 72, 0.1)';
                     counter.style.color = '#f44336';
                 } else if (visible === total) {
                     counter.style.background = 'rgba(76, 175, 80, 0.1)';
@@ -3130,6 +3134,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
 
         // Charts Initialization
         document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Chart !== 'undefined') {
+                Chart.defaults.font.family = "'Heebo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+                Chart.defaults.color = '#6b7280';
+                Chart.defaults.plugins.legend.labels.usePointStyle = true;
+                Chart.defaults.plugins.legend.labels.boxWidth = 8;
+                Chart.defaults.plugins.legend.labels.boxHeight = 8;
+            }
+
             // Data dari PHP
             const monthlyLabels = <?= json_encode($months) ?>;
             const monthlyBookingsData = <?= json_encode($monthly_bookings) ?>;
@@ -3150,8 +3162,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     datasets: [{
                         label: 'Bookings',
                         data: monthlyBookingsData,
-                        borderColor: '#3498db',
-                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderColor: '#2a78d6',
+                        backgroundColor: 'rgba(42, 120, 214, 0.12)',
+                        pointBackgroundColor: '#2a78d6',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 1.5,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
                         tension: 0.3,
                         fill: true,
                         borderWidth: 2
@@ -3162,15 +3179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            display: true,
-                            position: 'top'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Monthly Booking Trends',
-                            font: {
-                                size: 14
-                            }
+                            display: false
                         }
                     },
                     scales: {
@@ -3194,8 +3203,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     datasets: [{
                         label: 'Revenue (Rupiah)',
                         data: monthlyRevenueData,
-                        backgroundColor: '#2ecc71',
-                        borderColor: '#27ae60',
+                        backgroundColor: '#1baf7a',
+                        borderColor: '#1baf7a',
+                        borderRadius: 6,
+                        maxBarThickness: 42,
                         borderWidth: 1
                     }]
                 },
@@ -3204,15 +3215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            display: true,
-                            position: 'top'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Monthly Revenue',
-                            font: {
-                                size: 14
-                            }
+                            display: false
                         }
                     },
                     scales: {
@@ -3236,12 +3239,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     datasets: [{
                         label: 'Booked Rooms',
                         data: roomTypeBookedData,
-                        backgroundColor: '#e74c3c',
+                        backgroundColor: '#eb6834',
+                        borderRadius: 4,
                         stack: 'Stack 0'
                     }, {
                         label: 'Available Rooms',
                         data: roomTypeAvailableData,
-                        backgroundColor: '#2ecc71',
+                        backgroundColor: '#2a78d6',
+                        borderRadius: 4,
                         stack: 'Stack 0'
                     }]
                 },
@@ -3269,13 +3274,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                         legend: {
                             display: true,
                             position: 'top'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Room Availability by Type',
-                            font: {
-                                size: 14
-                            }
                         }
                     }
                 }
@@ -3289,7 +3287,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     labels: ['Available Rooms', 'Booked Rooms'],
                     datasets: [{
                         data: [availableRooms, bookedRooms],
-                        backgroundColor: ['#4caf50', '#f44336'],
+                        backgroundColor: ['#2a78d6', '#eb6834'],
                         hoverOffset: 4,
                         borderWidth: 2,
                         borderColor: '#fff'
@@ -3315,13 +3313,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                                     }
                                     return label;
                                 }
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Overall Room Stock',
-                            font: {
-                                size: 14
                             }
                         }
                     }

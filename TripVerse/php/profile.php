@@ -182,7 +182,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <title>Profile Settings - TripVerse Admin</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.3.0">
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
         /* Reset and Base Styles */

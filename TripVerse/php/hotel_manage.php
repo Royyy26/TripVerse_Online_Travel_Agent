@@ -359,7 +359,7 @@ if ($stmt) {
 }
 
 // Generate fallback avatar SVG
-$avatar_colors = ['#1a237e', '#0277bd', '#00838f', '#00897b', '#283593', '#3949ab'];
+$avatar_colors = ['#eb6834', '#2a78d6', '#1baf7a', '#eda100', '#e87ba4', '#4a3aa7'];
 $color_index = abs(crc32($user_initials ?? 'U')) % count($avatar_colors);
 $fallback_color = $avatar_colors[$color_index];
 $fallback_avatar = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22' . urlencode($fallback_color) . '%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2280%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22Arial, sans-serif%22%3E' . urlencode($user_initials) . '%3C/text%3E%3C/svg%3E';
@@ -373,7 +373,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hotel Management</title>
-    <link rel="stylesheet" href="../css/owner_dashboard.css?v=3.0.0">
+    <link rel="stylesheet" href="../css/owner_dashboard.css?v=1.8.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -392,22 +392,22 @@ $conn->close();
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(26, 35, 126, 0.15);
+            box-shadow: 0 10px 30px rgba(15, 23, 43, 0.15);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(26, 35, 126, 0.2);
+            border: 1px solid rgba(15, 23, 43, 0.2);
             height: fit-content;
         }
 
         .section-title {
             font-size: 1.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            background: linear-gradient(135deg, #FF7A3D 0%, #E8672B 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin: 0 0 25px 0;
             padding-bottom: 15px;
-            border-bottom: 2px solid rgba(26, 35, 126, 0.1);
+            border-bottom: 2px solid rgba(15, 23, 43, 0.1);
         }
 
         .hotel-form {
@@ -434,14 +434,14 @@ $conn->close();
         .form-group label {
             margin-bottom: 8px;
             font-weight: 600;
-            color: #1a237e;
+            color: #FF7A3D;
             font-size: 0.9rem;
         }
 
         .form-group input,
         .form-group textarea {
             padding: 12px 15px;
-            border: 2px solid rgba(26, 35, 126, 0.2);
+            border: 2px solid rgba(15, 23, 43, 0.2);
             border-radius: 10px;
             font-size: 1rem;
             transition: all 0.3s ease;
@@ -451,8 +451,8 @@ $conn->close();
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #1a237e;
-            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+            border-color: #FF7A3D;
+            box-shadow: 0 0 0 3px rgba(15, 23, 43, 0.1);
         }
 
         .form-group textarea {
@@ -465,8 +465,8 @@ $conn->close();
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 12px;
             padding: 15px;
-            background: rgba(26, 35, 126, 0.02);
-            border: 2px solid rgba(26, 35, 126, 0.1);
+            background: rgba(15, 23, 43, 0.02);
+            border: 2px solid rgba(15, 23, 43, 0.1);
             border-radius: 10px;
         }
 
@@ -476,7 +476,7 @@ $conn->close();
             gap: 8px;
             padding: 10px 12px;
             cursor: pointer;
-            border: 2px solid rgba(26, 35, 126, 0.1);
+            border: 2px solid rgba(15, 23, 43, 0.1);
             border-radius: 8px;
             background: white;
             transition: all 0.2s ease;
@@ -485,29 +485,29 @@ $conn->close();
         }
 
         .facility-checkbox:hover {
-            border-color: #1a237e;
-            background: rgba(26, 35, 126, 0.02);
+            border-color: #FF7A3D;
+            background: rgba(15, 23, 43, 0.02);
         }
 
         .facility-checkbox input[type="checkbox"] {
             cursor: pointer;
             width: 18px;
             height: 18px;
-            accent-color: #1a237e;
+            accent-color: #FF7A3D;
         }
 
         .facility-checkbox input[type="checkbox"]:checked + span {
-            color: #1a237e;
+            color: #FF7A3D;
             font-weight: 600;
         }
 
         .file-upload-container {
-            border: 2px dashed rgba(26, 35, 126, 0.3);
+            border: 2px dashed rgba(15, 23, 43, 0.3);
             border-radius: 10px;
             padding: 20px;
             text-align: center;
             transition: all 0.3s ease;
-            background: rgba(26, 35, 126, 0.02);
+            background: rgba(15, 23, 43, 0.02);
         }
 
         .file-upload-label {
@@ -519,7 +519,7 @@ $conn->close();
         }
 
         .file-upload-text {
-            color: #1a237e;
+            color: #FF7A3D;
             font-weight: 600;
             font-size: 0.9rem;
         }
@@ -555,7 +555,7 @@ $conn->close();
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #ffa726 0%, #ffb74d 100%);
+            background: linear-gradient(135deg, #ffa726 0%, #FF7A3D 100%);
             color: white;
         }
 
@@ -569,9 +569,9 @@ $conn->close();
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(26, 35, 126, 0.15);
+            box-shadow: 0 10px 30px rgba(15, 23, 43, 0.15);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(26, 35, 126, 0.2);
+            border: 1px solid rgba(15, 23, 43, 0.2);
         }
 
         .section-header {
@@ -580,13 +580,13 @@ $conn->close();
             align-items: center;
             margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 2px solid rgba(26, 35, 126, 0.1);
+            border-bottom: 2px solid rgba(15, 23, 43, 0.1);
         }
 
         .section-header h2 {
             font-size: 1.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            background: linear-gradient(135deg, #FF7A3D 0%, #E8672B 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -598,7 +598,7 @@ $conn->close();
             align-items: center;
             gap: 8px;
             padding: 10px 20px;
-            background: linear-gradient(135deg, #ffa726 0%, #ffb74d 100%);
+            background: linear-gradient(135deg, #ffa726 0%, #FF7A3D 100%);
             color: white;
             border: none;
             border-radius: 10px;
@@ -626,14 +626,14 @@ $conn->close();
             background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.1);
-            border: 1px solid rgba(26, 35, 126, 0.1);
+            box-shadow: 0 5px 15px rgba(15, 23, 43, 0.1);
+            border: 1px solid rgba(15, 23, 43, 0.1);
             transition: all 0.3s ease;
         }
 
         .hotel-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(26, 35, 126, 0.15);
+            box-shadow: 0 8px 25px rgba(15, 23, 43, 0.15);
         }
 
         .hotel-card-layout {
@@ -677,7 +677,7 @@ $conn->close();
         .hotel-name {
             font-size: 1.1rem;
             font-weight: 700;
-            color: #1a237e;
+            color: #FF7A3D;
             margin: 0 0 5px 0;
         }
 
@@ -722,7 +722,7 @@ $conn->close();
 
         .detail-item .material-icons {
             font-size: 1rem;
-            color: #1a237e;
+            color: #FF7A3D;
         }
 
         .facilities-badges {
@@ -737,18 +737,18 @@ $conn->close();
             align-items: center;
             gap: 4px;
             padding: 4px 10px;
-            background: rgba(26, 35, 126, 0.08);
-            border: 1px solid rgba(26, 35, 126, 0.15);
+            background: rgba(15, 23, 43, 0.08);
+            border: 1px solid rgba(15, 23, 43, 0.15);
             border-radius: 15px;
             font-size: 0.75rem;
-            color: #1a237e;
+            color: #FF7A3D;
             font-weight: 500;
             white-space: nowrap;
         }
 
         .facility-badge .material-icons {
             font-size: 0.9rem;
-            color: #1a237e;
+            color: #FF7A3D;
         }
 
         .hotel-actions {
@@ -757,7 +757,7 @@ $conn->close();
             flex-wrap: wrap;
             margin-top: auto;
             padding-top: 15px;
-            border-top: 1px solid rgba(26, 35, 126, 0.1);
+            border-top: 1px solid rgba(15, 23, 43, 0.1);
         }
 
         .btn-small {
@@ -778,7 +778,7 @@ $conn->close();
         }
 
         .btn-edit {
-            background: linear-gradient(135deg, #ffa726 0%, #ffb74d 100%);
+            background: linear-gradient(135deg, #ffa726 0%, #FF7A3D 100%);
             color: white;
             border: none;
         }
@@ -789,22 +789,22 @@ $conn->close();
         }
 
         .btn-secondary {
-            background: rgba(26, 35, 126, 0.1);
-            color: #1a237e;
-            border: 1px solid rgba(26, 35, 126, 0.2);
+            background: rgba(15, 23, 43, 0.1);
+            color: #FF7A3D;
+            border: 1px solid rgba(15, 23, 43, 0.2);
         }
 
         .btn-secondary:hover {
-            background: rgba(26, 35, 126, 0.2);
+            background: rgba(15, 23, 43, 0.2);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(26, 35, 126, 0.15);
+            box-shadow: 0 4px 12px rgba(15, 23, 43, 0.15);
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
             padding: 40px 20px;
-            color: #1a237e;
+            color: #FF7A3D;
         }
 
         .empty-state .material-icons {
@@ -838,9 +838,9 @@ $conn->close();
         }
 
         .notification.error {
-            background: rgba(244, 67, 54, 0.1);
+            background: rgba(227, 73, 72, 0.1);
             color: #f44336;
-            border: 1px solid rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(227, 73, 72, 0.2);
         }
 
 .notification.info {
@@ -894,7 +894,7 @@ $conn->close();
         }
 
         .modal-header {
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            background: linear-gradient(135deg, #FF7A3D 0%, #E8672B 100%);
             color: white;
             padding: 20px 25px;
             display: flex;
@@ -941,7 +941,7 @@ $conn->close();
             gap: 25px;
             margin-bottom: 25px;
             padding-bottom: 25px;
-            border-bottom: 2px solid rgba(26, 35, 126, 0.1);
+            border-bottom: 2px solid rgba(15, 23, 43, 0.1);
         }
 
         .detail-image {
@@ -949,12 +949,12 @@ $conn->close();
             height: 250px;
             border-radius: 12px;
             object-fit: cover;
-            box-shadow: 0 8px 20px rgba(26, 35, 126, 0.15);
+            box-shadow: 0 8px 20px rgba(15, 23, 43, 0.15);
         }
 
         .detail-main-info h3 {
             font-size: 1.5rem;
-            color: #1a237e;
+            color: #FF7A3D;
             margin: 0 0 8px 0;
         }
 
@@ -975,12 +975,12 @@ $conn->close();
             align-items: center;
             gap: 10px;
             padding: 10px;
-            background: rgba(26, 35, 126, 0.05);
+            background: rgba(15, 23, 43, 0.05);
             border-radius: 8px;
         }
 
         .detail-info-item .material-icons {
-            color: #1a237e;
+            color: #FF7A3D;
             font-size: 1.2rem;
         }
 
@@ -996,7 +996,7 @@ $conn->close();
         .detail-section-title {
             font-size: 1.1rem;
             font-weight: 700;
-            color: #1a237e;
+            color: #FF7A3D;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
@@ -1004,17 +1004,17 @@ $conn->close();
         }
 
         .detail-section-title .material-icons {
-            background: rgba(26, 35, 126, 0.1);
+            background: rgba(15, 23, 43, 0.1);
             padding: 8px;
             border-radius: 8px;
             font-size: 1.3rem;
         }
 
         .detail-description {
-            background: rgba(26, 35, 126, 0.03);
+            background: rgba(15, 23, 43, 0.03);
             padding: 15px;
             border-radius: 10px;
-            border-left: 4px solid #1a237e;
+            border-left: 4px solid #FF7A3D;
             color: #333;
             line-height: 1.6;
         }
@@ -1031,20 +1031,20 @@ $conn->close();
             gap: 10px;
             padding: 12px;
             background: white;
-            border: 2px solid rgba(26, 35, 126, 0.1);
+            border: 2px solid rgba(15, 23, 43, 0.1);
             border-radius: 10px;
             transition: all 0.3s ease;
         }
 
         .detail-facility-item:hover {
-            border-color: #1a237e;
-            background: rgba(26, 35, 126, 0.02);
+            border-color: #FF7A3D;
+            background: rgba(15, 23, 43, 0.02);
             transform: translateY(-2px);
         }
 
         .detail-facility-item .material-icons {
-            color: #1a237e;
-            background: rgba(26, 35, 126, 0.1);
+            color: #FF7A3D;
+            background: rgba(15, 23, 43, 0.1);
             padding: 8px;
             border-radius: 8px;
             font-size: 1.1rem;
@@ -1055,7 +1055,7 @@ $conn->close();
             height: 300px;
             border-radius: 12px;
             overflow: hidden;
-            border: 2px solid rgba(26, 35, 126, 0.1);
+            border: 2px solid rgba(15, 23, 43, 0.1);
         }
 
         .detail-map-container iframe {
@@ -1066,7 +1066,7 @@ $conn->close();
 
         .modal-footer {
             padding: 15px 25px;
-            background: rgba(26, 35, 126, 0.03);
+            background: rgba(15, 23, 43, 0.03);
             display: flex;
             justify-content: flex-end;
             gap: 10px;
@@ -1442,7 +1442,7 @@ $conn->close();
             </div>
             <div class="modal-body" id="hotelDetailContent">
                 <div style="text-align: center; padding: 40px; color: #666;">
-                    <span class="material-icons" style="font-size: 3rem; color: #1a237e;">hotel</span>
+                    <span class="material-icons" style="font-size: 3rem; color: #FF7A3D;">hotel</span>
                     <p>Loading hotel details...</p>
                 </div>
             </div>

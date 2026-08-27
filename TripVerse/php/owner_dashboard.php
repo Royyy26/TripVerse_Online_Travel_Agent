@@ -61,7 +61,7 @@ if ($stmt) {
 }
 
 // Generate fallback avatar SVG
-$avatar_colors = ['#1a237e', '#0277bd', '#00838f', '#00897b', '#283593', '#3949ab'];
+$avatar_colors = ['#eb6834', '#2a78d6', '#1baf7a', '#eda100', '#e87ba4', '#4a3aa7'];
 $color_index = abs(crc32($user_initials ?? 'U')) % count($avatar_colors);
 $fallback_color = $avatar_colors[$color_index];
 $fallback_avatar = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22' . urlencode($fallback_color) . '%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2280%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22Arial, sans-serif%22%3E' . urlencode($user_initials) . '%3C/text%3E%3C/svg%3E';
@@ -286,7 +286,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Owner Dashboard - TripVerse</title>
-    <link rel="stylesheet" href="../css/owner_dashboard.css?v=3.0.0">
+    <link rel="stylesheet" href="../css/owner_dashboard.css?v=1.8.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -344,9 +344,9 @@ $conn->close();
             justify-content: center;
             flex-shrink: 0;
             transition: all 0.3s ease;
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            background: linear-gradient(135deg, #FF7A3D 0%, #E8672B 100%);
             color: white;
-            box-shadow: 0 8px 25px rgba(26, 35, 126, 0.3);
+            box-shadow: 0 8px 25px rgba(15, 23, 43, 0.3);
         }
 
         .stat-icon .material-icons {
@@ -427,7 +427,7 @@ $conn->close();
             border-radius: 20px;
             padding: 28px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(26, 35, 126, 0.08);
+            border: 1px solid rgba(15, 23, 43, 0.08);
         }
 
         .card-header {
@@ -469,7 +469,7 @@ $conn->close();
             background: #f8f9fa;
             border-radius: 12px;
             transition: all 0.3s ease;
-            border: 1px solid rgba(26, 35, 126, 0.06);
+            border: 1px solid rgba(15, 23, 43, 0.06);
         }
 
         .hotel-item:hover {
@@ -505,7 +505,7 @@ $conn->close();
         .hotel-item:nth-child(3) .hotel-rank {
             background: #f3f4f6;
             color: #1f2937;
-            border: 2px solid #d97706;
+            border: 2px solid #b97e00;
         }
 
         .hotel-item:nth-child(n+4) .hotel-rank {
@@ -1075,7 +1075,7 @@ $conn->close();
             // Highlight selected hotel item
             document.querySelectorAll('.hotel-item').forEach(item => {
                 item.style.background = '#f8f9fa';
-                item.style.borderColor = 'rgba(26, 35, 126, 0.06)';
+                item.style.borderColor = 'rgba(15, 23, 43, 0.06)';
             });
             
             const selectedItem = document.querySelector(`[data-hotel-name="${hotelName}"]`);

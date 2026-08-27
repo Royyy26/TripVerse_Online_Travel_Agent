@@ -838,25 +838,28 @@ $current_indonesian_month = get_indonesian_month($filter_month);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Risk Management | TripVerse Admin</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.4.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
     :root {
-        --primary-color: #3f51b5;
-        --secondary-color: #ff9800;
-        --success-color: #4caf50;
-        --danger-color: #f44336;
-        --warning-color: #ffc107;
-        --info-color: #2196f3;
-        --light-color: #f5f5f5;
-        --dark-color: #212121;
-        --text-color: #333;
-        --text-light: #777;
+        --primary-color: #FF7A3D;
+        --secondary-color: #0F172B;
+        --success-color: #1baf7a;
+        --danger-color: #e34948;
+        --warning-color: #eda100;
+        --info-color: #2a78d6;
+        --light-color: #f5f6f8;
+        --dark-color: #0F172B;
+        --text-color: #1e2635;
+        --text-light: #6b7280;
         --border-radius: 12px;
-        --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        --box-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+        --box-shadow: 0 4px 12px rgba(15, 23, 43, 0.08);
+        --box-shadow-hover: 0 8px 24px rgba(15, 23, 43, 0.14);
     }
 
     /* Animasi Keyframes */
@@ -966,7 +969,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
         left: 0;
         width: 100%;
         height: 4px;
-        background: linear-gradient(135deg, var(--primary-color), #5c6bc0);
+        background: linear-gradient(135deg, var(--primary-color), #FF7A3D);
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 0.5s ease;
@@ -1045,7 +1048,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
 
     .filter-select:focus {
         border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+        box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.1);
         outline: none;
         transform: translateY(-1px);
     }
@@ -1077,9 +1080,9 @@ $current_indonesian_month = get_indonesian_month($filter_month);
     }
 
     .filter-btn:hover {
-        background: #303f9f;
+        background: #E8672B;
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+        box-shadow: 0 4px 12px rgba(255, 122, 61, 0.3);
     }
 
     .reset-btn {
@@ -1146,11 +1149,11 @@ $current_indonesian_month = get_indonesian_month($filter_month);
     }
 
     .kpi-card.primary::before {
-        background: linear-gradient(135deg, var(--primary-color), #5c6bc0);
+        background: linear-gradient(135deg, var(--primary-color), #FF7A3D);
     }
 
     .kpi-card.success::before {
-        background: linear-gradient(135deg, var(--success-color), #66bb6a);
+        background: linear-gradient(135deg, var(--success-color), #3fcf9c);
     }
 
     .kpi-card.warning::before {
@@ -1158,7 +1161,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
     }
 
     .kpi-card.danger::before {
-        background: linear-gradient(135deg, var(--danger-color), #ef5350);
+        background: linear-gradient(135deg, var(--danger-color), #ef6e6d);
     }
 
     .kpi-card.info::before {
@@ -1186,11 +1189,11 @@ $current_indonesian_month = get_indonesian_month($filter_month);
     }
 
     .kpi-card.primary .kpi-icon {
-        background: linear-gradient(135deg, var(--primary-color), #5c6bc0);
+        background: linear-gradient(135deg, var(--primary-color), #FF7A3D);
     }
 
     .kpi-card.success .kpi-icon {
-        background: linear-gradient(135deg, var(--success-color), #66bb6a);
+        background: linear-gradient(135deg, var(--success-color), #3fcf9c);
     }
 
     .kpi-card.warning .kpi-icon {
@@ -1198,7 +1201,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
     }
 
     .kpi-card.danger .kpi-icon {
-        background: linear-gradient(135deg, var(--danger-color), #ef5350);
+        background: linear-gradient(135deg, var(--danger-color), #ef6e6d);
     }
 
     .kpi-card.info .kpi-icon {
@@ -1241,7 +1244,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
         color: var(--primary-color);
         font-weight: 500;
         padding: 15px 20px;
-        background: rgba(63, 81, 181, 0.05);
+        background: rgba(255, 122, 61, 0.05);
         border-radius: var(--border-radius);
         border-left: 4px solid var(--primary-color);
         flex-wrap: wrap;
@@ -1326,31 +1329,31 @@ $current_indonesian_month = get_indonesian_month($filter_month);
     .badge-critical {
         background: #ffcdd2;
         color: #b71c1c;
-        border: 1px solid #f44336;
+        border: 1px solid #e34948;
     }
 
     .badge-high {
         background: #ffebee;
         color: var(--danger-color);
-        border: 1px solid #ff9800;
+        border: 1px solid #eda100;
     }
 
     .badge-medium {
         background: #fff3e0;
         color: var(--warning-color);
-        border: 1px solid #ffc107;
+        border: 1px solid #eda100;
     }
 
     .badge-low {
         background: #e8f5e8;
         color: var(--success-color);
-        border: 1px solid #4caf50;
+        border: 1px solid #1baf7a;
     }
 
     .badge-info {
         background: #e3f2fd;
         color: var(--info-color);
-        border: 1px solid #2196f3;
+        border: 1px solid #2a78d6;
     }
 
     .badge-pending {
@@ -1529,19 +1532,19 @@ $current_indonesian_month = get_indonesian_month($filter_month);
     }
 
     .progress-critical {
-        background: linear-gradient(135deg, #f44336, #ef5350);
+        background: linear-gradient(135deg, #e34948, #ef6e6d);
     }
 
     .progress-high {
-        background: linear-gradient(135deg, #ff9800, #ffb74d);
+        background: linear-gradient(135deg, #eda100, #ffb74d);
     }
 
     .progress-medium {
-        background: linear-gradient(135deg, #ffc107, #ffd54f);
+        background: linear-gradient(135deg, #eda100, #ffd54f);
     }
 
     .progress-low {
-        background: linear-gradient(135deg, #4caf50, #66bb6a);
+        background: linear-gradient(135deg, #1baf7a, #3fcf9c);
     }
 
     /* Score Display dengan Animasi */
@@ -1941,7 +1944,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
             <!-- Summary Statistics -->
             <div class="summary-stats">
                 <div class="stat-box">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #f44336, #ef5350);">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #e34948, #ef6e6d);">
                         <i class="material-icons">warning</i>
                     </div>
                     <div class="stat-content">
@@ -1951,7 +1954,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                 </div>
                 
                 <div class="stat-box">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #ff9800, #ffb74d);">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #eda100, #ffb74d);">
                         <i class="material-icons">priority_high</i>
                     </div>
                     <div class="stat-content">
@@ -1961,7 +1964,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                 </div>
                 
                 <div class="stat-box">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107, #ffd54f);">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #eda100, #ffd54f);">
                         <i class="material-icons">monetization_on</i>
                     </div>
                     <div class="stat-content">
@@ -1971,7 +1974,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                 </div>
                 
                 <div class="stat-box">
-                    <div class="stat-icon" style="background: linear-gradient(135deg, #4caf50, #66bb6a);">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #1baf7a, #3fcf9c);">
                         <i class="material-icons">check_circle</i>
                     </div>
                     <div class="stat-content">
@@ -2062,7 +2065,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                         </thead>
                         <tbody>
                             <!-- KRITIS -->
-                            <tr style="background: rgba(244, 67, 54, 0.05);">
+                            <tr style="background: rgba(227, 73, 72, 0.05);">
                                 <td style="text-align: center;">
                                     <span class="badge badge-critical">KRITIS</span>
                                 </td>
@@ -2071,7 +2074,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                                 <td style="text-align: center;">Check-in ≤ 2 hari</td>
                                 <td style="text-align: center;">≥ 30%</td>
                                 <td>
-                                    <span style="color: #f44336; font-weight: bold;">IMMEDIATE ACTION</span><br>
+                                    <span style="color: #e34948; font-weight: bold;">IMMEDIATE ACTION</span><br>
                                     • Follow-up dalam 1 jam<br>
                                     • Escalate ke management<br>
                                     • Sediakan alternatif
@@ -2088,7 +2091,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                                 <td style="text-align: center;">Check-in 3-7 hari</td>
                                 <td style="text-align: center;">25% - 29.9%</td>
                                 <td>
-                                    <span style="color: #ff9800; font-weight: bold;">URGENT ACTION</span><br>
+                                    <span style="color: #eda100; font-weight: bold;">URGENT ACTION</span><br>
                                     • Follow-up dalam 4 jam<br>
                                     • Prioritas konfirmasi<br>
                                     • Monitoring harian
@@ -2105,7 +2108,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                                 <td style="text-align: center;">Check-in 8-14 hari</td>
                                 <td style="text-align: center;">15% - 24.9%</td>
                                 <td>
-                                    <span style="color: #ffc107; font-weight: bold;">MONITORING</span><br>
+                                    <span style="color: #eda100; font-weight: bold;">MONITORING</span><br>
                                     • Follow-up dalam 24 jam<br>
                                     • Review mingguan<br>
                                     • Standard procedure
@@ -2122,7 +2125,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                                 <td style="text-align: center;">Check-in &gt; 14 hari</td>
                                 <td style="text-align: center;">&lt; 15%</td>
                                 <td>
-                                    <span style="color: #4caf50; font-weight: bold;">NORMAL</span><br>
+                                    <span style="color: #1baf7a; font-weight: bold;">NORMAL</span><br>
                                     • Follow-up rutin<br>
                                     • Monthly review<br>
                                     • Maintain quality
@@ -2534,8 +2537,8 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                         datasets: [{
                                 label: 'Pembatalan',
                                 data: cancellationData,
-                                borderColor: '#f44336',
-                                backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                                borderColor: '#e34948',
+                                backgroundColor: 'rgba(227, 73, 72, 0.1)',
                                 tension: 0.3,
                                 fill: true,
                                 borderWidth: 2,
@@ -2544,7 +2547,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                             {
                                 label: 'Penyelesaian',
                                 data: completionData,
-                                borderColor: '#4caf50',
+                                borderColor: '#1baf7a',
                                 backgroundColor: 'rgba(76, 175, 80, 0.1)',
                                 tension: 0.3,
                                 fill: true,
@@ -2554,7 +2557,7 @@ $current_indonesian_month = get_indonesian_month($filter_month);
                             {
                                 label: 'Tingkat Pembatalan (%)',
                                 data: cancellationRateData,
-                                borderColor: '#ff9800',
+                                borderColor: '#eda100',
                                 backgroundColor: 'rgba(255, 152, 0, 0.1)',
                                 tension: 0.3,
                                 fill: false,

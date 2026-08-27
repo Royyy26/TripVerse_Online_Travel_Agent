@@ -246,7 +246,7 @@ if ($stmt) {
     $stmt->close();
 }
 
-$avatar_colors = ['#1a237e', '#0277bd', '#00838f', '#00897b', '#283593', '#3949ab'];
+$avatar_colors = ['#eb6834', '#2a78d6', '#1baf7a', '#eda100', '#e87ba4', '#4a3aa7'];
 $color_index = abs(crc32($user_initials ?? 'U')) % count($avatar_colors);
 $fallback_color = $avatar_colors[$color_index];
 $fallback_avatar = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22' . urlencode($fallback_color) . '%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2280%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22 dy=%22.35em%22 font-family=%22Arial, sans-serif%22%3E' . urlencode($user_initials) . '%3C/text%3E%3C/svg%3E';
@@ -259,7 +259,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Fasilitas Tambahan - TripVerse</title>
-    <link rel="stylesheet" href="../css/owner_dashboard.css?v=3.0.0">
+    <link rel="stylesheet" href="../css/owner_dashboard.css?v=1.8.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -272,7 +272,7 @@ $conn->close();
             border-radius: 20px;
             padding: 25px 30px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(26, 35, 126, 0.1);
+            box-shadow: 0 10px 30px rgba(15, 23, 43, 0.1);
         }
 
         .hotel-selection h2 {
@@ -286,7 +286,7 @@ $conn->close();
         }
 
         .hotel-selection h2 .material-icons {
-            color: #1a237e;
+            color: #FF7A3D;
         }
 
         .hotel-select {
@@ -301,8 +301,8 @@ $conn->close();
 
         .hotel-select:focus {
             outline: none;
-            border-color: #1a237e;
-            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.08);
+            border-color: #FF7A3D;
+            box-shadow: 0 0 0 3px rgba(15, 23, 43, 0.08);
         }
 
         .facilities-grid {
@@ -402,13 +402,13 @@ $conn->close();
 
         .price-input:focus {
             outline: none;
-            border-color: #1a237e;
-            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.08);
+            border-color: #FF7A3D;
+            box-shadow: 0 0 0 3px rgba(15, 23, 43, 0.08);
         }
 
         .btn-update-price {
             padding: 8px 16px;
-            background: #1a237e;
+            background: #FF7A3D;
             color: white;
             border: none;
             border-radius: 8px;
@@ -421,7 +421,7 @@ $conn->close();
         .btn-update-price:hover {
             background: #0d47a1;
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(26, 35, 126, 0.2);
+            box-shadow: 0 2px 8px rgba(15, 23, 43, 0.2);
         }
 
         .btn-reset-price {
@@ -610,7 +610,7 @@ $conn->close();
                 <span class="material-icons">hotel</span>
                 <span class="logo-text">TripVerse</span>
             </div>
-            <button class="sidebar-toggle" onclick="document.getElementById('owner-sidebar').classList.toggle('collapsed'); document.getElementById('main-content').classList.toggle('expanded');" aria-label="Toggle sidebar">
+            <button id="toggleSidebar" class="sidebar-toggle" aria-label="Toggle sidebar">
                 <span class="material-icons">menu</span>
             </button>
         </div>
@@ -703,7 +703,7 @@ $conn->close();
             <?php if ($selected_hotel): ?>
                 <section>
                     <h2 style="color: #0f1724; margin-bottom: 20px; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">
-                        <span class="material-icons" style="color: #1a237e;">room_service</span>
+                        <span class="material-icons" style="color: #FF7A3D;">room_service</span>
                         Fasilitas Tambahan untuk <?= htmlspecialchars($selected_hotel['nama_hotel']) ?>
                     </h2>
                     

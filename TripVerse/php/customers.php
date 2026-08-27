@@ -122,7 +122,7 @@ $filtered_customers = array_filter($customers, function ($c) use ($search_query)
     <meta charset="UTF-8" />
     <title>Data Customer</title>
     <link rel="stylesheet" href="../css/booking.css?v=1.2.3">
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.2.3" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
     <link rel="stylesheet" href="../css/profile.css?v=1.2.3" />
     <link rel="stylesheet" href="../css/customers.css?v=1.2.3" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />

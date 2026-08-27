@@ -373,6 +373,10 @@ if ($data = $result->fetch_assoc()) {
     $foto = "../images/default.jpg";
 }
 
+// Notifikasi (sama seperti dashboard.php: jumlah booking berstatus Pending)
+$notifCountResult = $conn->query("SELECT COUNT(*) as notifications FROM booking_hotel WHERE status = 'Pending'");
+$notificationCount = $notifCountResult ? ($notifCountResult->fetch_assoc()['notifications'] ?? 0) : 0;
+
 // Ambil semua promo
 $promo_query = "SELECT * FROM diskon_promo ORDER BY 
                 CASE WHEN status = 'active' THEN 1 ELSE 2 END,
@@ -402,31 +406,34 @@ $conn->close();
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TripVerse Admin - Promo & Discount Management</title>
-    <link rel="stylesheet" href="../css/dashboard.css?v=1.3.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/dashboard.css?v=1.8.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-color: #3f51b5;
-            --secondary-color: #ff9800;
-            --success-color: #4caf50;
-            --info-color: #2196f3;
-            --warning-color: #ffc107;
-            --danger-color: #f44336;
-            --light-color: #f5f5f5;
-            --dark-color: #212121;
-            --text-color: #333;
-            --text-light: #777;
+            --primary-color: #FF7A3D;
+            --secondary-color: #0F172B;
+            --success-color: #1baf7a;
+            --info-color: #2a78d6;
+            --warning-color: #eda100;
+            --danger-color: #e34948;
+            --light-color: #f5f6f8;
+            --dark-color: #0F172B;
+            --text-color: #1e2635;
+            --text-light: #6b7280;
             --border-radius: 12px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --box-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --box-shadow: 0 4px 12px rgba(15, 23, 43, 0.08);
+            --box-shadow-hover: 0 8px 24px rgba(15, 23, 43, 0.14);
             --transition: all 0.3s ease;
-            --gradient-primary: linear-gradient(135deg, #3f51b5, #5c6bc0);
-            --gradient-success: linear-gradient(135deg, #4caf50, #66bb6a);
-            --gradient-warning: linear-gradient(135deg, #ff9800, #ffa726);
-            --gradient-danger: linear-gradient(135deg, #f44336, #ef5350);
-            --gradient-info: linear-gradient(135deg, #2196f3, #42a5f5);
+            --gradient-primary: linear-gradient(135deg, #FEA116, #FF7A3D);
+            --gradient-success: linear-gradient(135deg, #1baf7a, #3fcf9c);
+            --gradient-warning: linear-gradient(135deg, #eda100, #f4b73a);
+            --gradient-danger: linear-gradient(135deg, #e34948, #ef6e6d);
+            --gradient-info: linear-gradient(135deg, #2a78d6, #4f92e3);
         }
 
         /* Animasi Keyframes */
@@ -438,7 +445,9 @@ $conn->close();
 
             to {
                 opacity: 1;
-                transform: translateY(0);
+                /* No trailing transform: a lingering non-"none" transform (even a
+                   no-op translateY(0)) creates a stacking context on .main-header
+                   that broke the fixed sidebar's ability to overlay it. */
             }
         }
 
@@ -502,31 +511,20 @@ $conn->close();
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
             margin-bottom: 30px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            animation: fadeIn 0.4s ease-out 0.1s both;
-            opacity: 0;
+            /* No position:sticky here: no other admin page pins its header while
+               scrolling, so this scrolls away with the page like everywhere else. */
         }
 
-        .menu-toggle {
-            background: none;
-            border: none;
-            color: var(--dark-color);
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .menu-toggle:hover {
-            background: var(--light-color);
-        }
-
+        /* .menu-toggle intentionally has no override here: it now falls back to
+           dashboard.css's shared dark-navy-square button, so it looks identical
+           to every other admin page instead of the mismatched white circle this
+           page used to have. .header-actions still needs margin-left:auto since
+           the shared button is position:fixed and out of the header's flex flow. */
         .header-actions {
             display: flex;
             align-items: center;
             gap: 20px;
+            margin-left: auto;
             animation: fadeInLeft 0.4s ease-out 0.2s both;
             opacity: 0;
         }
@@ -718,7 +716,7 @@ $conn->close();
 
         .search-input:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.1);
             outline: none;
         }
 
@@ -744,9 +742,9 @@ $conn->close();
         }
 
         .btn-primary:hover {
-            background: #303f9f;
+            background: #E8672B;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(63, 81, 181, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 122, 61, 0.3);
         }
 
         .btn-success {
@@ -755,7 +753,7 @@ $conn->close();
         }
 
         .btn-success:hover {
-            background: #388e3c;
+            background: #17996b;
             transform: translateY(-2px);
         }
 
@@ -765,7 +763,7 @@ $conn->close();
         }
 
         .btn-danger:hover {
-            background: #d32f2f;
+            background: #cf3c3b;
             transform: translateY(-2px);
         }
 
@@ -775,7 +773,7 @@ $conn->close();
         }
 
         .btn-info:hover {
-            background: #1976d2;
+            background: #2468bd;
             transform: translateY(-2px);
         }
 
@@ -871,9 +869,9 @@ $conn->close();
         }
 
         .status-inactive {
-            background: rgba(244, 67, 54, 0.1);
+            background: rgba(227, 73, 72, 0.1);
             color: var(--danger-color);
-            border: 1px solid rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(227, 73, 72, 0.2);
         }
 
         /* Discount Type Badge */
@@ -1039,7 +1037,7 @@ $conn->close();
             justify-content: space-between;
             align-items: center;
             padding: 25px 30px;
-            background: linear-gradient(135deg, var(--primary-color), #5c6bc0);
+            background: linear-gradient(135deg, var(--primary-color), #FF7A3D);
             color: white;
             position: relative;
         }
@@ -1163,7 +1161,7 @@ $conn->close();
 
         .form-control:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 122, 61, 0.1);
             outline: none;
         }
 
@@ -1685,12 +1683,22 @@ $conn->close();
     </div>
 
     <main class="main-content" id="main-content">
-        <header class="main-header">
-            <button id="toggleSidebar" class="menu-toggle" aria-label="Toggle sidebar">
-                <span class="material-icons">menu</span>
-            </button>
+        <!-- Outside <header>: this page's header is position:sticky with its own
+             z-index, which traps any fixed-position descendant inside that local
+             stacking context regardless of the descendant's own z-index — the
+             button would render below the sidebar overlay. Living as a sibling
+             lets it compete for stacking at the top level like on every other page. -->
+        <button id="toggleSidebar" class="menu-toggle" aria-label="Toggle sidebar">
+            <span class="material-icons">menu</span>
+        </button>
 
+        <header class="main-header">
             <div class="header-actions">
+                <div class="notification-bell" id="notificationBell" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+                    <span class="material-icons bell-icon">notifications</span>
+                    <span class="notification-badge" id="notificationCount"><?= $notificationCount ?></span>
+                </div>
+
                 <div class="user-menu">
                     <img src="../uploads/<?php echo htmlspecialchars($foto); ?>" alt="User Avatar" class="user-avatar" />
                 </div>
