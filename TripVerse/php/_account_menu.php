@@ -150,7 +150,7 @@ $tvInitial = mb_strtoupper(mb_substr(trim($tvAccountName), 0, 1));
         </li>
         <li><hr class="tv-account-sep"></li>
         <li>
-            <a class="tv-account-item tv-account-logout" role="menuitem" href="auth/logout.php">
+            <a class="tv-account-item tv-account-logout" role="menuitem" href="../auth/logout.php">
                 <i class="fas fa-sign-out-alt"></i><span><?= te('Logout') ?></span>
             </a>
         </li>

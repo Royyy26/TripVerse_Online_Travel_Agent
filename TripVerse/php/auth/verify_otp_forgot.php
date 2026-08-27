@@ -9,7 +9,7 @@ if (!isset($_POST['email']) || !isset($_POST['otp'])) {
 $email = trim($_POST['email']);
 $otp_user = trim($_POST['otp']);
 
-$jsonFile = "otp_storage_forgot.json";
+$jsonFile = __DIR__ . "/../otp_storage_forgot.json";
 
 if (!file_exists($jsonFile)) {
     echo "failed";

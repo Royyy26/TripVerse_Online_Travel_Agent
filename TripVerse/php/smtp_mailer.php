@@ -71,7 +71,7 @@ function sendOtpEmail(string $toEmail, string $toName, string $subject, string $
             'To: ' . ($toName !== '' ? "$toName <$toEmail>" : $toEmail),
             'Subject: ' . $subject,
             'MIME-Version: 1.0',
-            'Content-Type: text/plain; charset=UTF-8',
+            'Content-Type: text/html; charset=UTF-8',
             'Date: ' . date('r'),
         ];
 
