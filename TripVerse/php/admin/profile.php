@@ -729,6 +729,18 @@ $conn->close();
 
 <body>
     <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="../../img/logo.png" alt="TripVerse Logo" class="sidebar-brand-logo" />
+            <div class="sidebar-brand-text">
+                <span class="sidebar-brand-title">TripVerse</span>
+                <span class="sidebar-brand-subtitle"><?= te('Dasbor Admin') ?></span>
+            </div>
+        </div>
+
+        <div class="sidebar-brand-lang">
+            <?php include __DIR__ . '/../_lang_switch_inner.php'; ?>
+        </div>
+
         <div class="profile-header">
             <div class="profile-photo-section">
                 <div class="profile-photo-container">
@@ -753,7 +765,7 @@ $conn->close();
 
                     <div class="user-dropdown">
                         <button class="user-info" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown(this)">
-                            <span class="dropdown-text">Manage Account</span>
+                            <span class="dropdown-text"><?= te('Kelola Akun') ?></span>
                             <span class="material-icons dropdown-arrow">expand_more</span>
                         </button>
 
@@ -764,7 +776,7 @@ $conn->close();
                             </a>
                             <a href="../auth/logout.php" class="dropdown-item">
                                 <span class="material-icons">logout</span>
-                                <span>Logout</span>
+                                <span><?= te('Keluar') ?></span>
                             </a>
                         </div>
                     </div>
