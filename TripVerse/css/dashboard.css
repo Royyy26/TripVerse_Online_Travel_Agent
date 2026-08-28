@@ -254,16 +254,16 @@ a {
 
 .user-info {
     background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 0.9rem;
+    justify-content: space-between;
+    font-size: 13px;
     gap: 8px;
     padding: 8px 12px;
-    border-radius: 8px;
+    border-radius: 6px;
     width: 100%;
     transition: all 0.3s ease;
 }
