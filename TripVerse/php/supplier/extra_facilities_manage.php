@@ -227,9 +227,9 @@ if ($stmt) {
     
     if ($u && !empty($u['profile_picture'])) {
         $possible_paths = [
-            __DIR__ . '/../uploads/' . $u['profile_picture'],
-            __DIR__ . '/../uploads/profiles/' . $u['profile_picture'],
-            __DIR__ . '/../uploads/users/' . $u['profile_picture']
+            __DIR__ . '/../../uploads/' . $u['profile_picture'],
+            __DIR__ . '/../../uploads/profiles/' . $u['profile_picture'],
+            __DIR__ . '/../../uploads/users/' . $u['profile_picture']
         ];
         
         foreach ($possible_paths as $check_path) {
@@ -239,7 +239,7 @@ if ($stmt) {
             }
         }
         
-        if ($profile_picture === null && file_exists(__DIR__ . '/../uploads/' . $u['profile_picture'])) {
+        if ($profile_picture === null && file_exists(__DIR__ . '/../../uploads/' . $u['profile_picture'])) {
             $profile_picture = $u['profile_picture'];
         }
     }
@@ -260,7 +260,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Fasilitas Tambahan - TripVerse</title>
-    <link rel="stylesheet" href="../../css/owner_dashboard.css?v=2.0.0">
+    <link rel="stylesheet" href="../../css/owner_dashboard.css?v=2.1.1">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -611,7 +611,7 @@ $conn->close();
                 <img src="../../img/logo.png" alt="TripVerse Logo" class="logo-img" />
                 <div class="logo-text-group">
                     <span class="logo-text">TripVerse</span>
-                    <span class="logo-subtitle"><?= te('Dasbor Admin') ?></span>
+                    <span class="logo-subtitle"><?= te('Dasbor Supplier') ?></span>
                 </div>
             </div>
             <button id="toggleSidebar" class="sidebar-toggle" aria-label="Toggle sidebar">
@@ -662,7 +662,7 @@ $conn->close();
                 <span class="material-icons">book_online</span>
                 <span><?= te('Pemesanan') ?></span>
             </a>
-            <a href="activity_log.php" class="nav-item">
+            <a href="../admin/activity_log.php" class="nav-item">
                 <span class="material-icons">history</span>
                 <span><?= te('Log Aktivitas') ?></span>
             </a>
@@ -816,9 +816,16 @@ $conn->close();
         const toggleBtn = document.getElementById('toggleSidebar');
         const mainContent = document.getElementById('main-content');
 
+        const sidebarState = localStorage.getItem('sidebarState');
+        if (sidebarState === 'collapsed') {
+            sidebar.classList.add('collapsed');
+            mainContent.classList.add('expanded');
+        }
+
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('expanded');
+            localStorage.setItem('sidebarState', sidebar.classList.contains('collapsed') ? 'collapsed' : 'expanded');
         });
 
         // Auto-hide notification after 5 seconds

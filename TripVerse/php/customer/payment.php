@@ -9,8 +9,7 @@ if (!isset($_SESSION['id_user'])) {
 }
 
 // Include WhatsApp notification functions
-require_once __DIR__ . '/../fonnte_api.php';
-require_once __DIR__ . '/notification_payment.php';
+require_once __DIR__ . '/../notification_payment.php';
 
 // Database configuration
 require_once __DIR__ . '/../db_config.php';

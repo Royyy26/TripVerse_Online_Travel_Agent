@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_owner'])) {
     $newPassword = trim($_POST['password'] ?? '');
 
     if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
-        $ownerCreateMessage = ['type' => 'error', 'text' => 'Format email tidak valid untuk owner. Gunakan format yang benar (contoh: owner@domain.com).'];
+        $ownerCreateMessage = ['type' => 'error', 'text' => 'Format email tidak valid untuk supplier. Gunakan format yang benar (contoh: supplier@domain.com).'];
     } elseif ($newFirst && $newUsername && $newEmail && $newPassword) {
         $emailCheck = $conn->prepare("SELECT id_user FROM user WHERE email = ?");
         $emailCheck->bind_param("s", $newEmail);
@@ -45,9 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_owner'])) {
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
             $createStmt->bind_param('ssssssss', $newOwnerId, $newFirst, $newLast, $newUsername, $newPhone, $newEmail, $hashedPassword, $id_user);
             if ($createStmt->execute()) {
-                $ownerCreateMessage = ['type' => 'success', 'text' => 'Owner berhasil dibuat: ' . htmlspecialchars($newOwnerId) . ' | Email: ' . htmlspecialchars($newEmail)];
+                $ownerCreateMessage = ['type' => 'success', 'text' => 'Supplier berhasil dibuat: ' . htmlspecialchars($newOwnerId) . ' | Email: ' . htmlspecialchars($newEmail)];
             } else {
-                $ownerCreateMessage = ['type' => 'error', 'text' => 'Gagal membuat owner: ' . $createStmt->error];
+                $ownerCreateMessage = ['type' => 'error', 'text' => 'Gagal membuat supplier: ' . $createStmt->error];
             }
             $createStmt->close();
         }
@@ -143,7 +143,7 @@ $conn->close();
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../css/dashboard.css?v=2.0.0">
+    <link rel="stylesheet" href="../../css/dashboard.css?v=2.1.1">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -198,7 +198,7 @@ $conn->close();
         }
 
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            font-family: 'Heebo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #f0f2f5 100%);
             color: var(--text-dark);
             line-height: 1.5;
@@ -1559,7 +1559,7 @@ $conn->close();
                 </button>
                 <button class="tab-button<?= $defaultTab === 'manageowners' ? ' active' : '' ?>" onclick="switchTab('manageowners')">
                     <i class="material-icons">group_add</i>
-                    <?= te('Kelola Owner') ?>
+                    <?= te('Kelola Supplier') ?>
                 </button>
             </div>
 
@@ -1833,7 +1833,7 @@ $conn->close();
                 <?php endif; ?>
 
                 <div class="owner-form-card">
-                    <h3><i class="material-icons">person_add</i> <?= te('Buat Owner Baru') ?></h3>
+                    <h3><i class="material-icons">person_add</i> <?= te('Buat Supplier Baru') ?></h3>
                     <form method="post">
                         <input type="hidden" name="create_owner" value="1">
                         <div class="owner-form-grid">
@@ -1862,12 +1862,12 @@ $conn->close();
                                 <input type="password" name="password" required>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-create-owner"><?= te('Buat Owner') ?></button>
+                        <button type="submit" class="btn btn-create-owner"><?= te('Buat Supplier') ?></button>
                     </form>
                 </div>
 
                 <div class="owner-table-card">
-                    <h3><i class="material-icons">list_alt</i> <?= te('Semua Owner') ?></h3>
+                    <h3><i class="material-icons">list_alt</i> <?= te('Semua Supplier') ?></h3>
                     <table class="owner-manage-table">
                         <thead>
                             <tr>
@@ -1889,7 +1889,7 @@ $conn->close();
                                 <?php endwhile; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="4"><?= te('Belum ada owner') ?></td>
+                                    <td colspan="4"><?= te('Belum ada supplier') ?></td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>

@@ -501,7 +501,7 @@ $conn->close();
 </head>
 
 <body>
-    <div class="tv-lang tv-lang-light tv-lang-floating"><?php include __DIR__ . "/_lang_switch_inner.php"; ?></div>
+    <div class="tv-lang tv-lang-light tv-lang-floating"><?php include __DIR__ . "/../_lang_switch_inner.php"; ?></div>
     <div class="container">
         <div class="header">
             <div class="logo">
@@ -622,7 +622,7 @@ $conn->close();
         </div>
 
         <div class="back-home">
-            <a href="home.php"><i class="fas fa-arrow-left me-2"></i><?= te('Kembali ke Beranda') ?></a>
+            <a href="../customer/home.php"><i class="fas fa-arrow-left me-2"></i><?= te('Kembali ke Beranda') ?></a>
         </div>
     </div>
 

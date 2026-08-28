@@ -653,6 +653,7 @@ $GLOBALS['TV_DICT'] = [
 
     /* ---- admin panel: shared sidebar chrome ---- */
     'Dasbor Admin'            => 'Admin Dashboard',
+    'Dasbor Supplier'         => 'Supplier Dashboard',
     'Kelola Akun'             => 'Manage Account',
     'Keluar'                  => 'Logout',
     'Ringkasan Eksekutif'     => 'Executive Overview',
@@ -730,7 +731,7 @@ $GLOBALS['TV_DICT'] = [
     'Ditolak'                     => 'Rejected',
     'Aplikasi ditolak'          => 'Declined applications',
     'Tingkat Persetujuan'      => 'Approval Rate',
-    'Kelola Owner'                => 'Manage Owners',
+    'Kelola Supplier'                => 'Manage Suppliers',
     'Tidak Ada Permintaan Tertunda' => 'No Pending Requests',
     'Semua permintaan supplier telah diproses' => 'All supplier requests have been processed',
     'Belum Ada Supplier Disetujui' => 'No Approved Suppliers',
@@ -902,10 +903,10 @@ $GLOBALS['TV_DICT'] = [
     'Tetap'                        => 'Fixed',
     'Tidak Aktif'                  => 'Inactive',
 
-    'Buat Owner Baru'           => 'Create New Owner',
-    'Buat Owner'                  => 'Create Owner',
-    'Semua Owner'                 => 'All Owners',
-    'Belum ada owner'            => 'No owners yet',
+    'Buat Supplier Baru'           => 'Create New Supplier',
+    'Buat Supplier'                  => 'Create Supplier',
+    'Semua Supplier'                 => 'All Suppliers',
+    'Belum ada supplier'            => 'No suppliers yet',
 
     'Kelola Hotel'            => 'Manage Hotels',
     'Kelola Kamar'            => 'Manage Rooms',

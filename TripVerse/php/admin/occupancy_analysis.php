@@ -671,7 +671,7 @@ function getWeekRange($year, $week)
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../css/dashboard.css?v=2.0.0" />
+    <link rel="stylesheet" href="../../css/dashboard.css?v=2.1.1" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1137,38 +1137,15 @@ function getWeekRange($year, $week)
                 gap: 10px;
             }
 
-            /* Mobile sidebar adjustments */
-            .sidebar {
-                position: fixed;
-                left: -280px;
-                transition: left 0.3s ease;
-                z-index: 1000;
-                height: 100vh;
-                overflow-y: auto;
-            }
-
-            .sidebar.active {
-                left: 0;
-            }
+            /* No .sidebar override here on purpose. dashboard.css already
+               positions the sidebar with transform, and .collapsed hides it at
+               every width. The old drawer pinned it to left:-280px and relied
+               on .active to slide it back — so once .active went away the
+               sidebar stayed off-screen and the toggle looked broken. */
 
             .main-content {
                 margin-left: 0 !important;
                 width: 100% !important;
-            }
-
-            .sidebar-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 999;
-            }
-
-            .sidebar-overlay.active {
-                display: block;
             }
         }
 
@@ -1316,7 +1293,6 @@ function getWeekRange($year, $week)
         <div class="loading-spinner"></div>
     </div>
 
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-brand">
@@ -1750,8 +1726,25 @@ function getWeekRange($year, $week)
             // Initialize sidebar dropdowns based on current page
             initializeSidebarDropdowns();
 
-            // Initialize mobile sidebar functionality
-            initializeMobileSidebar();
+            // Sidebar collapse/expand — state persists across page navigation
+            (function() {
+                const sidebar = document.getElementById('sidebar');
+                const toggleBtn = document.getElementById('toggleSidebar');
+                const mainContent = document.getElementById('main-content');
+                if (!sidebar || !toggleBtn || !mainContent) return;
+
+                const sidebarState = localStorage.getItem('sidebarState');
+                if (sidebarState === 'collapsed') {
+                    sidebar.classList.add('collapsed');
+                    mainContent.classList.add('expanded');
+                }
+
+                toggleBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('collapsed');
+                    mainContent.classList.toggle('expanded');
+                    localStorage.setItem('sidebarState', sidebar.classList.contains('collapsed') ? 'collapsed' : 'expanded');
+                });
+            })();
 
             // Period Tabs functionality
             document.querySelectorAll('.period-tab').forEach(tab => {
@@ -1783,7 +1776,7 @@ function getWeekRange($year, $week)
 
                 // Fetch hotels for selected city
                 if (city !== 'all') {
-                    fetch(`get_hotels.php?city=${encodeURIComponent(city)}`)
+                    fetch(`../get_hotels.php?city=${encodeURIComponent(city)}`)
                         .then(response => response.json())
                         .then(data => {
                             const hotelSelect = document.getElementById('filter_hotel');
@@ -1796,7 +1789,7 @@ function getWeekRange($year, $week)
 
                             // Fetch rooms for the first hotel if exists
                             if (data.length > 0) {
-                                fetch(`get_rooms.php?hotel=${data[0].hotel_id}`)
+                                fetch(`../get_rooms.php?hotel=${data[0].hotel_id}`)
                                     .then(response => response.json())
                                     .then(roomData => {
                                         const roomSelect = document.getElementById('filter_room');
@@ -1834,7 +1827,7 @@ function getWeekRange($year, $week)
                 document.getElementById('filter_room').innerHTML = '<option value="all">Semua Tipe Kamar</option>';
 
                 if (hotel !== 'all') {
-                    fetch(`get_rooms.php?hotel=${hotel}`)
+                    fetch(`../get_rooms.php?hotel=${hotel}`)
                         .then(response => response.json())
                         .then(data => {
                             const roomSelect = document.getElementById('filter_room');
@@ -1956,7 +1949,6 @@ function getWeekRange($year, $week)
             }
 
             if (currentPage.includes('revenue_optimization') ||
-                currentPage.includes('pricing_strategy') ||
                 currentPage.includes('occupancy_analysis') ||
                 currentPage.includes('alos_analysis')) {
                 toggleDropdownMenu('decisionDropdown');
@@ -2004,33 +1996,10 @@ function getWeekRange($year, $week)
             });
         }
 
-        function initializeMobileSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const toggleButton = document.getElementById('toggleSidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-
-            if (window.innerWidth <= 768) {
-                // Toggle sidebar
-                toggleButton.addEventListener('click', function() {
-                    sidebar.classList.add('active');
-                    overlay.classList.add('active');
-                });
-
-                // Close sidebar when clicking overlay
-                overlay.addEventListener('click', function() {
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
-                });
-
-                // Close sidebar when clicking links on mobile
-                document.querySelectorAll('.sidebar a').forEach(link => {
-                    link.addEventListener('click', function() {
-                        sidebar.classList.remove('active');
-                        overlay.classList.remove('active');
-                    });
-                });
-            }
-        }
+        /* The old initializeMobileSidebar() lived here. It toggled a .active
+           class that has no CSS behind it, fought with the .collapsed toggle
+           above, and re-bound its click listener on every resize event. The
+           single .collapsed toggle handles every width on its own. */
 
         function uploadProfilePhoto(file) {
             // Implementation remains the same
@@ -2185,10 +2154,6 @@ function getWeekRange($year, $week)
             }
         }
 
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            initializeMobileSidebar();
-        });
     </script>
 </body>
 

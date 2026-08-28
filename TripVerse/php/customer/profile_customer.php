@@ -963,7 +963,7 @@ $conn->close();
                         </div>
 
                         <!-- PERBAIKAN: Profile Dropdown yang Benar -->
-                        <?php include __DIR__ . "/_lang_switch.php"; ?><?php include __DIR__ . "/_account_menu.php"; ?>
+                        <?php include __DIR__ . "/../_lang_switch.php"; ?><?php include __DIR__ . "/../_account_menu.php"; ?>
                     </div>
                 </nav>
             </div>

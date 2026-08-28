@@ -410,7 +410,7 @@ $conn->close();
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../css/dashboard.css?v=2.0.0" />
+    <link rel="stylesheet" href="../../css/dashboard.css?v=2.1.1" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2208,16 +2208,9 @@ $conn->close();
                 document.getElementById('add_tanggal_berakhir').min = this.value;
             });
 
-            // Responsive behavior
-            function handleResponsive() {
-                if (window.innerWidth <= 768) {
-                    sidebar.classList.add('collapsed');
-                    mainContent.classList.add('expanded');
-                }
-            }
-
-            handleResponsive();
-            window.addEventListener('resize', handleResponsive);
+            /* No responsive auto-collapse here: it used to force .collapsed on
+               every resize, which overrode the saved sidebarState and slammed
+               the sidebar shut again right after the user opened it. */
             
             // Fix: Make sure Add New Promo button works
             document.getElementById('addNewPromoBtn').addEventListener('click', openAddPromoModal);

@@ -1247,8 +1247,6 @@ if (!empty($foto) && file_exists('../../uploads/' . $foto)) {
         </div>
         <?php endif; ?>
 
-        <?php // include 'wa.php'; 
-        ?>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="../../lib/wow/wow.min.js"></script>
         <script src="../../lib/easing/easing.min.js"></script>

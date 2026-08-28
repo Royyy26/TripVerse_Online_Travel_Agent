@@ -808,7 +808,7 @@ if ($filter_hotel !== 'all') {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../css/dashboard.css?v=2.0.0" />
+    <link rel="stylesheet" href="../../css/dashboard.css?v=2.1.1" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -2136,22 +2136,19 @@ if ($filter_hotel !== 'all') {
         const toggleBtn = document.getElementById('toggleSidebar');
         const mainContent = document.getElementById('main-content');
 
-        toggleBtn.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle('active');
-            } else {
-                sidebar.classList.toggle('collapsed');
-                mainContent.classList.toggle('expanded');
-                localStorage.setItem('sidebarState', sidebar.classList.contains('collapsed') ? 'collapsed' : 'expanded');
-            }
-        });
-
-        // Initialize sidebar state
-        const savedState = localStorage.getItem('sidebarState');
-        if (savedState === 'collapsed' && window.innerWidth > 768) {
+        // Restore the saved state, then toggle the same way at every width:
+        // .collapsed is position:fixed + translateX, so it works on mobile too.
+        const sidebarState = localStorage.getItem('sidebarState');
+        if (sidebarState === 'collapsed') {
             sidebar.classList.add('collapsed');
             mainContent.classList.add('expanded');
         }
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+            localStorage.setItem('sidebarState', sidebar.classList.contains('collapsed') ? 'collapsed' : 'expanded');
+        });
 
         // Initialize charts on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -2537,19 +2534,6 @@ if ($filter_hotel !== 'all') {
             });
         });
 
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768 && sidebar && !sidebar.contains(e.target) && toggleBtn && !toggleBtn.contains(e.target)) {
-                sidebar.classList.remove('active');
-            }
-        });
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                sidebar.classList.remove('active');
-            }
-        });
     </script>
 </body>
 

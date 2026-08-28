@@ -179,12 +179,19 @@ a {
 
 .profile-photo-container {
     position: relative;
-    margin: 0 auto 10px;
-    width: 120px;
-    height: 120px;
+    margin: 0 auto 15px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile-photo-container:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
 }
 
 .profile-photo-container img.profile-photo {
@@ -241,7 +248,7 @@ a {
 .user-dropdown {
     position: relative;
     margin: 16px auto;
-    width: fit-content;
+    width: 100%;
 }
 
 
@@ -255,7 +262,7 @@ a {
     justify-content: center;
     font-size: 0.9rem;
     gap: 8px;
-    padding: 8px 16px;
+    padding: 8px 12px;
     border-radius: 8px;
     width: 100%;
     transition: all 0.3s ease;
@@ -409,6 +416,7 @@ nav a span.material-icons {
     width: 32px;
     height: 32px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .dropdown-menu {

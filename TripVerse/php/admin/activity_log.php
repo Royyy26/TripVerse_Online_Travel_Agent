@@ -115,9 +115,9 @@ if ($stmt) {
     if ($u && !empty($u['profile_picture'])) {
         // Check multiple possible locations
         $possible_paths = [
-            __DIR__ . '/../uploads/' . $u['profile_picture'],
-            __DIR__ . '/../uploads/profiles/' . $u['profile_picture'],
-            __DIR__ . '/../uploads/users/' . $u['profile_picture']
+            __DIR__ . '/../../uploads/' . $u['profile_picture'],
+            __DIR__ . '/../../uploads/profiles/' . $u['profile_picture'],
+            __DIR__ . '/../../uploads/users/' . $u['profile_picture']
         ];
         
         foreach ($possible_paths as $check_path) {
@@ -128,7 +128,7 @@ if ($stmt) {
         }
         
         // If not found in specific folders, check root uploads
-        if ($profile_picture === null && file_exists(__DIR__ . '/../uploads/' . $u['profile_picture'])) {
+        if ($profile_picture === null && file_exists(__DIR__ . '/../../uploads/' . $u['profile_picture'])) {
             $profile_picture = $u['profile_picture'];
         }
     }
@@ -218,10 +218,13 @@ $action_icons = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activity Log - TripVerse</title>
-    <link rel="stylesheet" href="../../css/owner_dashboard.css?v=2.0.0">
+    <title>Activity Log - TripVerse Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/dashboard.css?v=2.1.1">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .filter-section {
             background: rgba(255, 255, 255, 0.95);
@@ -427,70 +430,143 @@ $action_icons = [
     </style>
 </head>
 <body>
-    <!-- Owner-specific sidebar -->
-    <div class="owner-sidebar" id="owner-sidebar">
-        <div class="sidebar-header">
-            <div class="logo">
-                <img src="../../img/logo.png" alt="TripVerse Logo" class="logo-img" />
-                <div class="logo-text-group">
-                    <span class="logo-text">TripVerse</span>
-                    <span class="logo-subtitle"><?= te('Dasbor Admin') ?></span>
-                </div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="../../img/logo.png" alt="TripVerse Logo" class="sidebar-brand-logo" />
+            <div class="sidebar-brand-text">
+                <span class="sidebar-brand-title">TripVerse</span>
+                <span class="sidebar-brand-subtitle"><?= te('Dasbor Admin') ?></span>
             </div>
-            <button id="toggleSidebar" class="sidebar-toggle" aria-label="Toggle sidebar">
-                <span class="material-icons">menu</span>
-            </button>
         </div>
 
         <div class="sidebar-brand-lang">
             <?php include __DIR__ . '/../_lang_switch_inner.php'; ?>
         </div>
-        
-         <div class="profile-section">
-            <div class="profile-avatar">
-                <?php if ($profile_picture): ?>
-                    <img src="../../uploads/<?php echo htmlspecialchars($profile_picture); ?>" 
-                         alt="<?php echo htmlspecialchars(($u['first_name'] ?? 'User') . ' ' . ($u['last_name'] ?? '')); ?>"
-                         onerror="this.src='<?php echo $fallback_avatar; ?>'">
-                <?php else: ?>
-                    <img src="<?php echo $fallback_avatar; ?>" 
-                         alt="<?php echo htmlspecialchars(($u['first_name'] ?? 'User') . ' ' . ($u['last_name'] ?? '')); ?>">
-                <?php endif; ?>
-            </div>
-            <div class="profile-info">
-                <h3><?php echo htmlspecialchars(($u['first_name'] ?? 'User') . ' ' . ($u['last_name'] ?? '')); ?></h3>
-                <p class="profile-role">Hotel Owner</p>
-                <p class="profile-email"><?php echo htmlspecialchars($u['email'] ?? ''); ?></p>
+
+        <div class="profile-header">
+            <div class="profile-photo-section">
+                <div class="profile-photo-container">
+                    <?php if ($profile_picture): ?>
+                        <img src="../../uploads/<?php echo htmlspecialchars($profile_picture); ?>"
+                            alt="Profile Photo"
+                            class="profile-photo"
+                            id="profilePhoto"
+                            onerror="this.src='<?php echo $fallback_avatar; ?>'">
+                    <?php else: ?>
+                        <img src="<?php echo $fallback_avatar; ?>"
+                            alt="Profile Photo"
+                            class="profile-photo"
+                            id="profilePhoto">
+                    <?php endif; ?>
+
+                    <div class="profile-overlay">
+                        <span class="material-icons">edit</span>
+                    </div>
+
+                    <form id="uploadForm" action="dashboard.php" method="POST" enctype="multipart/form-data" style="display:none;">
+                        <input type="file" name="profile_photo" id="profileUpload" accept="image/*" />
+                    </form>
+                </div>
+
+                <div class="profile-info">
+                    <h2><?php echo htmlspecialchars(($u['first_name'] ?? 'User') . ' ' . ($u['last_name'] ?? '')); ?></h2>
+                    <p><?php echo htmlspecialchars($u['email'] ?? ''); ?></p>
+
+                    <div class="user-dropdown">
+                        <button class="user-info" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown(this)">
+                            <span class="dropdown-text"><?= te('Kelola Akun') ?></span>
+                            <span class="material-icons dropdown-arrow">expand_more</span>
+                        </button>
+
+                        <div class="dropdown-content" role="menu" aria-hidden="true">
+                            <a href="profile.php" class="dropdown-item">
+                                <span class="material-icons">person</span>
+                                <span>Edit Profile</span>
+                            </a>
+                            <a href="../auth/logout.php" class="dropdown-item">
+                                <span class="material-icons">logout</span>
+                                <span><?= te('Keluar') ?></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <nav class="owner-nav">
-            <a href="owner_dashboard.php" class="nav-item">
+        <nav>
+            <!-- EXECUTIVE OVERVIEW -->
+            <a href="dashboard.php">
                 <span class="material-icons">dashboard</span>
-                <span><?= te('Dashboard') ?></span>
+                <span><?= te('Ringkasan Eksekutif') ?></span>
             </a>
-            <a href="hotel_manage.php" class="nav-item">
-                <span class="material-icons">hotel</span>
-                <span><?= te('Kelola Hotel') ?></span>
+
+            <!-- SUPPLIER APPROVAL -->
+            <?php if ($_SESSION['role'] === 'admin'): ?>
+                <a href="supplier_approvals.php">
+                    <span class="material-icons">approval</span>
+                    <span><?= te('Manajemen Supplier') ?></span>
+                </a>
+            <?php endif; ?>
+
+            <!-- PROMO MANAGEMENT -->
+            <a href="promo_management.php">
+                <span class="material-icons">campaign</span>
+                <span><?= te('Manajemen Promo') ?></span>
             </a>
-            <a href="room_management.php" class="nav-item">
-                <span class="material-icons">bed</span>
-                <span><?= te('Kelola Kamar') ?></span>
+
+            <!-- ANALYTICS & INSIGHTS -->
+            <div class="user-menu">
+                <a href="#" class="booking-toggle" data-target="analyticsDropdown">
+                    <span class="material-icons">monitor</span>
+                    <span><?= te('Monitoring Performa') ?></span>
+                    <span class="material-icons toggle-icon">expand_more</span>
+                </a>
+
+                <div class="booking-submenu hidden" id="analyticsDropdown">
+                    <a href="performance_analytics.php">
+                        <span class="material-icons">bar_chart</span>
+                        <span><?= te('Statistik Performa') ?></span>
+                    </a>
+                    <a href="market_analysis.php">
+                        <span class="material-icons">trending_up</span>
+                        <span><?= te('Tren Booking') ?></span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- DECISION SUPPORT MODULES -->
+            <div class="user-menu">
+                <a href="#" class="booking-toggle" data-target="decisionDropdown">
+                    <span class="material-icons">analytics</span>
+                    <span><?= te('Analisis Statistik') ?></span>
+                    <span class="material-icons toggle-icon">expand_more</span>
+                </a>
+
+                <div class="booking-submenu hidden" id="decisionDropdown">
+                    <a href="revenue_optimization.php">
+                        <span class="material-icons">attach_money</span>
+                        <span><?= te('Statistik Pendapatan') ?></span>
+                    </a>
+                    <a href="occupancy_analysis.php">
+                        <span class="material-icons">king_bed</span>
+                        <span><?= te('Statistik Okupansi') ?></span>
+                    </a>
+                    <a href="alos_analysis.php">
+                        <span class="material-icons">calendar_today</span>
+                        <span><?= te('Statistik ALOS') ?></span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- CUSTOMER INTELLIGENCE -->
+            <a href="customerdss.php">
+                <span class="material-icons">people</span>
+                <span><?= te('Statistik Pelanggan') ?></span>
             </a>
-            <a href="extra_facilities_manage.php" class="nav-item ">
-                <span class="material-icons">room_service</span>
-                <span><?= te('Fasilitas Tambahan') ?></span>
-            </a>
-            <a href="booking_management.php" class="nav-item">
-                <span class="material-icons">book_online</span>
-                <span><?= te('Pemesanan') ?></span>
-            </a>
-            <a href="activity_log.php" class="nav-item active">
-                <span class="material-icons">history</span>
-                <span><?= te('Log Aktivitas') ?></span>
-            </a>
-            <a href="../auth/logout.php" class="nav-item logout">
-                <span class="material-icons">logout</span>
+
+            <!-- LOGOUT -->
+            <a href="../auth/logout.php">
+                <span class="material-icons">exit_to_app</span>
                 <span><?= te('Keluar') ?></span>
             </a>
         </nav>
@@ -498,16 +574,22 @@ $action_icons = [
 
     <main class="main-content" id="main-content">
         <header class="main-header">
-            <div class="header-left">
-                <h1><?= te('Log Aktivitas') ?></h1>
-                <p class="header-subtitle"><?= te('Lacak semua tindakan dan aktivitas Anda') ?></p>
-            </div>
-            <div class="header-right">
-                <div class="header-actions">
-                    <span class="notification-count"><?= count($activity_logs) ?> <?= te('Aktivitas') ?></span>
+            <button id="toggleSidebar" class="menu-toggle" aria-label="Toggle sidebar">
+                <span class="material-icons">menu</span>
+            </button>
+
+            <div class="header-actions">
+                <div class="notification-bell" id="notificationBell" tabindex="0" aria-haspopup="true" aria-expanded="false" aria-label="Notifications">
+                    <span class="material-icons bell-icon">notifications</span>
+                    <span class="notification-badge" id="notificationCount"><?= count($activity_logs) ?></span>
                 </div>
             </div>
         </header>
+
+        <div style="padding: 0 30px; margin-bottom: 20px;">
+            <h1 style="font-size: 24px; color: #0F172B; margin-bottom: 5px;"><?= te('Log Aktivitas') ?></h1>
+            <p style="color: #6b7280; font-size: 14px;"><?= te('Lacak semua tindakan dan aktivitas Anda') ?></p>
+        </div>
 
         <!-- Statistics -->
         <section class="stats-section">
@@ -630,13 +712,50 @@ $action_icons = [
     </main>
 
     <script>
-        const sidebar = document.getElementById('owner-sidebar');
+        // Sidebar toggle
+        const sidebar = document.getElementById('sidebar');
         const toggleBtn = document.getElementById('toggleSidebar');
         const mainContent = document.getElementById('main-content');
-        
+
+        const sidebarState = localStorage.getItem('sidebarState');
+        if (sidebarState === 'collapsed') {
+            sidebar.classList.add('collapsed');
+            mainContent.classList.add('expanded');
+        }
+
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('expanded');
+            localStorage.setItem('sidebarState', sidebar.classList.contains('collapsed') ? 'collapsed' : 'expanded');
+        });
+
+        // Dropdown toggle
+        function toggleDropdown(btn) {
+            const dropdown = btn.nextElementSibling;
+            const isOpen = dropdown.classList.contains('show');
+            document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('show'));
+            if (!isOpen) dropdown.classList.add('show');
+            btn.setAttribute('aria-expanded', !isOpen);
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-dropdown')) {
+                document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('show'));
+            }
+        });
+
+        // Submenu toggle for sidebar
+        document.querySelectorAll('.booking-toggle').forEach(function(toggle) {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('data-target');
+                const submenu = document.getElementById(targetId);
+                const icon = this.querySelector('.toggle-icon');
+                if (submenu) {
+                    submenu.classList.toggle('hidden');
+                    if (icon) icon.style.transform = submenu.classList.contains('hidden') ? '' : 'rotate(180deg)';
+                }
+            });
         });
     </script>
 </body>
