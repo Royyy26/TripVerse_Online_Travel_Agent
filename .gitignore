@@ -3,3 +3,6 @@ TripVerse/php/db_config.php
 
 # Holds a real Gmail App Password for outgoing OTP email — never commit.
 TripVerse/php/mail_config.php
+
+# Transient runtime OTP codes — regenerated constantly, shouldn't be tracked.
+otp_storage*.json

@@ -820,7 +820,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
 
         <h1 class="form-title"><?= te('Verifikasi OTP') ?></h1>
         <p style="color:#666; margin-bottom:20px;">
-            <?= te('Kami mengirim kode 6 digit ke WhatsApp Anda.') ?>
+            <?= te('Kami mengirim kode 6 digit ke Email Anda.') ?>
         </p>
 
         <button id="requestOtpBtnCustomer" class="btn" style="margin-bottom:15px;">
@@ -1105,21 +1105,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                 alert("<?= t('Nomor telepon wajib diisi.') ?>");
                 return;
             }
+            if (document.getElementById("emailCustomer").value.trim() === "") {
+                alert("<?= t('Email wajib diisi.') ?>");
+                return;
+            }
             document.getElementById("signupCustomer").style.display = "none";
             document.getElementById("otpPageCustomer").style.display = "block";
         });
 
         document.getElementById("requestOtpBtnCustomer").addEventListener("click", () => {
-            const phone = document.getElementById("phoneCustomer").value;
-            fetch("send_otp.php", {
+            const email = document.getElementById("emailCustomer").value;
+            fetch("send_otp_register.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: "no_hp=" + encodeURIComponent(phone)
+                    body: "email=" + encodeURIComponent(email)
                 })
                 .then(res => res.text())
-                .then(() => alert("<?= t('OTP terkirim ke WhatsApp!') ?>"));
+                .then(result => {
+                    if (result === "sent") {
+                        alert("<?= t('OTP terkirim ke Email Anda!') ?>");
+                    } else {
+                        alert("<?= t('Gagal mengirim OTP. Silakan coba lagi.') ?>");
+                    }
+                });
         });
 
         // OTP Auto Focus
@@ -1134,14 +1144,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
         document.getElementById("verifyOtpBtnCustomer").addEventListener("click", () => {
             let otp = "";
             otpFields.forEach(f => otp += f.value);
-            const phone = document.getElementById("phoneCustomer").value;
+            const email = document.getElementById("emailCustomer").value;
 
-            fetch("verify_otp.php", {
+            fetch("verify_otp_register.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
-                    body: "no_hp=" + encodeURIComponent(phone) + "&otp=" + otp
+                    body: "email=" + encodeURIComponent(email) + "&otp=" + otp
                 })
                 .then(res => res.text())
                 .then(result => {
