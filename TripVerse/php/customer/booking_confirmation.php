@@ -34,7 +34,7 @@ if (isset($_SESSION['payment_confirmation'])) {
 // =====================================================
 // JIKA TIDAK DARI PAYMENT_CONFIRMATION, LOAD DARI DATABASE
 // =====================================================
-require_once "connect.php";
+require_once __DIR__ . '/../connect.php';
 
 // Inisialisasi variabel
 $error = null;

@@ -777,14 +777,14 @@ $conn->close();
     <main class="main-content" id="main-content">
         <header class="main-header">
             <div class="header-left">
-                <h1>Welcome back, <?php echo htmlspecialchars($u['first_name'] ?? 'Owner'); ?>!</h1>
-                <p class="header-subtitle">Manage your hotels and track your business</p>
+                <h1><?= te('Selamat datang kembali,') ?> <?php echo htmlspecialchars($u['first_name'] ?? 'Owner'); ?>!</h1>
+                <p class="header-subtitle"><?= te('Kelola hotel Anda dan pantau bisnis Anda') ?></p>
             </div>
             <div class="header-right">
                 <div class="header-actions">
                     <button class="action-btn" onclick="window.location.href='hotel_manage.php'">
                         <span class="material-icons">add</span>
-                        Add Hotel
+                        <?= te('Tambah Hotel') ?>
                     </button>
                 </div>
             </div>
@@ -797,9 +797,9 @@ $conn->close();
                     <span class="material-icons">hotel</span>
                 </div>
                 <div class="stat-content">
-                    <h3>Total Hotels</h3>
+                    <h3><?= te('Total Hotel') ?></h3>
                     <p><?php echo $stats['total_hotels'] ?? 0; ?></p>
-                    <small>Active Properties</small>
+                    <small><?= te('Properti Aktif') ?></small>
                 </div>
                 <div class="stat-arrow">
                     <span class="material-icons">arrow_forward</span>
@@ -811,9 +811,9 @@ $conn->close();
                     <span class="material-icons">bed</span>
                 </div>
                 <div class="stat-content">
-                    <h3>Total Rooms</h3>
+                    <h3><?= te('Total Kamar') ?></h3>
                     <p><?php echo $stats['total_rooms'] ?? 0; ?></p>
-                    <small>Available Units</small>
+                    <small><?= te('Unit Tersedia') ?></small>
                 </div>
                 <div class="stat-arrow">
                     <span class="material-icons">arrow_forward</span>
@@ -825,9 +825,9 @@ $conn->close();
                     <span class="material-icons">book_online</span>
                 </div>
                 <div class="stat-content">
-                    <h3>Total Bookings</h3>
+                    <h3><?= te('Total Booking') ?></h3>
                     <p><?php echo $stats['total_bookings'] ?? 0; ?></p>
-                    <small>All Time Bookings</small>
+                    <small><?= te('Semua Booking') ?></small>
                 </div>
                 <div class="stat-arrow">
                     <span class="material-icons">arrow_forward</span>
@@ -839,12 +839,12 @@ $conn->close();
                     <span class="material-icons">payments</span>
                 </div>
                 <div class="stat-content">
-                    <h3>Net Revenue</h3>
+                    <h3><?= te('Pendapatan Bersih') ?></h3>
                     <p>Rp <?php echo number_format($stats['total_revenue'] ?? 0, 0, ',', '.'); ?></p>
                     <?php if (isset($stats['gross_revenue']) && $stats['gross_revenue'] > 0): ?>
-                    <small>After 5% admin fee deduction</small>
+                    <small><?= te('Setelah potongan biaya admin 5%') ?></small>
                     <?php else: ?>
-                    <small>Completed bookings only</small>
+                    <small><?= te('Hanya booking selesai') ?></small>
                     <?php endif; ?>
                 </div>
                 <div class="stat-arrow">
@@ -860,7 +860,7 @@ $conn->close();
                 <div class="card-header">
                     <div class="card-title">
                         <span class="material-icons">emoji_events</span>
-                        Top Performing Hotels
+                        <?= te('Hotel Berperforma Terbaik') ?>
                     </div>
                 </div>
                 <?php if (!empty($top_hotels)): ?>
@@ -962,8 +962,8 @@ $conn->close();
                     <div id="occupancyDetailsContainer">
                         <div class="empty-state">
                             <span class="material-icons">hotel</span>
-                            <h4>Select a Hotel</h4>
-                            <p>Click on a hotel from Top Performing Hotels to view occupancy data</p>
+                            <h4><?= te('Pilih Hotel') ?></h4>
+                            <p><?= te('Klik hotel dari Hotel Berperforma Terbaik untuk melihat data okupansi') ?></p>
                         </div>
                     </div>
                     
@@ -979,7 +979,7 @@ $conn->close();
         <!-- Recent Hotels -->
         <?php if (!empty($recent_hotels)): ?>
         <section class="recent-hotels">
-            <h2 class="section-title">Recent Hotels</h2>
+            <h2 class="section-title"><?= te('Hotel Terbaru') ?></h2>
             <div class="hotels-grid">
                 <?php foreach ($recent_hotels as $hotel): ?>
                 <div class="hotel-card">
@@ -1003,7 +1003,7 @@ $conn->close();
         <!-- Recent Bookings -->
         <?php if (!empty($recent_bookings)): ?>
         <section class="recent-bookings">
-            <h2 class="section-title">Recent Bookings</h2>
+            <h2 class="section-title"><?= te('Booking Terbaru') ?></h2>
             <div class="bookings-table">
                 <div class="table-header">
                     <div class="table-cell">Customer</div>

@@ -11,7 +11,7 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'owner']
 
 require __DIR__ . '/../connect.php';
 require_once __DIR__ . '/../_lang.php';
-require 'activity_log_helper.php';
+require __DIR__ . '/../activity_log_helper.php';
 
 // Ensure hotel table has owner_id column
 $checkCol = $conn->query("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'hotel' AND COLUMN_NAME = 'owner_id'");
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_hotel'])) {
         // Handle file upload
         $foto_hotel = '';
         if (isset($_FILES['foto_hotel']) && $_FILES['foto_hotel']['error'] === UPLOAD_ERR_OK) {
-            $upload_dir = __DIR__ . '/../img/';
+            $upload_dir = __DIR__ . '/../../img/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_hotel'])) {
                 $foto_sql = "";
                 $foto_hotel = null;
                 if (isset($_FILES['foto_hotel']) && $_FILES['foto_hotel']['error'] === UPLOAD_ERR_OK) {
-                    $upload_dir = __DIR__ . '/../img/';
+                    $upload_dir = __DIR__ . '/../../img/';
                     if (!is_dir($upload_dir)) {
                         mkdir($upload_dir, 0755, true);
                     }
@@ -1202,8 +1202,8 @@ $conn->close();
     <main class="main-content" id="main-content">
         <header class="main-header">
             <div class="header-left">
-                <h1>Hotel Management</h1>
-                <p class="header-subtitle">Manage your hotels and properties</p>
+                <h1><?= te('Manajemen Hotel') ?></h1>
+                <p class="header-subtitle"><?= te('Kelola hotel dan properti Anda') ?></p>
             </div>
         </header>
 
@@ -1319,10 +1319,10 @@ $conn->close();
             <!-- Right Section - My Hotels -->
             <section class="my-hotels-section">
                 <div class="section-header">
-                    <h2>Hotel Saya</h2>
+                    <h2><?= te('Hotel Saya') ?></h2>
                     <button class="add-hotel-btn" onclick="scrollToForm()">
                         <span class="material-icons">add</span>
-                        + Add Hotel
+                        + <?= te('Tambah Hotel') ?>
                     </button>
                 </div>
                 
@@ -1330,11 +1330,11 @@ $conn->close();
                     <?php if (empty($hotels)): ?>
                         <div class="empty-state">
                             <span class="material-icons">hotel</span>
-                            <h3>Belum ada hotel</h3>
-                            <p>Mulai dengan menambahkan hotel pertama Anda</p>
+                            <h3><?= te('Belum ada hotel') ?></h3>
+                            <p><?= te('Mulai dengan menambahkan hotel pertama Anda') ?></p>
                             <button class="add-hotel-btn" onclick="scrollToForm()">
                                 <span class="material-icons">add</span>
-                                Tambah Hotel Pertama
+                                <?= te('Tambah Hotel Pertama') ?>
                             </button>
                         </div>
                         <?php else: ?>
@@ -1344,25 +1344,15 @@ $conn->close();
                                     <?php 
                                     $hotel_img_path = '../../img/default-hotel.svg';
                                     if (!empty($hotel['foto_hotel'])) {
-                                        // Check if foto_hotel already contains path prefix
-                                        $foto_manage = $hotel['foto_hotel'];
-                                        if (strpos($foto_manage, '../../img/') === 0 || strpos($foto_manage, 'img/') === 0) {
-                                            // Path already included in database
-                                            $img_file = __DIR__ . '/../' . ltrim($foto_manage, './');
-                                        } else {
-                                            // Just filename, add path
-                                            $img_file = __DIR__ . '/../img/' . $foto_manage;
-                                        }
-                                        
+                                        // The database has files stored under a few different legacy
+                                        // formats ("../img/x.jpg", "img/x.jpg", or just "x.jpg") from
+                                        // before the folder reorg. Normalize down to the bare filename
+                                        // first, then always resolve it the same way from here.
+                                        $foto_filename = basename($hotel['foto_hotel']);
+                                        $img_file = __DIR__ . '/../../img/' . $foto_filename;
+
                                         if (file_exists($img_file)) {
-                                            // Return the correct relative path for browser
-                                            if (strpos($foto_manage, '../../img/') === 0) {
-                                                $hotel_img_path = $foto_manage;
-                                            } elseif (strpos($foto_manage, 'img/') === 0) {
-                                                $hotel_img_path = '../' . $foto_manage;
-                                            } else {
-                                                $hotel_img_path = '../../img/' . htmlspecialchars($foto_manage);
-                                            }
+                                            $hotel_img_path = '../../img/' . htmlspecialchars($foto_filename);
                                         }
                                     }
                                     ?>
@@ -1442,7 +1432,7 @@ $conn->close();
             <div class="modal-header">
                 <h2>
                     <span class="material-icons">hotel</span>
-                    Detail Hotel
+                    <?= te('Detail Hotel') ?>
                 </h2>
                 <button class="modal-close" onclick="closeHotelModal()">
                     <span class="material-icons">close</span>

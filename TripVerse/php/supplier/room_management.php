@@ -11,7 +11,7 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['owner', 'admin']
 
 require __DIR__ . '/../connect.php';
 require_once __DIR__ . '/../_lang.php';
-require 'activity_log_helper.php';
+require __DIR__ . '/../activity_log_helper.php';
 
 $id_user = $_SESSION['id_user'];
 $role = $_SESSION['role'] ?? 'user';
@@ -759,13 +759,13 @@ $conn->close();
     <main class="main-content" id="main-content">
         <header class="main-header">
             <div class="header-left">
-                <h1>Room Management</h1>
-                <p class="header-subtitle">Manage room types and pricing for your hotels</p>
+                <h1><?= te('Manajemen Kamar') ?></h1>
+                <p class="header-subtitle"><?= te('Kelola tipe kamar dan harga untuk hotel Anda') ?></p>
             </div>
             <div class="header-right">
                 <button class="action-btn secondary" onclick="showAddTypeModal()">
                     <span class="material-icons">category</span>
-                    Add Room Type
+                    <?= te('Tambah Tipe Kamar') ?>
                 </button>
                 <div class="header-actions">
                     <button class="action-btn" onclick="showAddRoomModal()">
@@ -805,11 +805,11 @@ $conn->close();
                     <?php if (empty($rooms)): ?>
                         <div class="empty-state">
                             <span class="material-icons">bed</span>
-                            <h3>No rooms found</h3>
-                            <p>Add your first room to get started</p>
+                            <h3><?= te('Belum ada kamar') ?></h3>
+                            <p><?= te('Tambahkan kamar pertama Anda untuk memulai') ?></p>
                             <button class="action-btn" onclick="showAddRoomModal()">
                                 <span class="material-icons">add</span>
-                                Add Room
+                                <?= te('Tambah Kamar') ?>
                             </button>
                         </div>
                     <?php else: ?>
@@ -893,8 +893,8 @@ $conn->close();
             <section class="rooms-section">
                 <div class="empty-state">
                     <span class="material-icons">hotel</span>
-                    <h3>Pilih hotel terlebih dahulu</h3>
-                    <p>Silakan pilih hotel untuk mengelola tipe kamar.</p>
+                    <h3><?= te('Pilih hotel terlebih dahulu') ?></h3>
+                    <p><?= te('Silakan pilih hotel untuk mengelola tipe kamar.') ?></p>
                 </div>
             </section>
         <?php endif; ?>
@@ -978,7 +978,7 @@ $conn->close();
         <div id="typeModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Add Room Type</h2>
+                    <h2><?= te('Tambah Tipe Kamar') ?></h2>
                     <button class="close-btn" onclick="closeTypeModal()">
                         <span class="material-icons">close</span>
                     </button>

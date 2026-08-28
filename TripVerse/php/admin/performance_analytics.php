@@ -2053,27 +2053,27 @@ function get_overview_analytics($conn, $year, $month, $period, $filter_condition
 switch ($filter_type) {
     case 'occupancy':
         $analytics_data = get_occupancy_analytics($conn, $filter_year, $filter_month, $filter_period, $filter_conditions, $filter_params);
-        $page_title = "Occupancy Analytics - Visualisasi Hunian Kamar";
+        $page_title = te("Analitik Okupansi - Visualisasi Hunian Kamar");
         break;
     case 'revenue':
         $analytics_data = get_revenue_analytics($conn, $filter_year, $filter_month, $filter_period, $filter_conditions, $filter_params);
-        $page_title = "Revenue Analytics - Visualisasi Pendapatan";
+        $page_title = te("Analitik Pendapatan - Visualisasi Pendapatan");
         break;
     case 'booking':
         $analytics_data = get_booking_analytics($conn, $filter_year, $filter_month, $filter_period, $filter_conditions, $filter_params);
-        $page_title = "Booking Analytics - Visualisasi Reservasi";
+        $page_title = te("Analitik Booking - Visualisasi Reservasi");
         break;
     case 'room':
         $analytics_data = get_room_performance_analytics($conn, $filter_year, $filter_month, $filter_period, $filter_conditions, $filter_params);
-        $page_title = "Room Performance Analytics - Visualisasi Performa Kamar";
+        $page_title = te("Analitik Performa Kamar - Visualisasi Performa Kamar");
         break;
     case 'customer':
         $analytics_data = get_customer_analytics($conn, $filter_year, $filter_month, $filter_period, $filter_conditions, $filter_params);
-        $page_title = "Customer Analytics - Visualisasi Pelanggan";
+        $page_title = te("Analitik Pelanggan - Visualisasi Pelanggan");
         break;
     default:
         $analytics_data = get_overview_analytics($conn, $filter_year, $filter_month, $filter_period, $filter_conditions, $filter_params);
-        $page_title = "Performance Analytics Dashboard - Visualisasi Data TripVerse";
+        $page_title = te("Dasbor Analitik Performa - Visualisasi Data TripVerse");
         break;
 }
 
@@ -2930,27 +2930,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             <div class="analytics-tabs">
                 <div class="analytics-tab <?= $filter_type === 'overview' ? 'active' : '' ?>" onclick="changeAnalyticsType('overview')">
                     <i class="material-icons">dashboard</i>
-                    <span>Overview</span>
+                    <span><?= te('Ikhtisar') ?></span>
                 </div>
                 <div class="analytics-tab <?= $filter_type === 'occupancy' ? 'active' : '' ?>" onclick="changeAnalyticsType('occupancy')">
                     <i class="material-icons">hotel</i>
-                    <span>Occupancy</span>
+                    <span><?= te('Okupansi') ?></span>
                 </div>
                 <div class="analytics-tab <?= $filter_type === 'revenue' ? 'active' : '' ?>" onclick="changeAnalyticsType('revenue')">
                     <i class="material-icons">attach_money</i>
-                    <span>Revenue</span>
+                    <span><?= te('Pendapatan') ?></span>
                 </div>
                 <div class="analytics-tab <?= $filter_type === 'booking' ? 'active' : '' ?>" onclick="changeAnalyticsType('booking')">
                     <i class="material-icons">book_online</i>
-                    <span>Booking</span>
+                    <span><?= te('Pemesanan') ?></span>
                 </div>
                 <div class="analytics-tab <?= $filter_type === 'room' ? 'active' : '' ?>" onclick="changeAnalyticsType('room')">
                     <i class="material-icons">room_service</i>
-                    <span>Room Performance</span>
+                    <span><?= te('Performa Kamar') ?></span>
                 </div>
                 <div class="analytics-tab <?= $filter_type === 'customer' ? 'active' : '' ?>" onclick="changeAnalyticsType('customer')">
                     <i class="material-icons">people</i>
-                    <span>Customer</span>
+                    <span><?= te('Statistik Pelanggan') ?></span>
                 </div>
             </div>
 
@@ -3140,7 +3140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </div>
 
                 <div class="performance-section">
-                    <h2><i class="material-icons">leaderboard</i> Hotel Performance Ranking</h2>
+                    <h2><i class="material-icons">leaderboard</i> <?= te("Peringkat Performa Hotel") ?></h2>
                     <?php if (!empty($analytics_data['hotel_performance'])): ?>
                         <table class="performance-table">
                             <thead>
@@ -3177,7 +3177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </div>
 
                 <div class="performance-section">
-                    <h2><i class="material-icons">leaderboard</i> Quick Stats by Room Type</h2>
+                    <h2><i class="material-icons">leaderboard</i> <?= te('Statistik Cepat per Tipe Kamar') ?></h2>
                     <?php if (!empty($analytics_data['quick_stats'])): ?>
                         <table class="performance-table">
                             <thead>
@@ -3250,7 +3250,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </div>
 
                 <div class="performance-section">
-                    <h2><i class="material-icons">location_city</i> Occupancy by Location</h2>
+                    <h2><i class="material-icons">location_city</i> <?= te('Okupansi berdasarkan Lokasi') ?></h2>
                     <?php if (!empty($analytics_data['occupancy_by_location'])): ?>
                         <table class="performance-table">
                             <thead>
@@ -3376,7 +3376,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </div>
 
                 <div class="performance-section">
-                    <h2><i class="material-icons">location_city</i> Revenue by Location - Analisis Geografis</h2>
+                    <h2><i class="material-icons">location_city</i> <?= te('Pendapatan berdasarkan Lokasi - Analisis Geografis') ?></h2>
                     <?php if (!empty($analytics_data['revenue_by_location'])): ?>
                         <table class="performance-table">
                             <thead>
@@ -3411,13 +3411,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     <?php if (!empty($analytics_data['revenue_by_type'])): ?>
                         <div class="performance-grid">
                             <div class="performance-card">
-                                <h3><i class="material-icons">donut_large</i> Revenue Distribution Pie Chart</h3>
+                                <h3><i class="material-icons">donut_large</i> <?= te('Diagram Pai Distribusi Pendapatan') ?></h3>
                                 <div class="chart-container">
                                     <canvas id="revenueByTypeChart"></canvas>
                                 </div>
                             </div>
                             <div class="performance-card">
-                                <h3><i class="material-icons">table_chart</i> Detail Data Visualisasi</h3>
+                                <h3><i class="material-icons">table_chart</i> <?= te('Detail Data Visualisasi') ?></h3>
                                 <table class="performance-table">
                                     <thead>
                                         <tr>
@@ -3449,7 +3449,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </div>
 
                 <div class="performance-section">
-                    <h2><i class="material-icons">star</i> Top Revenue Bookings</h2>
+                    <h2><i class="material-icons">star</i> <?= te('Booking Pendapatan Tertinggi') ?></h2>
 
                     <?php if (!empty($analytics_data['top_revenue_bookings'])): ?>
                         <table class="performance-table">
@@ -3554,12 +3554,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
 
                 <!-- Booking Methods -->
                 <div class="performance-section">
-                    <h2><i class="material-icons">pie_chart</i> Distribusi Metode Pembayaran / Booking</h2>
+                    <h2><i class="material-icons">pie_chart</i> <?= te('Distribusi Metode Pembayaran / Booking') ?></h2>
 
                     <?php if (!empty($analytics_data['booking_methods'])): ?>
                         <div class="performance-grid">
                             <div class="performance-card">
-                                <h3><i class="material-icons">donut_large</i> Booking Methods Pie Chart</h3>
+                                <h3><i class="material-icons">donut_large</i> <?= te('Diagram Pai Metode Booking') ?></h3>
                                 <div class="chart-container">
                                     <canvas id="bookingMethodsChart"></canvas>
                                 </div>
@@ -3597,7 +3597,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
 
                 <!-- Lead Time (opsional tapi berguna untuk Booking) -->
                 <div class="performance-section">
-                    <h2><i class="material-icons">schedule</i> Lead Time Analysis</h2>
+                    <h2><i class="material-icons">schedule</i> <?= te('Analisis Lead Time') ?></h2>
                     <?php if (!empty($analytics_data['leadtime_analysis'])): ?>
                         <table class="performance-table">
                             <thead>
@@ -3768,7 +3768,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </div>
 
                 <div class="performance-section">
-                    <h2><i class="material-icons">calendar_today</i> Room Utilization by Day of Week - Visualisasi Jadwal</h2>
+                    <h2><i class="material-icons">calendar_today</i> <?= te('Utilisasi Kamar berdasarkan Hari - Visualisasi Jadwal') ?></h2>
                     <?php if (!empty($analytics_data['room_utilization'])): ?>
                         <table class="performance-table">
                             <thead>
@@ -3839,17 +3839,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </div>
 
                 <div class="performance-section">
-                    <h2><i class="material-icons">people</i> Customer Segmentation Analysis - Visualisasi Segmentasi</h2>
+                    <h2><i class="material-icons">people</i> <?= te('Analisis Segmentasi Pelanggan - Visualisasi Segmentasi') ?></h2>
                     <?php if (!empty($analytics_data['customer_segments'])): ?>
                         <div class="performance-grid">
                             <div class="performance-card">
-                                <h3><i class="material-icons">donut_large</i> Customer Type Distribution</h3>
+                                <h3><i class="material-icons">donut_large</i> <?= te('Distribusi Tipe Pelanggan') ?></h3>
                                 <div class="chart-container">
                                     <canvas id="customerTypeChart"></canvas>
                                 </div>
                             </div>
                             <div class="performance-card">
-                                <h3><i class="material-icons">table_chart</i> Customer Segmentation Detail</h3>
+                                <h3><i class="material-icons">table_chart</i> <?= te('Detail Segmentasi Pelanggan') ?></h3>
                                 <table class="performance-table">
                                     <thead>
                                         <tr>
@@ -3885,7 +3885,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </div>
 
                 <div class="performance-section">
-                    <h2><i class="material-icons">source</i> Customer Source Analysis - Visualisasi Channel</h2>
+                    <h2><i class="material-icons">source</i> <?= te('Analisis Sumber Pelanggan - Visualisasi Channel') ?></h2>
                     <?php if (!empty($analytics_data['customer_sources'])): ?>
                         <table class="performance-table">
                             <thead>
@@ -3916,7 +3916,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </div>
 
                 <div class="performance-section">
-                    <h2><i class="material-icons">star</i> Top 10 Customers by Value - Visualisasi VIP</h2>
+                    <h2><i class="material-icons">star</i> <?= te('Top 10 Pelanggan berdasarkan Nilai - Visualisasi VIP') ?></h2>
                     <?php if (!empty($analytics_data['top_customers'])): ?>
                         <table class="performance-table">
                             <thead>
@@ -3953,7 +3953,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                 </div>
 
                 <div class="performance-section">
-                    <h2><i class="material-icons">attach_money</i> Customer Lifetime Value (CLV) Analysis - Visualisasi Nilai</h2>
+                    <h2><i class="material-icons">attach_money</i> <?= te('Analisis Customer Lifetime Value (CLV) - Visualisasi Nilai') ?></h2>
                     <?php if (!empty($analytics_data['clv_analysis'])): ?>
                         <table class="performance-table">
                             <thead>

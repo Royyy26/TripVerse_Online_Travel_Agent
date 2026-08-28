@@ -11,7 +11,7 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['owner', 'admin']
 
 require __DIR__ . '/../connect.php';
 require_once __DIR__ . '/../_lang.php';
-require 'activity_log_helper.php';
+require __DIR__ . '/../activity_log_helper.php';
 
 $id_user = $_SESSION['id_user'];
 $user_role = $_SESSION['role'] ?? '';
@@ -620,12 +620,12 @@ $conn->close();
     <main class="main-content" id="main-content">
         <header class="main-header">
             <div class="header-left">
-                <h1>Booking Management</h1>
-                <p class="header-subtitle">Manage customer bookings and reservations</p>
+                <h1><?= te('Manajemen Booking') ?></h1>
+                <p class="header-subtitle"><?= te('Kelola booking dan reservasi pelanggan') ?></p>
             </div>
             <div class="header-right">
                 <div class="header-actions">
-                    <span class="booking-count"><?= count($bookings) ?> Total Bookings</span>
+                    <span class="booking-count"><?= count($bookings) ?> <?= te('Total Booking') ?></span>
                 </div>
             </div>
         </header>
@@ -843,7 +843,7 @@ $conn->close();
         <div id="statusModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Update Booking Status</h2>
+                    <h2><?= te('Update Status Booking') ?></h2>
                     <button class="close-btn" onclick="closeStatusModal()">
                         <span class="material-icons">close</span>
                     </button>
@@ -873,7 +873,7 @@ $conn->close();
         <div id="viewDetailModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Booking Details</h2>
+                    <h2><?= te('Detail Booking') ?></h2>
                     <button class="close-modal" onclick="closeViewDetailModal()">
                         <span class="material-icons">close</span>
                     </button>

@@ -2253,14 +2253,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         <?php endif; ?>
 
         <div class="dss-section">
-            <h2><i class="material-icons">dashboard</i> Customer Decision Support System</h2>
+            <h2><i class="material-icons">dashboard</i> <?= te('Sistem Pendukung Keputusan Pelanggan') ?></h2>
 
             <div class="kpi-grid">
                 <div class="kpi-card primary">
                     <div class="kpi-icon">
                         <i class="material-icons">people</i>
                     </div>
-                    <div class="kpi-label">Total Customers</div>
+                    <div class="kpi-label"><?= te('Total Pelanggan') ?></div>
                     <div class="kpi-value"><?= number_format($customer_stats['total_customers']) ?></div>
                     <div class="kpi-trend trend-up">
                         <i class="material-icons">trending_up</i> Active
@@ -2270,7 +2270,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     <div class="kpi-icon">
                         <i class="material-icons">check_circle</i>
                     </div>
-                    <div class="kpi-label">Active Customers</div>
+                    <div class="kpi-label"><?= te('Pelanggan Aktif') ?></div>
                     <div class="kpi-value"><?= number_format($customer_stats['active_customers']) ?></div>
                     <div class="kpi-trend trend-up">
                         <i class="material-icons">check_circle</i> <?= $customer_stats['total_customers'] > 0 ? round(($customer_stats['active_customers'] / $customer_stats['total_customers']) * 100, 1) : 0 ?>%
@@ -2280,7 +2280,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     <div class="kpi-icon">
                         <i class="material-icons">add_circle</i>
                     </div>
-                    <div class="kpi-label">New This Week</div>
+                    <div class="kpi-label"><?= te('Baru Minggu Ini') ?></div>
                     <div class="kpi-value"><?= number_format($customer_stats['new_customers_week']) ?></div>
                     <div class="kpi-trend trend-up">
                         <i class="material-icons">trending_up</i> Growth
@@ -2290,7 +2290,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     <div class="kpi-icon">
                         <i class="material-icons">shopping_cart</i>
                     </div>
-                    <div class="kpi-label">Avg. Bookings/Customer</div>
+                    <div class="kpi-label"><?= te('Rata-rata Booking/Pelanggan') ?></div>
                     <div class="kpi-value"><?= $customer_stats['avg_booking_per_customer'] ?></div>
                     <div class="kpi-trend trend-up">
                         <i class="material-icons">trending_up</i> Engagement
@@ -2300,7 +2300,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
                     <div class="kpi-icon">
                         <i class="material-icons">attach_money</i>
                     </div>
-                    <div class="kpi-label">Avg. Spent/Customer</div>
+                    <div class="kpi-label"><?= te('Rata-rata Pengeluaran/Pelanggan') ?></div>
                     <div class="kpi-value"><?= formatRupiah($customer_stats['avg_spent_per_customer']) ?></div>
                     <div class="kpi-trend trend-up">
                         <i class="material-icons">trending_up</i> Value
@@ -2310,7 +2310,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         </div>
 
         <div class="dss-section">
-            <h2><i class="material-icons">trending_up</i> Customer Growth & Demographics</h2>
+            <h2><i class="material-icons">trending_up</i> <?= te('Pertumbuhan & Demografi Pelanggan') ?></h2>
             <div class="dss-grid">
                 <div class="dss-card">
                     <h3><i class="material-icons">show_chart</i> Customer Growth</h3>
@@ -2329,7 +2329,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         </div>
 
         <div class="dss-section">
-            <h2><i class="material-icons">stars</i> Top Spending Customers</h2>
+            <h2><i class="material-icons">stars</i> <?= te('Pelanggan dengan Pengeluaran Tertinggi') ?></h2>
             <table class="top-customers-table">
                 <thead>
                     <tr>
@@ -2367,7 +2367,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         <!-- CUSTOMER LIST SECTION -->
         <div class="customer-list-section">
             <div class="customer-list-header">
-                <h2><i class="material-icons">list_alt</i> Customer Management</h2>
+                <h2><i class="material-icons">list_alt</i> <?= te('Manajemen Pelanggan') ?></h2>
                 <div class="header-actions">
                 </div>
             </div>
@@ -2549,7 +2549,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             <div id="viewDetailModal" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2>Customer Details</h2>
+                        <h2><?= te('Detail Pelanggan') ?></h2>
                         <span class="close-modal">&times;</span>
                     </div>
                     <div class="modal-body" id="viewDetailContent">
@@ -2565,7 +2565,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             <div id="editCustomerModal" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2>Edit Customer</h2>
+                        <h2><?= te('Edit Pelanggan') ?></h2>
                         <span class="close-modal">&times;</span>
                     </div>
                     <form id="editCustomerForm">
@@ -2584,7 +2584,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             <div id="deleteConfirmationModal" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2>Confirm Delete</h2>
+                        <h2><?= te('Konfirmasi Hapus') ?></h2>
                         <span class="close-modal">&times;</span>
                     </div>
                     <div class="modal-body">

@@ -1378,7 +1378,7 @@ function highlightSearchTerm($text, $searchTerm)
 
         <!-- ALOS Analysis Dashboard -->
         <div class="dss-section fade-in">
-            <h2><i class="material-icons">nightlight_round</i> ALOS Analysis - Analisis Rata-rata Lama Menginap</h2>
+            <h2><i class="material-icons">nightlight_round</i> <?= te('Analisis ALOS - Analisis Rata-rata Lama Menginap') ?></h2>
 
             <!-- Filter Controls -->
             <form method="GET" action="alos_analysis.php" class="filter-controls" id="filterForm">
@@ -1484,7 +1484,7 @@ function highlightSearchTerm($text, $searchTerm)
                     <div class="kpi-icon">
                         <i class="material-icons">schedule</i>
                     </div>
-                    <div class="kpi-label">Average ALOS</div>
+                    <div class="kpi-label"><?= te('Rata-rata ALOS') ?></div>
                     <div class="kpi-value"><?php echo round($alos_stats['avg_alos'] ?? 0, 2); ?> Hari</div>
                     <div class="kpi-trend <?php echo ($alos_stats['avg_alos'] ?? 0) >= 3 ? 'trend-up' : (($alos_stats['avg_alos'] ?? 0) >= 2 ? 'trend-neutral' : 'trend-down'); ?>">
                         <i class="material-icons"><?php echo ($alos_stats['avg_alos'] ?? 0) >= 3 ? 'trending_up' : (($alos_stats['avg_alos'] ?? 0) >= 2 ? 'trending_flat' : 'trending_down'); ?></i>
@@ -1496,7 +1496,7 @@ function highlightSearchTerm($text, $searchTerm)
                     <div class="kpi-icon">
                         <i class="material-icons">hotel</i>
                     </div>
-                    <div class="kpi-label">Total Nights</div>
+                    <div class="kpi-label"><?= te('Total Malam') ?></div>
                     <div class="kpi-value"><?php echo number_format($alos_stats['total_nights'] ?? 0); ?></div>
                     <div class="kpi-trend trend-up">
                         <i class="material-icons">trending_up</i>
@@ -1508,7 +1508,7 @@ function highlightSearchTerm($text, $searchTerm)
                     <div class="kpi-icon">
                         <i class="material-icons">arrow_downward</i>
                     </div>
-                    <div class="kpi-label">Shortest Stay</div>
+                    <div class="kpi-label"><?= te('Menginap Tersingkat') ?></div>
                     <div class="kpi-value"><?php echo $alos_stats['min_alos'] ?? 0; ?> Hari</div>
                     <div class="kpi-trend trend-down">
                         <i class="material-icons">arrow_downward</i>
@@ -1520,7 +1520,7 @@ function highlightSearchTerm($text, $searchTerm)
                     <div class="kpi-icon">
                         <i class="material-icons">arrow_upward</i>
                     </div>
-                    <div class="kpi-label">Longest Stay</div>
+                    <div class="kpi-label"><?= te('Menginap Terlama') ?></div>
                     <div class="kpi-value"><?php echo $alos_stats['max_alos'] ?? 0; ?> Hari</div>
                     <div class="kpi-trend trend-up">
                         <i class="material-icons">arrow_upward</i>
@@ -1532,7 +1532,7 @@ function highlightSearchTerm($text, $searchTerm)
                     <div class="kpi-icon">
                         <i class="material-icons">attach_money</i>
                     </div>
-                    <div class="kpi-label">Revenue per Malam</div>
+                    <div class="kpi-label"><?= te('Pendapatan per Malam') ?></div>
                     <div class="kpi-value"><?php echo $alos_stats['total_nights'] > 0 ? formatRupiah(($alos_stats['total_revenue'] ?? 0) / $alos_stats['total_nights']) : 'Rp 0'; ?></div>
                     <div class="kpi-trend trend-up">
                         <i class="material-icons">trending_up</i>
@@ -1543,7 +1543,7 @@ function highlightSearchTerm($text, $searchTerm)
 
             <!-- Monthly ALOS Trends -->
             <div class="dss-section fade-in">
-                <h2><i class="material-icons">trending_up</i> Tren ALOS Bulanan</h2>
+                <h2><i class="material-icons">trending_up</i> <?= te('Tren ALOS Bulanan') ?></h2>
 
                 <div class="performance-grid">
                     <div class="performance-card fade-in">
@@ -1564,7 +1564,7 @@ function highlightSearchTerm($text, $searchTerm)
 
             <!-- ALOS Distribution -->
             <div class="dss-section fade-in">
-                <h2><i class="material-icons">bar_chart</i> Analisis Distribusi ALOS</h2>
+                <h2><i class="material-icons">bar_chart</i> <?= te('Analisis Distribusi ALOS') ?></h2>
 
                 <div class="performance-grid">
                     <div class="performance-card fade-in">
@@ -1585,7 +1585,7 @@ function highlightSearchTerm($text, $searchTerm)
 
             <!-- ALOS by Hotel -->
             <div class="dss-section fade-in">
-                <h2><i class="material-icons">business</i> Analisis ALOS per Hotel</h2>
+                <h2><i class="material-icons">business</i> <?= te('Analisis ALOS per Hotel') ?></h2>
 
                 <!-- Search Status -->
                 <?php if (!empty($hotel_search)): ?>
@@ -1695,7 +1695,7 @@ function highlightSearchTerm($text, $searchTerm)
 
             <!-- ALOS by Room Type -->
             <div class="dss-section fade-in">
-                <h2><i class="material-icons">category</i> Analisis ALOS per Tipe Kamar</h2>
+                <h2><i class="material-icons">category</i> <?= te('Analisis ALOS per Tipe Kamar') ?></h2>
 
                 <div class="performance-card fade-in">
                     <table class="performance-table">
@@ -1739,7 +1739,7 @@ function highlightSearchTerm($text, $searchTerm)
 
             <!-- ALOS vs Revenue Correlation -->
             <div class="dss-section fade-in">
-                <h2><i class="material-icons">scatter_plot</i> Korelasi ALOS vs Revenue</h2>
+                <h2><i class="material-icons">scatter_plot</i> <?= te('Korelasi ALOS vs Pendapatan') ?></h2>
 
                 <div class="chart-container">
                     <canvas id="alosRevenueCorrelationChart"></canvas>
@@ -1748,7 +1748,7 @@ function highlightSearchTerm($text, $searchTerm)
 
             <!-- ALOS Segments Detailed Analysis -->
             <div class="dss-section fade-in">
-                <h2><i class="material-icons">analytics</i> Kinerja Segmen ALOS</h2>
+                <h2><i class="material-icons">analytics</i> <?= te('Kinerja Segmen ALOS') ?></h2>
 
                 <div class="performance-card fade-in">
                     <table class="performance-table">

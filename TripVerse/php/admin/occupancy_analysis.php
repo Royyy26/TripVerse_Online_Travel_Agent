@@ -1474,7 +1474,7 @@ function getWeekRange($year, $week)
         </header>
 
         <div class="stats-section fade-in">
-            <h2><i class="material-icons">analytics</i> Occupancy Statistics Dashboard</h2>
+            <h2><i class="material-icons">analytics</i> <?= te('Dasbor Statistik Okupansi') ?></h2>
             <p class="period-info">
                 Visualisasi data okupansi untuk analisis performa pemesanan hotel TripVerse
             </p>
@@ -1616,7 +1616,7 @@ function getWeekRange($year, $week)
                     <div class="kpi-icon">
                         <i class="material-icons">hotel</i>
                     </div>
-                    <div class="kpi-label">Occupancy Rate</div>
+                    <div class="kpi-label"><?= te('Tingkat Okupansi') ?></div>
                     <div class="kpi-value"><?= $occupancy_stats['occupancy_rate'] ?? 0 ?>%</div>
                     <div class="kpi-label">
                         <?= number_format($occupancy_stats['total_booked'] ?? 0) ?> / <?= number_format($occupancy_stats['total_capacity'] ?? 0) ?> Kamar
@@ -1627,7 +1627,7 @@ function getWeekRange($year, $week)
                     <div class="kpi-icon">
                         <i class="material-icons">check_circle</i>
                     </div>
-                    <div class="kpi-label">Success Rate</div>
+                    <div class="kpi-label"><?= te('Tingkat Keberhasilan') ?></div>
                     <div class="kpi-value"><?= $occupancy_stats['success_rate'] ?? 0 ?>%</div>
                     <div class="kpi-label">
                         <?= number_format($occupancy_stats['completed_bookings'] ?? 0) ?> / <?= number_format($occupancy_stats['total_bookings'] ?? 0) ?> Bookings
@@ -1638,7 +1638,7 @@ function getWeekRange($year, $week)
                     <div class="kpi-icon">
                         <i class="material-icons">attach_money</i>
                     </div>
-                    <div class="kpi-label">Total Revenue</div>
+                    <div class="kpi-label"><?= te('Total Pendapatan') ?></div>
                     <div class="kpi-value"><?= formatRupiah($occupancy_stats['total_revenue'] ?? 0) ?></div>
                     <div class="kpi-label">
                         RevPAR: <?= formatRupiah($occupancy_stats['revpar'] ?? 0) ?>
@@ -1649,7 +1649,7 @@ function getWeekRange($year, $week)
                     <div class="kpi-icon">
                         <i class="material-icons">apartment</i>
                     </div>
-                    <div class="kpi-label">Hotel & Kamar</div>
+                    <div class="kpi-label"><?= te('Hotel & Kamar') ?></div>
                     <div class="kpi-value"><?= number_format($occupancy_stats['total_hotels'] ?? 0) ?></div>
                     <div class="kpi-label">
                         <?= number_format($occupancy_stats['total_room_types'] ?? 0) ?> Tipe Kamar
@@ -1660,7 +1660,7 @@ function getWeekRange($year, $week)
 
         <!-- Hotel Performance Section -->
         <div class="stats-section fade-in">
-            <h2><i class="material-icons">analytics</i> Hotel Occupancy Performance</h2>
+            <h2><i class="material-icons">analytics</i> <?= te('Performa Okupansi Hotel') ?></h2>
 
             <div class="performance-grid">
                 <div class="performance-card fade-in">
@@ -1731,7 +1731,7 @@ function getWeekRange($year, $week)
 
         <!-- Period Trends Section -->
         <div class="stats-section fade-in">
-            <h2><i class="material-icons">trending_up</i> <?= getPeriodName($filter_period) ?> Occupancy Trends</h2>
+            <h2><i class="material-icons">trending_up</i> <?= getPeriodName($filter_period) ?> <?= te('Tren Okupansi') ?></h2>
 
             <div class="performance-card fade-in">
                 <div class="chart-container">

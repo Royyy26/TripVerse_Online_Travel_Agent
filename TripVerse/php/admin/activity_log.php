@@ -11,7 +11,7 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['owner', 'admin']
 
 require __DIR__ . '/../connect.php';
 require_once __DIR__ . '/../_lang.php';
-require 'activity_log_helper.php';
+require __DIR__ . '/../activity_log_helper.php';
 
 $id_user = $_SESSION['id_user'];
 $user_role = $_SESSION['role'] ?? '';
@@ -499,12 +499,12 @@ $action_icons = [
     <main class="main-content" id="main-content">
         <header class="main-header">
             <div class="header-left">
-                <h1>Activity Log</h1>
-                <p class="header-subtitle">Track all your actions and activities</p>
+                <h1><?= te('Log Aktivitas') ?></h1>
+                <p class="header-subtitle"><?= te('Lacak semua tindakan dan aktivitas Anda') ?></p>
             </div>
             <div class="header-right">
                 <div class="header-actions">
-                    <span class="notification-count"><?= count($activity_logs) ?> Activities</span>
+                    <span class="notification-count"><?= count($activity_logs) ?> <?= te('Aktivitas') ?></span>
                 </div>
             </div>
         </header>
@@ -584,8 +584,8 @@ $action_icons = [
             <?php if (empty($activity_logs)): ?>
                 <div class="empty-state">
                     <span class="material-icons">history</span>
-                    <h3>No activities found</h3>
-                    <p>Your activities will appear here as you perform actions</p>
+                    <h3><?= te('Belum ada aktivitas') ?></h3>
+                    <p><?= te('Aktivitas Anda akan muncul di sini saat Anda melakukan tindakan') ?></p>
                 </div>
             <?php else: ?>
                 <div class="activity-logs-list">

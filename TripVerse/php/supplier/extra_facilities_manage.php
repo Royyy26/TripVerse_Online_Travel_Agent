@@ -11,7 +11,7 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'owner']
 
 require __DIR__ . '/../connect.php';
 require_once __DIR__ . '/../_lang.php';
-require 'activity_log_helper.php';
+require __DIR__ . '/../activity_log_helper.php';
 
 $id_user = $_SESSION['id_user'];
 $role = $_SESSION['role'] ?? 'user';
@@ -677,8 +677,8 @@ $conn->close();
     <main class="main-content" id="main-content">
         <header class="main-header">
             <div class="header-left">
-                <h1>Kelola Fasilitas Tambahan</h1>
-                <p class="header-subtitle">Atur fasilitas berbayar untuk setiap hotel Anda</p>
+                <h1><?= te('Kelola Fasilitas Tambahan') ?></h1>
+                <p class="header-subtitle"><?= te('Atur fasilitas berbayar untuk setiap hotel Anda') ?></p>
             </div>
         </header>
 
@@ -694,7 +694,7 @@ $conn->close();
             <section class="hotel-selection">
                 <h2>
                     <span class="material-icons">hotel</span>
-                    Pilih Hotel
+                    <?= te('Pilih Hotel') ?>
                 </h2>
                 <select class="hotel-select" onchange="if(this.value) window.location.href='extra_facilities_manage.php?hotel_id=' + this.value">
                     <option value="">-- Pilih Hotel --</option>
@@ -718,7 +718,7 @@ $conn->close();
                     <?php if (empty($facilities)): ?>
                         <div class="empty-state">
                             <span class="material-icons">inbox</span>
-                            <h3>Tidak ada fasilitas tambahan tersedia</h3>
+                            <h3><?= te('Tidak ada fasilitas tambahan tersedia') ?></h3>
                             <p>Hubungi admin untuk menambahkan fasilitas tambahan</p>
                         </div>
                     <?php else: ?>
@@ -804,7 +804,7 @@ $conn->close();
             <?php else: ?>
                 <div class="empty-state">
                     <span class="material-icons">location_city</span>
-                    <h3>Pilih Hotel</h3>
+                    <h3><?= te('Pilih Hotel') ?></h3>
                     <p>Silakan pilih hotel terlebih dahulu untuk mengelola fasilitas tambahan</p>
                 </div>
             <?php endif; ?>
