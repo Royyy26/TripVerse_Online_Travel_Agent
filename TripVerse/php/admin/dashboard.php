@@ -1753,67 +1753,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
             transform: rotate(180deg);
         }
 
-        .dropdown-content {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            display: none;
-            margin-top: 8px;
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
-            text-align: center;
-        }
-
-        .dropdown-content.show {
-            display: block;
-            animation: dropdownFadeIn 0.2s ease;
-        }
-
-        @keyframes dropdownFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 15px;
-            color: #333;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border-bottom: 1px solid #f5f5f5;
-            font-size: 14px;
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-item:hover {
-            background: #f8f9fa;
-            color: #000;
-        }
-
-        .dropdown-item .material-icons {
-            font-size: 18px;
-            color: #666;
-            width: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        /* .dropdown-content uses centralized styling from dashboard.css */
 
         .dropdown-item:hover .material-icons {
             color: #000;
