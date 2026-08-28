@@ -14,6 +14,7 @@ if ($_SESSION['role'] !== 'admin') {
 }
 
 require __DIR__ . '/../connect.php';
+require_once __DIR__ . '/../_lang.php';
 
 $id_user = $_SESSION['id_user'];
 
