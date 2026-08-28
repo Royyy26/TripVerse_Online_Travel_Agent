@@ -787,41 +787,41 @@ $conn->close();
 
         <nav>
             <!-- EXECUTIVE OVERVIEW -->
-            <a href="dashboard.php" class="active">
+            <a href="dashboard.php">
                 <span class="material-icons">dashboard</span>
-                <span>Executive Overview</span>
+                <span><?= te('Ringkasan Eksekutif') ?></span>
             </a>
 
             <!-- SUPPLIER APPROVAL -->
             <?php if ($_SESSION['role'] === 'admin'): ?>
                 <a href="supplier_approvals.php">
-                    <span class="material-icons">approval</span> <!-- atau groups, person_add -->
-                    <span>Supplier Management</span>
+                    <span class="material-icons">approval</span>
+                    <span><?= te('Manajemen Supplier') ?></span>
                 </a>
             <?php endif; ?>
 
             <!-- PROMO MANAGEMENT -->
             <a href="promo_management.php">
-                <span class="material-icons">campaign</span> <!-- atau discount, local_offer -->
-                <span>Promo Management</span>
+                <span class="material-icons">campaign</span>
+                <span><?= te('Manajemen Promo') ?></span>
             </a>
 
             <!-- ANALYTICS & INSIGHTS -->
             <div class="user-menu">
                 <a href="#" class="booking-toggle" data-target="analyticsDropdown">
-                    <span class="material-icons">monitor</span> <!-- atau show_chart, trending_up -->
-                    <span>Performance Monitoring</span>
+                    <span class="material-icons">monitor</span>
+                    <span><?= te('Monitoring Performa') ?></span>
                     <span class="material-icons toggle-icon">expand_more</span>
                 </a>
 
                 <div class="booking-submenu hidden" id="analyticsDropdown">
                     <a href="performance_analytics.php">
-                        <span class="material-icons">bar_chart</span> <!-- atau assessment -->
-                        <span>Performance Statistics</span>
+                        <span class="material-icons">bar_chart</span>
+                        <span><?= te('Statistik Performa') ?></span>
                     </a>
                     <a href="market_analysis.php">
-                        <span class="material-icons">trending_up</span> <!-- atau timeline -->
-                        <span>Booking Trends</span>
+                        <span class="material-icons">trending_up</span>
+                        <span><?= te('Tren Booking') ?></span>
                     </a>
                 </div>
             </div>
@@ -829,37 +829,37 @@ $conn->close();
             <!-- DECISION SUPPORT MODULES -->
             <div class="user-menu">
                 <a href="#" class="booking-toggle" data-target="decisionDropdown">
-                    <span class="material-icons">analytics</span> <!-- atau calculate, functions -->
-                    <span>Statistical Analysis</span>
+                    <span class="material-icons">analytics</span>
+                    <span><?= te('Analisis Statistik') ?></span>
                     <span class="material-icons toggle-icon">expand_more</span>
                 </a>
 
                 <div class="booking-submenu hidden" id="decisionDropdown">
                     <a href="revenue_optimization.php">
-                        <span class="material-icons">attach_money</span> <!-- atau paid -->
-                        <span>Revenue Statistics</span>
+                        <span class="material-icons">attach_money</span>
+                        <span><?= te('Statistik Pendapatan') ?></span>
                     </a>
                     <a href="occupancy_analysis.php">
-                        <span class="material-icons">king_bed</span> <!-- atau hotel -->
-                        <span>Occupancy Statistics</span>
+                        <span class="material-icons">king_bed</span>
+                        <span><?= te('Statistik Okupansi') ?></span>
                     </a>
                     <a href="alos_analysis.php">
-                        <span class="material-icons">calendar_today</span> <!-- atau date_range -->
-                        <span>ALOS Statistics</span>
+                        <span class="material-icons">calendar_today</span>
+                        <span><?= te('Statistik ALOS') ?></span>
                     </a>
                 </div>
             </div>
 
             <!-- CUSTOMER INTELLIGENCE -->
             <a href="customerdss.php">
-                <span class="material-icons">people</span> <!-- atau sentiment_satisfied -->
-                <span>Customer Statistics</span>
+                <span class="material-icons">people</span>
+                <span><?= te('Statistik Pelanggan') ?></span>
             </a>
 
             <!-- LOGOUT -->
             <a href="../auth/logout.php">
                 <span class="material-icons">exit_to_app</span>
-                <span>Logout</span>
+                <span><?= te('Keluar') ?></span>
             </a>
         </nav>
     </div>
