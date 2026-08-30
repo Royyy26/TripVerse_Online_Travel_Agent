@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../_lang.php';
+require_once __DIR__ . '/../_pagination.php';
 
 // Redirect jika user belum login
 if (!isset($_SESSION['id_user'])) {
@@ -450,7 +451,8 @@ try {
                 </div>
             <?php else: ?>
                 <div class="row">
-                    <?php foreach ($bookings as $booking): ?>
+                    <?php $bookingPage = tv_paginate($bookings, 8); ?>
+                    <?php foreach ($bookingPage['items'] as $booking): ?>
                         <?php
                         // Hitung durasi menginap
                         $check_in = new DateTime($booking['check_in']);
@@ -556,6 +558,7 @@ try {
                         </div>
                     <?php endforeach; ?>
                 </div>
+                <?php tv_render_pagination($bookingPage); ?>
             <?php endif; ?>
         </div>
 

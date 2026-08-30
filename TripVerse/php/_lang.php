@@ -651,6 +651,13 @@ $GLOBALS['TV_DICT'] = [
     'Fitur pemesanan tiket pesawat sedang kami siapkan supaya perjalananmu makin lengkap, dari hotel sampai penerbangan dalam satu platform.'
         => "We're putting the finishing touches on flight booking, so your whole trip \u{2014} hotel and flights \u{2014} will fit in one platform.",
 
+    /* ---- shared pagination control (_pagination.php) ---- */
+    'Navigasi halaman'        => 'Pagination',
+    'Menampilkan'             => 'Showing',
+    'dari'                    => 'of',
+    'Sebelumnya'              => 'Previous',
+    'Berikutnya'              => 'Next',
+
     /* ---- admin panel: shared sidebar chrome ---- */
     'Dasbor Admin'            => 'Admin Dashboard',
     'Dasbor Supplier'         => 'Supplier Dashboard',

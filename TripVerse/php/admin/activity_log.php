@@ -11,6 +11,7 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['owner', 'admin']
 
 require __DIR__ . '/../connect.php';
 require_once __DIR__ . '/../_lang.php';
+require_once __DIR__ . '/../_pagination.php';
 require __DIR__ . '/../activity_log_helper.php';
 
 $id_user = $_SESSION['id_user'];
@@ -670,8 +671,9 @@ $action_icons = [
                     <p><?= te('Aktivitas Anda akan muncul di sini saat Anda melakukan tindakan') ?></p>
                 </div>
             <?php else: ?>
+                <?php $logPage = tv_paginate($activity_logs, 20); ?>
                 <div class="activity-logs-list">
-                    <?php foreach ($activity_logs as $log): ?>
+                    <?php foreach ($logPage['items'] as $log): ?>
                     <div class="activity-log-item">
                         <div class="activity-icon">
                             <span class="material-icons"><?= $action_icons[$log['action_type']] ?? 'info' ?></span>
@@ -707,6 +709,7 @@ $action_icons = [
                     </div>
                     <?php endforeach; ?>
                 </div>
+                <?php tv_render_pagination($logPage); ?>
             <?php endif; ?>
         </section>
     </main>

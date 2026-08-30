@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../_lang.php';
+require_once __DIR__ . '/../_pagination.php';
 
 if (!isset($_SESSION['id_user'])) {
     header("Location: ../auth/login.php");
@@ -891,7 +892,8 @@ $filter_options = getFilterOptions();
                             </a>
                         </div>
                     <?php else: ?>
-                        <?php foreach ($bookings as $booking): ?>
+                        <?php $bookingPage = tv_paginate($bookings, 8); ?>
+                        <?php foreach ($bookingPage['items'] as $booking): ?>
                             <?php
                             // PERBAIKAN: Gunakan function getImagePath untuk foto hotel
                             $hotelImagePath = getImagePath($booking['foto_hotel'], '../../img/default-hotel.jpg');
@@ -963,6 +965,7 @@ $filter_options = getFilterOptions();
                                 </div>
                             </div>
                         <?php endforeach; ?>
+                        <?php tv_render_pagination($bookingPage); ?>
                     <?php endif; ?>
                 </div>
             </div>

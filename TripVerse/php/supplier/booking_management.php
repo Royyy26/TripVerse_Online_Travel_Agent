@@ -11,6 +11,7 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['owner', 'admin']
 
 require __DIR__ . '/../connect.php';
 require_once __DIR__ . '/../_lang.php';
+require_once __DIR__ . '/../_pagination.php';
 require __DIR__ . '/../activity_log_helper.php';
 
 $id_user = $_SESSION['id_user'];
@@ -771,8 +772,9 @@ $conn->close();
                     <p>Bookings will appear here when customers make reservations</p>
                 </div>
             <?php else: ?>
+                <?php $bookingPage = tv_paginate($bookings, 12); ?>
                 <div class="bookings-grid">
-                    <?php foreach ($bookings as $booking):
+                    <?php foreach ($bookingPage['items'] as $booking):
                         $statusClass = htmlspecialchars($booking['status']);
                         $badgeClass = strtolower($booking['status']);
                     ?>
@@ -841,6 +843,7 @@ $conn->close();
                     </div>
                     <?php endforeach; ?>
                 </div>
+                <?php tv_render_pagination($bookingPage); ?>
             <?php endif; ?>
         </section>
 
