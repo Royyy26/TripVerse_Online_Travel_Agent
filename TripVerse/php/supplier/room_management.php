@@ -577,7 +577,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Management - TripVerse</title>
-    <link rel="stylesheet" href="../../css/owner_dashboard.css?v=2.1.1">
+    <link rel="stylesheet" href="../../css/owner_dashboard.css?v=2.1.2">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -688,6 +688,14 @@ $conn->close();
 
 <body>
     <!-- Owner-specific sidebar -->
+    <!-- Kept outside .owner-sidebar on purpose: the sidebar uses a transform
+         when collapsed, and a transformed ancestor becomes the containing
+         block for position:fixed children -- so a button inside it slid off
+         screen with the sidebar and could never be clicked again. -->
+    <button id="toggleSidebar" class="sidebar-toggle" aria-label="Toggle sidebar">
+        <span class="material-icons">menu</span>
+    </button>
+
     <div class="owner-sidebar" id="owner-sidebar">
         <div class="sidebar-header">
             <div class="logo">
@@ -697,9 +705,6 @@ $conn->close();
                     <span class="logo-subtitle"><?= te('Dasbor Supplier') ?></span>
                 </div>
             </div>
-            <button id="toggleSidebar" class="sidebar-toggle" aria-label="Toggle sidebar">
-                <span class="material-icons">menu</span>
-            </button>
         </div>
 
         <div class="sidebar-brand-lang">
@@ -1031,11 +1036,13 @@ $conn->close();
         if (sidebarState === 'collapsed') {
             sidebar.classList.add('collapsed');
             mainContent.classList.add('expanded');
+            document.body.classList.add('sidebar-collapsed');
         }
 
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('expanded');
+            document.body.classList.toggle('sidebar-collapsed', sidebar.classList.contains('collapsed'));
             localStorage.setItem('sidebarState', sidebar.classList.contains('collapsed') ? 'collapsed' : 'expanded');
         });
 

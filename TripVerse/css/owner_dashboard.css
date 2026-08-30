@@ -123,15 +123,30 @@ html, body {
     white-space: nowrap;
 }
 
+/* Fixed and outside .owner-sidebar so it never travels off-screen with the
+   sidebar. When the sidebar is open it sits at the sidebar's inner edge, in
+   the same spot it used to occupy inside .sidebar-header; when collapsed it
+   slides to the screen edge so there is always a way back. */
 .sidebar-toggle {
+    position: fixed;
+    top: 30px;
+    left: 231px;
+    z-index: 1100;
     background: rgba(255, 255, 255, 0.2);
     border: none;
     color: white;
     cursor: pointer;
     padding: 10px;
     border-radius: 12px;
-    transition: all 0.3s ease;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
     backdrop-filter: blur(10px);
+}
+
+body.sidebar-collapsed .sidebar-toggle {
+    left: 16px;
+    /* Solid once it is over page content -- the translucent white above is
+       only legible against the dark sidebar. */
+    background: #1e2a38;
 }
 
 .sidebar-toggle:hover {
