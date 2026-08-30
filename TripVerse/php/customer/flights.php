@@ -121,7 +121,7 @@ if (!isset($_SESSION['id_user'])) {
 
         <!-- Coming Soon Start -->
         <div class="tv-coming-soon">
-            <div class="tv-coming-soon-bg" style="background-image: url(../img/pesawat-1.jpg);"></div>
+            <div class="tv-coming-soon-bg" style="background-image: url(../../img/pesawat-1.jpg);"></div>
             <div class="tv-coming-soon-overlay"></div>
             <div class="tv-coming-soon-content">
                 <i class="fas fa-plane tv-coming-soon-icon"></i>
