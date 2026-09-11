@@ -70,7 +70,12 @@
     transform: translateX(0);
 }
 
-/* stagger children automatically when parent has .tv-stagger */
+/* stagger children automatically when parent has .tv-stagger.
+   The nth-child rules are the no-JS fallback; they stop at 6 because writing
+   one rule per card does not scale. tv-modern.js sets --tv-i on each child so
+   any number of cards keeps an even cadence -- a search result grid can hold
+   a dozen hotels, and without this every card past the sixth animated at the
+   same instant, which read as a glitch rather than a sequence. */
 .tv-stagger .tv-reveal:nth-child(1) { transition-delay: .04s; }
 .tv-stagger .tv-reveal:nth-child(2) { transition-delay: .10s; }
 .tv-stagger .tv-reveal:nth-child(3) { transition-delay: .16s; }
@@ -78,6 +83,14 @@
 .tv-stagger .tv-reveal:nth-child(5) { transition-delay: .28s; }
 .tv-stagger .tv-reveal:nth-child(6) { transition-delay: .34s; }
 .tv-stagger .tv-reveal:nth-child(n+7) { transition-delay: .38s; }
+
+/* Index-driven cadence. Capped so a long list never leaves the last card
+   waiting almost a second after the first. */
+.tv-stagger > [style*="--tv-i"],
+.tv-stagger .tv-reveal[style*="--tv-i"],
+.tv-stagger .tv-reveal-scale[style*="--tv-i"] {
+    transition-delay: calc(min(var(--tv-i, 0) * 60ms, 480ms));
+}
 
 @keyframes tv-float {
     0%, 100% { transform: translateY(0); }
@@ -168,6 +181,21 @@
     backdrop-filter: blur(16px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(160%);
     border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Touch devices have no hover ----------
+   Cards across the site lift on :hover. On a touchscreen that state sticks
+   after a tap, leaving a card raised until something else is touched. */
+@media (hover: none) {
+    .tv-card-hover:hover,
+    .hotel-card:hover {
+        transform: none;
+        box-shadow: var(--tv-shadow-md);
+    }
+
+    .hotel-card:hover .hotel-img {
+        transform: none;
+    }
 }
 
 /* ---------- Step indicator (used across the 4-step booking wizard) ---------- */
@@ -493,6 +521,24 @@ img { max-width: 100%; }
     .tv-reveal-left,
     .tv-reveal-right {
         opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* Kill the stagger too, otherwise cards still arrive one by one --
+       just faster -- which is the sequencing the preference asks us to drop. */
+    .tv-stagger > *,
+    .tv-stagger .tv-reveal,
+    .tv-stagger .tv-reveal-scale {
+        transition-delay: 0ms !important;
+    }
+
+    .tv-hotel-card:hover,
+    .tv-hotel-card:focus-within {
+        transform: none !important;
+    }
+
+    .tv-hotel-card:hover .hotel-img,
+    .tv-hotel-card:hover .tv-hotel-media img {
         transform: none !important;
     }
 }

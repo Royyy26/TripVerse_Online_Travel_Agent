@@ -554,7 +554,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../../img/default-hotel.
 
     <!-- Template Stylesheet -->
     <link href="../../css/style.css?v=2.0" rel="stylesheet">
-    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         /* [Keep all your CSS styles unchanged] */
@@ -1788,7 +1788,7 @@ $hotel_image_path = getImagePath($hotel['foto_hotel'], '../../img/default-hotel.
 
     <!-- Template Javascript -->
     <script src="../../js/main.js?v=2.0"></script>
-    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 
     <script>
         // Hide spinner when page is loaded

@@ -130,7 +130,7 @@ try {
     <!-- Template Stylesheet -->
     <link href="../../css/style.css?v=2.0" rel="stylesheet">
 
-    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         .booking-card {
@@ -663,7 +663,7 @@ try {
                 }, 60000); // Refresh every 60 seconds to check for expired bookings
             <?php endif; ?>
         </script>
-    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

@@ -158,7 +158,7 @@ if (!empty($foto) && file_exists('../../uploads/' . $foto)) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <link href="../../css/home.css?v=2.0" rel="stylesheet">
-    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         /* PROFIL STYLES - DIPERBAIKI TOTAL UNTUK BOOTSTRAP DROPDOWN */
@@ -1258,7 +1258,7 @@ if (!empty($foto) && file_exists('../../uploads/' . $foto)) {
         <script src="../../lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="../../js/main.js?v=2.0"></script>
-        <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+        <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 
         <script>
             // HAPUS FUNGSI toggleDropdown() DAN document.addEventListener('click')

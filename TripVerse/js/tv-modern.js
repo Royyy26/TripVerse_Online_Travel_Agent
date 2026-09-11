@@ -5,12 +5,29 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ------------------------------------------------------------------
      * Scroll reveal for .tv-reveal / -scale / -left / -right
      * ---------------------------------------------------------------- */
-    var targets = document.querySelectorAll(
-        '.tv-reveal, .tv-reveal-scale, .tv-reveal-left, .tv-reveal-right'
-    );
+    var REVEAL_SELECTOR =
+        '.tv-reveal, .tv-reveal-scale, .tv-reveal-left, .tv-reveal-right';
+
+    var targets = document.querySelectorAll(REVEAL_SELECTOR);
+
+    // Someone who asked the OS for less motion should get the finished layout,
+    // not a faster version of the animation.
+    var prefersReducedMotion =
+        window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* Give every child of a .tv-stagger container its position in the run, so
+     * the CSS can turn it into a delay. The nth-child fallback in the stylesheet
+     * only reaches six; a search result grid routinely holds more than that. */
+    document.querySelectorAll('.tv-stagger').forEach(function (group) {
+        var children = group.querySelectorAll(REVEAL_SELECTOR);
+        children.forEach(function (el, i) {
+            el.style.setProperty('--tv-i', i);
+        });
+    });
 
     if (targets.length) {
-        if (!('IntersectionObserver' in window)) {
+        if (prefersReducedMotion || !('IntersectionObserver' in window)) {
             targets.forEach(function (el) { el.classList.add('tv-in'); });
         } else {
             var observer = new IntersectionObserver(function (entries) {

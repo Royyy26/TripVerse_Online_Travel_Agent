@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
     <title><?= te('Daftar & Masuk') ?> | TripVerse</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" />
+    <link rel="stylesheet" href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>" />
     <style>
         /* Reset dan Font */
         * {
@@ -1169,7 +1169,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['signIn'])) {
                 });
         });
     </script>
-    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

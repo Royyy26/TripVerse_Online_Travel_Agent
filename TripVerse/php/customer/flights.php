@@ -40,7 +40,7 @@ if (!isset($_SESSION['id_user'])) {
 
     <!-- Template Stylesheet -->
     <link href="../../css/style.css?v=2.0" rel="stylesheet">
-    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>" rel="stylesheet">
 
 </head>
 
@@ -225,7 +225,7 @@ if (!isset($_SESSION['id_user'])) {
 
     <!-- Template Javascript -->
     <script src="../../js/main.js?v=2.0"></script>
-    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 
     <script>
         window.addEventListener('load', function() {

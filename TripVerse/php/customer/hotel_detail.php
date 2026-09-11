@@ -175,7 +175,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
     <!-- Template Stylesheet -->
     <link href="../../css/style.css?v=2.0" rel="stylesheet">
-    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
@@ -901,7 +901,7 @@ $full_address = $hotel['alamat'] . ', ' . $hotel['kota'];
 
     <!-- Template Javascript -->
     <script src="../../js/main.js?v=2.0"></script>
-    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 
     <script>
         // Hide spinner when page is loaded

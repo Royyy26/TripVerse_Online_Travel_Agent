@@ -87,7 +87,7 @@ $conn->close();
 
     <!-- Template Stylesheet -->
     <link href="../../css/style.css?v=2.0" rel="stylesheet">
-    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
@@ -266,7 +266,21 @@ $conn->close();
             display: flex;
             flex-direction: column;
             height: 100%;
-            animation: fadeIn 0.5s ease forwards;
+            /* Each card carries --order from the PHP loop. It was being set in
+               the markup but never read here, so every result faded in at the
+               same instant. Reading it turns the grid into a sequence, which
+               also gives the eye an order to scan the results in.
+               Capped so the last card in a long list is not left waiting, and
+               'both' holds the hidden start state during the delay -- with
+               'forwards' the card would flash at full opacity first. */
+            animation: fadeIn 0.5s ease both;
+            animation-delay: calc(min(var(--order, 0) * 60ms, 480ms));
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hotel-card {
+                animation: none;
+            }
         }
 
         .hotel-card:hover {
@@ -1068,7 +1082,7 @@ $conn->close();
 
     <!-- Template Javascript -->
     <script src="../../js/main.js?v=2.0"></script>
-    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 
     <script>
         // Fungsi untuk pencarian hotel

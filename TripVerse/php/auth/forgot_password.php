@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Poppins:wght@300;500;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
 
     <link href="../../css/login.css?v=2.0" rel="stylesheet">
-    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins','Heebo',sans-serif; }
@@ -547,7 +547,7 @@
         document.getElementById('confirmPass').addEventListener('input', checkPwReqs);
     </script>
 
-    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

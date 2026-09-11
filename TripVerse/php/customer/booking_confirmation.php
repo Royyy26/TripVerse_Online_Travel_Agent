@@ -291,7 +291,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700</title>family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>">
+    <link rel="stylesheet" href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>">
     <style>
         :root {
             --primary: #FEA116;
@@ -773,7 +773,7 @@ $js_booking_id = json_encode($booking_id ?? 'unknown');
         // Optional: clear session/notify before unload - currently not used
         window.addEventListener('beforeunload', function() {});
     </script>
-    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 </body>
 
 </html>

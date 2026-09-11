@@ -21,7 +21,7 @@ session_destroy();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= te('Konfirmasi Berhasil') ?> - TripVerse</title>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700</title>family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         body {
@@ -108,6 +108,6 @@ session_destroy();
 
         <a href="extra_services.php" class="btn"><?= te('Pesan Hotel Lain') ?></a>
     </div>
-    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 </body>
 </html>

@@ -174,7 +174,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
     <!-- Tambahkan CSS Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="../../css/search_history.css?v=2.0" rel="stylesheet">
-    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../css/tv-modern.css') ?>" rel="stylesheet">
+    <link href="../../css/tv-modern.css?v=<?= @filemtime(__DIR__ . '/../../css/tv-modern.css') ?>" rel="stylesheet">
 
     <style>
         html,
@@ -1212,7 +1212,7 @@ $history = $_SESSION['search_history'] = array_slice($_SESSION['search_history']
 
     <!-- Template Javascript -->
     <script src="../../js/main.js?v=2.0"></script>
-    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../js/tv-modern.js') ?>"></script>
+    <script src="../../js/tv-modern.js?v=<?= @filemtime(__DIR__ . '/../../js/tv-modern.js') ?>"></script>
 
     <script>
         window.addEventListener('load', function() {

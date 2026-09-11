@@ -86,12 +86,18 @@ if ($tvRow) {
     $tvAccountName  = $tvFull !== '' ? $tvFull : ($tvRow['username'] ?? $tvAccountName);
     $tvAccountEmail = $tvRow['email'] ?? $tvAccountEmail;
     if (!empty($tvRow['profile_picture'])) {
-        $tvAccountPhoto = '../uploads/' . basename($tvRow['profile_picture']);
+        // This partial lives in php/ but is only ever included from pages in
+        // php/customer/, and a browser resolves these against the including
+        // page's folder -- not this file's. With a single '../' they pointed at
+        // php/uploads and php/images: the first is a stray folder holding only
+        // hotel photos, the second does not exist at all, so every customer
+        // page rendered a broken avatar.
+        $tvAccountPhoto = '../../uploads/' . basename($tvRow['profile_picture']);
     }
 }
 
 if ($tvAccountPhoto === '') {
-    $tvAccountPhoto = '../images/default.jpg';
+    $tvAccountPhoto = '../../images/default.jpg';
 }
 
 $tvInitial = mb_strtoupper(mb_substr(trim($tvAccountName), 0, 1));
