@@ -1905,6 +1905,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_photo'])) {
         }
 
         @media (max-width: 768px) {
+            /* The top-customers table is ~552px wide inside a ~335px section
+               whose overflow-x is hidden, so on a phone roughly 200px of it --
+               entire columns -- was clipped with no way to scroll to it. Making
+               the table its own scroll container keeps every column reachable
+               without forcing the whole page to scroll sideways. */
+            .dss-section > table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                max-width: 100%;
+            }
+
             .customer-list-header {
                 flex-direction: column;
                 gap: 15px;
